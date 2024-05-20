@@ -1,0 +1,13 @@
+/* App.css */
+
+/* Styles pour le mode sombre */
+.dark .container {
+  background-color: #333;
+  color: #fff;
+}
+
+/* Styles pour le mode clair */
+.light .container {
+  background-color: white;
+  color: black;
+}

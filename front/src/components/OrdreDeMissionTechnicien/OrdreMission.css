@@ -1,0 +1,11 @@
+.date-picker {
+  font-size: 0.875rem; /* Taille de police plus petite */
+  width: 160px; /* Largeur personnalisée */
+}
+
+.input-group.custom-width {
+  width: 100px;
+}
+
+
+

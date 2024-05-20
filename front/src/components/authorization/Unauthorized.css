@@ -1,0 +1,12 @@
+@import url('https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css');
+
+.card.animated.fadeInDown {
+  animation-duration: 1s;
+}
+
+.img-fluid.animated.pulse {
+  animation-duration: 1s;
+  animation-iteration-count: infinite;
+}
+
+/* Additional custom animations can be added here */

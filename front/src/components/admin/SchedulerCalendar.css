@@ -1,0 +1,199 @@
+/*
+.event-item.update-clicked {
+    background-color: lightgreen;
+    color: white;
+  }
+
+
+  .calendar-container {
+    max-width: 50%; 
+    overflow: auto;
+    height: 100vh; 
+    width: 100vh; 
+
+  }
+  
+  .container-modal {
+    max-width: 50%;
+  }  
+
+  
+  
+  .calendar {
+    max-width: 100%;
+  }
+  */
+
+
+  
+  .rbc-event-content{
+    color: black;
+  }
+  
+
+  /* Custom styles for the Date de début section */
+.start-date-container {
+  margin-bottom: 20px; /* Adjust margin as needed */
+}
+
+.start-date-label {
+  font-size: 18px;
+  font-weight: bold;
+  color: #333;
+}
+
+.date-picker-input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+.date-picker-icon {
+  font-size: 24px;
+  color: #007bff;
+}
+
+/* Custom styles for the inline DatePicker */
+.inline-date-picker {
+  margin-top: 10px;
+}
+
+/* Style for the date picker calendar */
+.react-datepicker {
+  font-family: 'Arial', sans-serif;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Style for the date picker header */
+.react-datepicker__header {
+  background-color: #007bff; /* Header background color */
+  color: #fff; /* Header text color */
+}
+
+/* Style for the date picker day names (Mo, Tu, etc.) */
+.react-datepicker__day-name {
+  color: #007bff; /* Day name color */
+}
+
+/* Style for the selected date */
+.react-datepicker__day--selected {
+  background-color: #007bff; /* Selected date background color */
+  color: #fff; /* Selected date text color */
+}
+
+/* Style for the today's date */
+.react-datepicker__day--today {
+  font-weight: bold;
+}
+
+/* Style for the date picker arrows */
+.react-datepicker__navigation {
+  top: 10px;
+}
+
+/* Style for the date picker dropdowns (Month, Year) */
+.react-datepicker__month-dropdown,
+.react-datepicker__year-dropdown {
+  background-color: #f8f9fa; /* Dropdown background color */
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 5px;
+}
+
+/* Style for the date picker dropdown options */
+.react-datepicker__month-option,
+.react-datepicker__year-option {
+  padding: 5px;
+}
+
+/* Style for the date picker dropdown selected option */
+.react-datepicker__month-option--selected,
+.react-datepicker__year-option--selected {
+  background-color: #007bff; /* Selected option background color */
+  color: #fff; /* Selected option text color */
+}
+
+.react-datepicker__current-month {
+color: #f8f9fa;
+}
+
+/*****/     /*******/      /****/
+
+
+/* Custom styles for the Heure de début section */
+.start-time-container {
+  margin-bottom: 20px; /* Adjust margin as needed */
+}
+
+.start-time-label {
+  font-size: 18px;
+  font-weight: bold;
+  color: #333;
+}
+
+.time-picker-input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+.time-picker-icon {
+  font-size: 24px;
+  color: #555;
+}
+
+.time-picker-button {
+  font-size: 18px;
+  color: #007bff;
+  background-color: #f8f9fa;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 5px 10px;
+}
+
+/* Style for the inline time picker */
+.inline-time-picker {
+  margin-top: 10px;
+}
+
+
+.react-datepicker-time__header {
+  color: #f8f9fa;
+}
+
+.input-group-text {
+  color: #007bff;
+
+}
+
+
+.custom-date-input {
+  border: none;
+  outline: none;
+  background-color: transparent;
+  width: 100%;
+  cursor: pointer;
+}
+
+.custom-date-picker {
+  position: absolute;
+  z-index: 9999;
+}
+
+
+.custom-date-input:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+/* Style the calendar icon */
+.date-picker-icon {
+  margin-right: 10px;
+}

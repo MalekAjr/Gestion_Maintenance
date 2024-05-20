@@ -1,0 +1,27 @@
+.circular-image-container {
+    position: relative;
+    width: 100px; /* Adjust to your image size */
+    height: 100px; /* Adjust to your image size */
+    overflow: hidden;
+    border-radius: 50%; /* For circular shape */
+  }
+  
+  .image-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black background */
+    color: white;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+  }
+  
+  .circular-image-container:hover .image-overlay {
+    opacity: 1;
+  }
+  
