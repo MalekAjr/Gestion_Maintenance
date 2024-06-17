@@ -11,18 +11,20 @@ const createToken = (_id) => {
 };
 
 const signupUser = async (req, res) => {
-
   let image = null;
   
-      if (req.file) {
-        image = req.file.filename;
-      }
+  if (req.file) {
+    image = req.file.filename;
+  }
 
-  const { nom, phone, email, password } = req.body;
+  const { nom, phone, email, password, role } = req.body;
 
   if (!nom || !phone || !email || !password) {
     return res.status(400).json({ error: 'Please provide all fields' });
   }
+
+  // Vérifie si le rôle est fourni, sinon définit le rôle par défaut comme "utilisateur"
+  const userRole = role ? role : 'utilisateur';
 
   try {
     const existingNom = await User.findOne({ nom });
@@ -56,7 +58,7 @@ const signupUser = async (req, res) => {
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
-    const user = await User.create({ nom, phone, email, password: hashedPassword, image });
+    const user = await User.create({ nom, phone, email, password: hashedPassword, image, role: userRole });
 
     const token = createToken(user._id);
 
@@ -65,6 +67,8 @@ const signupUser = async (req, res) => {
     res.status(400).json({ error: error.message });
   }
 };
+
+
 
 const loginUser = async (req, res) => {
   const { email, password } = req.body;
@@ -170,7 +174,7 @@ const getUser = async (req, res) => {
 
   const getUsers = async (req, res) => {
     try {
-      const users = await User.find();
+      const users = await User.find().sort({ createdAt : -1});
       res.status(200).json({ users });
     } catch (error) {
       console.error("Error getting users:", error.message);
@@ -324,6 +328,27 @@ const getClientDetails = async (req, res) => {
   }
 };
 
+const getClients = async (req, res) => {
+  try {
+    const clients = await User.find({ role: 'utilisateur' }).sort({ createdAt: -1 });;
+
+    res.status(200).json({ clients });
+  } catch (error) {
+    console.error("Erreur lors de la récupération des clients :", error.message);
+    res.status(500).json({ error: "Erreur du serveur lors de la récupération des clients" });
+  }
+};
+
+const getListeTechniciens = async (req, res) => {
+  try {
+    const techniciens = await User.find({ role: 'technicien' }).sort({ createdAt: -1 });;
+
+    res.status(200).json({ techniciens });
+  } catch (error) {
+    console.error("Erreur lors de la récupération des clients :", error.message);
+    res.status(500).json({ error: "Erreur du serveur lors de la récupération des clients" });
+  }
+};
 
   module.exports = {
     signupUser,
@@ -333,5 +358,7 @@ const getClientDetails = async (req, res) => {
     deleteUser,
     updateUser,
     getTechniciens,
-    getClientDetails
+    getClientDetails,
+    getClients,
+    getListeTechniciens
   };

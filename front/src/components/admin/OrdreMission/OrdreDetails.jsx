@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { CircularProgress } from '@mui/material';
 import postService from '../../../services/postService';
 import StatusOrdreMissionTechnicien from '../../OrdreDeMissionTechnicien/StatusOrdreMissionTechnicien';
 import StatusOrdreMissionAdmin from '../../OrdreDeMissionTechnicien/StatusOrdreMissionAdmin';
+import { BsFillArrowLeftSquareFill, BsFillPlusSquareFill } from 'react-icons/bs';
 
 
 function OrdreDetails() {
@@ -127,7 +128,21 @@ function OrdreDetails() {
 
   return (
     <div className="container">
-  <h2>Ordre de Mission</h2>
+      <div className="row align-items-center">
+          <div className="col-auto">
+              <Link to="/admin/consulter-ordre" className="btn mb-3" style={{ color: 'green' }}>
+                  <BsFillArrowLeftSquareFill size={30} /> Retour Vers Dashboard
+              </Link>
+          </div>
+          <div className="col text-center">
+              <h1 className="mb-5">Ordre de Mission</h1>
+          </div>
+          <div className="col-auto text-end">
+              <Link to="/créer-ordre" className="btn btn-success mb-3">
+                  <BsFillPlusSquareFill size={30} /> Créer un Ordre de Mission
+              </Link>
+          </div>
+      </div>
   <div className="row">
     <div className="col-md-6">
     <div className="mb-3">
@@ -307,23 +322,23 @@ function OrdreDetails() {
       </div>
       <div className="row">
         <div className="col-md-6">
-          <label className="form-label">Statut technique :</label>
+          <label className="form-label">Statut de Technicien :</label>
           <StatusOrdreMissionTechnicien statuttechnicien={ordre.statuttechnicien} />
         </div>
         <div className="col-md-6">
-          <label className="form-label">Statut de facturation :</label>
+          <label className="form-label">Statut de Responsable(Admin) :</label>
           <StatusOrdreMissionAdmin statutadmin={ordre.statutadmin} />
         </div>
-      </div>
-      
+      </div>      
     </div>
   </div>
   <div className="row">
-    <div className="col-md-12 mb-3">
-      <button onClick={handleUpdateOrdre} className="btn btn-primary mr-2">Modifier l'ordre</button>
-      <button onClick={handleUpdateData} className="btn btn-secondary">Rafraîchir les données</button>
-    </div>
+  <div className="col-md-12 mb-3">
+    <button onClick={handleUpdateOrdre} className="btn btn-primary mr-2">Modifier l'ordre</button>
+    <button onClick={handleUpdateData} className="btn btn-secondary mx-2">Rafraîchir les données</button>
   </div>
+</div>
+
 </div>
 
   );

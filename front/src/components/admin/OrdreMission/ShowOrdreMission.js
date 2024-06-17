@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
 import { Link } from 'react-router-dom';
-import { BsFillPlusSquareFill } from 'react-icons/bs';
+import { BsFillArrowLeftSquareFill, BsFillPlusSquareFill, BsInfoCircle, BsTrash } from 'react-icons/bs';
 import { Modal, Button } from 'react-bootstrap'; // Importation des composants de la boîte de dialogue
 import postService from '../../../services/postService';
 import LoadingSpinner from '../../LoadingSpinner';
@@ -116,14 +116,20 @@ function ShowOrdreMission() {
     <div className="container">
       <div className="row align-items-center">
         <div className="col">
+          <Link to="/admin/dashboard" className="btn mb-3" style={{ color: 'green' }}>
+            <BsFillArrowLeftSquareFill size={30} /> Retour Vers Dashboard
+          </Link>
+        </div>
+        <div className="col text-center">
           <h1 className="mb-5">Liste des Ordres de Mission</h1>
         </div>
-        <div className="col-auto">
+        <div className="col text-end">
           <Link to="/créer-ordre" className="btn btn-success mb-3">
-            <BsFillPlusSquareFill /> Create Ordre De Mission
+            <BsFillPlusSquareFill  size={30} /> Create Ordre De Mission
           </Link>
         </div>
       </div>
+
 
       <Navbar searchQuery={searchQuery} handleSearch={handleSearch} />
       
@@ -142,11 +148,12 @@ function ShowOrdreMission() {
                 <th>Kilométrage effectué(KM)</th>
                 <th>Statut Technicien</th>
                 <th>Statut d'Admin</th>
-                <th>Email du Client</th>
-                <th>Nom du Client</th>
+                <th>Email du Technicien</th>
+                <th>Nom du Technicien</th>
                 <th>Date de création</th>
                 <th>Date de mise à jour</th>
                 <th>Heure de mise à jour</th>
+                <th>Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -160,8 +167,8 @@ function ShowOrdreMission() {
                   <td>{ordre.transportType ? ordre.transportType : "Ce champ est vide"}</td>
                   <td>{ordre.heuresRealisees ? ordre.heuresRealisees : "Ce champ est vide"}</td>
                   <td>{ordre.kilometrageEffectue ? ordre.kilometrageEffectue : "Ce champ est vide"}</td>
-                  <td><StatusOrdreMissionTechnicien statuttechnicien={ordre.statuttechnicien} /></td>
-                  <td><StatusOrdreMissionAdmin statutadmin={ordre.statutadmin} /></td>
+                  <td><StatusOrdreMissionTechnicien statuttechnicien={ordre.statuttechnicien}/></td>
+                  <td><StatusOrdreMissionAdmin statutadmin={ordre.statutadmin}/></td>
                   <td>{ordre.user_email ? ordre.user_email : "Ce champ est vide"}</td>
                   <td>{ordre.user_nom ? ordre.user_nom : "Ce champ est vide"}</td>
                   <td>{ordre.createdAt ? formatDate(ordre.createdAt) : "Ce champ est vide"}</td>
@@ -169,36 +176,39 @@ function ShowOrdreMission() {
                   <td>{ordre.updatedAt ? formatTime(ordre.updatedAt) : "Ce champ est vide"}</td>
                   <td>
                   <Link to={`/admin/ordre-details/${ordre._id}?startDate=${ordre.startDate}&endDate=${ordre.endDate}`} className="btn btn-primary">
-                    Voir Détails
+                  <BsInfoCircle className="me-1" />Voir Détails
                   </Link>
                   <button onClick={() => handleDeleteOrdreMission(ordre._id, ordre.nom)} className="btn btn-danger ml-2">
-                    Supprimer
+                    <BsTrash className="me-1"/>Supprimer
                   </button>
                   </td>
-                  <Modal show={showConfirmationModal} onHide={() => setShowConfirmationModal(false)}>
-                    <Modal.Header closeButton>
-                      <Modal.Title>Confirmation de la suppression</Modal.Title>
-                    </Modal.Header>
-                    <Modal.Body>
-                      Êtes-vous sûr de vouloir supprimer l'ordre de mission "{ordreToDelete ? ordreToDelete.nom : ''}" (ID: {ordreToDelete ? ordreToDelete.id : ''}) ?
-                    </Modal.Body>
-                    <Modal.Footer>
-                      <Button variant="secondary" onClick={() => setShowConfirmationModal(false)}>
-                        Annuler
-                      </Button>
-                      <Button variant="danger" onClick={confirmDelete}>
-                        Confirmer
-                      </Button>
-                    </Modal.Footer>
-                  </Modal>
                 </tr>
               ))}
+              
             </tbody>
           </table>
         </div>
       )}
+      {showConfirmationModal && (
+              <Modal show={showConfirmationModal} onHide={() => setShowConfirmationModal(false)}>
+                <Modal.Header closeButton>
+                  <Modal.Title>Confirmation de la suppression</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                  Êtes-vous sûr de vouloir supprimer l'ordre de mission "{ordreToDelete ? ordreToDelete.nom : ''}" (ID: {ordreToDelete ? ordreToDelete.id : ''}) ?
+                </Modal.Body>
+                <Modal.Footer>
+                  <Button variant="secondary" onClick={() => setShowConfirmationModal(false)}>
+                    Annuler
+                  </Button>
+                  <Button variant="danger" onClick={confirmDelete}>
+                    Confirmer
+                  </Button>
+                </Modal.Footer>
+              </Modal>
+            )}
     </div>
-  );
+  ); 
 }
 
 export default ShowOrdreMission;

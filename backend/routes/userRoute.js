@@ -44,6 +44,7 @@ userrouter.post('/get-techniciens-sans-evenements', authenticateToken, userContr
 userrouter.get('/get-user/', authenticateToken, userController.getUser);
 
 userrouter.get('/details/:clientName', authenticateToken, userController.getClientDetails);
-
+userrouter.get('/get-clients/', authenticateToken, userController.getClients);
+userrouter.get('/getliste-techniciens', authenticateToken, userController.getListeTechniciens);
 
 module.exports = userrouter;

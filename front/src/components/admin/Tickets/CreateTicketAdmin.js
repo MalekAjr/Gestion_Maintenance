@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Form, Button } from 'react-bootstrap';
 import postService from '../../../services/postService';
+import { BsFillArrowLeftSquareFill } from 'react-icons/bs';
 
 const CreateTicketAdmin = () => {
   const [formData, setFormData] = useState({
@@ -35,7 +36,18 @@ const CreateTicketAdmin = () => {
 
   return (
     <div className="container mt-5">
-      <h2 className="text-center mb-4">Créer un nouveau ticket</h2>
+      <div className="row align-items-center">
+          <div className="col-auto">
+              <Link to="/admin/showtickets" className="btn mb-3" style={{ color: 'green' }}>
+                  <BsFillArrowLeftSquareFill size={30} /> Retour Vers Dashboard
+              </Link>
+          </div>
+          <div className="col text-center">
+              <h2 className="text-center mb-4">Créer un nouveau ticket</h2>
+          </div>
+          <div className="col-auto"></div>
+      </div>
+
       <Form onSubmit={handleSubmit}>
         <div className="d-flex justify-content-center">
           <Form.Group className="mb-3 w-50" controlId="formTitle">

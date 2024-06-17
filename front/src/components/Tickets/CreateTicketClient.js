@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Form, Button } from 'react-bootstrap';
 import postService from '../../services/postService';
+import adminService from '../../services/adminService';
+import { BsFillArrowLeftSquareFill, BsFillPlusSquareFill } from 'react-icons/bs';
 
 const CreateTicket = () => {
   const [formData, setFormData] = useState({
@@ -21,21 +23,51 @@ const CreateTicket = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-
+  
     try {
-      await postService.createTicket(formData);
-      navigate("/dashboard")
+      // Suppose que user_nom est disponible dans le contexte
+      const { title, description, priority, category } = formData;
+      const userNom = 'user_nom'; // Remplacez ceci par le nom de l'utilisateur réel
+      const ticketData = {
+        title,
+        description,
+        priority,
+        category,
+        userNom, // Inclure le nom de l'utilisateur dans les données du ticket
+      };
+      await postService.createTicket(ticketData);
+    
+      navigate("/showticketclient")
     } catch (error) {
-      console.error('Error creating ticket:', error);
+      console.error('Erreur lors de la création du ticket :', error);
       alert('Une erreur s\'est produite lors de la création du ticket.');
     } finally {
       setLoading(false);
     }
   };
+  
+  
+  
 
   return (
     <div className="container mt-5">
-      <h2 className="text-center mb-4">Créer un nouveau ticket</h2>
+      <div className="row align-items-center">
+      <div className="col-auto">
+        <Link to="/showficheIntervention" className="btn mb-3" style={{ color: 'green' }}>
+          <BsFillArrowLeftSquareFill size={30} /> Retour Vers Dashboard
+        </Link>
+      </div>
+      <div className="col mx-auto text-center">
+        <h2 className="mb-5">Créer un nouveau ticket</h2>
+      </div>
+      <div className="col-auto">
+        <Link to="/createticketclient" className="btn btn-success mb-3">
+          <BsFillPlusSquareFill /> Créer un ticket
+        </Link>
+      </div>
+    </div>
+      
+      
       <Form onSubmit={handleSubmit}>
         <div className="d-flex justify-content-center">
           <Form.Group className="mb-3 w-50" controlId="formTitle">

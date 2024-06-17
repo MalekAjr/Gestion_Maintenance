@@ -8,6 +8,8 @@ import DeleteConfirmationModal from './DeleteConfirmationModal';
 import './css/ListUsers.css';
 import withAuthorization from '../authorization/withAuthorization';
 import { useTheme } from '../ThemeContext';
+import { BsPencilSquare, BsTrash } from 'react-icons/bs';
+import CreateUserModal from './CreateUserModal';
 
 function ListUsers() {
   const [users, setUsers] = useState([]);
@@ -19,7 +21,8 @@ function ListUsers() {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedUserForUpdate, setSelectedUserForUpdate] = useState(null);
   const { darkMode } = useTheme();
-
+  const iconSize = 28;
+  const [showCreateModal, setShowCreateModal] = useState(false);
   useEffect(() => {
     console.log('Dark Mode:', darkMode);
   }, [darkMode]);
@@ -120,8 +123,10 @@ function ListUsers() {
 
   return (
     <div className={`container mt-5 ${darkMode ? 'dark' : 'light'}`}>
-    <div className="container mt-5">
-      <h1 className="text-center mb-5">Liste des Users</h1>
+      <div className="d-flex justify-content-between align-items-center mb-5">
+      <h1 className="text-center">Liste des Utilisateurs</h1>
+      <button className="btn btn-primary" onClick={() => setShowCreateModal(true)}>Créer un Utilisateur</button>
+      </div>
       <Navbar searchQuery={searchQuery} handleSearch={handleSearch} />
 
       <div className="table-responsive">
@@ -134,11 +139,11 @@ function ListUsers() {
        {/*  <th scope="col">Date</th> */}
         <th scope="col">Role</th>
         <th scope="col">Email</th>
-        <th scope="col">Phone</th>
+        <th scope="col">Num Téléphone</th>
         <th scope="col">Date Created</th>
-        <th scope="col">Time Created</th>
-        <th scope="col">Update</th>
-        <th scope="col">Delete</th>
+        <th scope="col">Temps Création</th>
+        <th scope="col">Modifier</th>
+        <th scope="col">Supprimer</th>
       </tr>
     </thead>
     <tbody>
@@ -171,13 +176,14 @@ function ListUsers() {
                   <td>{formatTime(user.createdAt)}</td>
                   <td>
                     <button
-                      className="btn btn-primary"
+                      className="btn btn-success"
                       onClick={() => {
                         setSelectedUserForUpdate(user);
                         setShowUpdateModal(true);
                       }}
                     >
-                      Update
+                      <BsPencilSquare className="me-1" size={iconSize} />
+                      
                     </button>
                   </td>
                   <td>
@@ -185,7 +191,7 @@ function ListUsers() {
                       className="btn btn-danger"
                       onClick={() => handleDelete(user)}
                     >
-                      Delete
+                      <BsTrash className="me-1" size={iconSize} />
                     </button>
                   </td>
                 </tr>
@@ -224,7 +230,14 @@ function ListUsers() {
           onDelete={handleConfirmDelete}
         />
       )}
-    </div>
+
+{showCreateModal && (
+        <CreateUserModal
+          onClose={() => setShowCreateModal(false)}
+          show={showCreateModal}
+          onUserCreated={fetchUsers} // Refetch users after creation
+        />
+      )}
     </div>
   );
 }

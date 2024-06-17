@@ -24,7 +24,7 @@ function Navbartotal() {
       return (
         <>
           <Link to="/admin/dashboard" style={{ color: 'white', marginRight: '30px' }}>
-            <button style={{ color: 'white', background: 'none', border: 'none', cursor: 'pointer', marginRight: '10px' }}>Back to Dashboard</button>
+            <button style={{ color: 'white', background: 'none', border: 'none', cursor: 'pointer', marginRight: '10px' }}>Retour Au Tableau De Bord</button>
           </Link>
           <button onClick={handleLogout} style={{ color: 'white', background: 'none', border: 'none', cursor: 'pointer', marginRight: '10px' }}>Logout</button>
         </>
@@ -45,9 +45,9 @@ function Navbartotal() {
   return (
     <nav style={{ backgroundColor: '#ff5a5f', padding: '10px', display: 'flex', justifyContent: 'space-between', marginBottom: '15px' }}>
       <div>
-        <Link to="/home" style={{ color: 'white', marginRight: '10px' }}>Home</Link>
-        <Link to="/about" style={{ color: 'white', marginRight: '10px' }}>About</Link>
-        <Link to="/contact" style={{ color: 'white', marginRight: '10px' }}>Contact</Link>
+        {/** <Link to="/home" style={{ color: 'white', marginRight: '10px' }}>Home</Link>
+        <Link to="/about" style={{ color: 'white', marginRight: '10px' }}>About</Link> */}
+        <Link to="/contact" style={{ color: 'white', marginRight: '10px' }}>Contact</Link> 
       </div>
       
       <div style={{ display: 'flex', alignItems: 'center' }}>

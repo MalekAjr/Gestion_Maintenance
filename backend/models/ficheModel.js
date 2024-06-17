@@ -13,10 +13,6 @@ const ficheSchema = mongoose.Schema({
         type: String,
         required: true
     },
-    nom: {
-        type: String,
-        required: true
-    },
     date: {
         type: Date,
         required: true,
@@ -90,6 +86,10 @@ const ficheSchema = mongoose.Schema({
         type: Number,
         required:false
     },
+    statutservice: {
+        type: Number,
+        required:false
+    },
     user_id: {
         type: String,
         required: true
@@ -102,6 +102,22 @@ const ficheSchema = mongoose.Schema({
         type: String,
         required: false
       },
+    hourlyRate: {
+        type: Number,
+        required: false
+    },
+    piecePrice: {
+        type: Number,
+        required: false
+    },
+    heuresPrice: {
+        type: Number,
+        required: false
+    },
+    totalPrice: {
+        type: Number,
+        required: false
+    }
 
 }, { timestamps: true });
 

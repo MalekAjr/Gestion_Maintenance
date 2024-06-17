@@ -17,6 +17,10 @@ const eventSchema = new mongoose.Schema({
     type: Date,
     required: true,
   },
+  hoursTravel: {
+    type: Date,
+    required: false,
+  },
   statut: {
     type: Number,
     required:false
@@ -41,6 +45,11 @@ const eventSchema = new mongoose.Schema({
   carName: {
     type: String,
     default: '',
+  },
+  ticketId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Ticket',
+    required: false,
   },
 });
 

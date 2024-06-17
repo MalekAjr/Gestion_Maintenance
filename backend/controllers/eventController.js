@@ -4,18 +4,22 @@ const User = require('../models/userModel');
 
 const createEvent = async (req, res) => {
   try {
-    const { title, description, start, end, statut, userId, userName, technicienName = '', carName } = req.body;
+    const { title, description, start, end, hoursTravel, statut, userId, userName, technicienName = '', carName, ticketId } = req.body;
     
     const existingEvent = await Event.findOne({
       $or: [
         { start: { $lte: end }, end: { $gte: start } },
         { start: { $gte: start, $lte: end } },
       ],
-      technicienName: technicienName,
+      $or: [
+      {technicienName: technicienName },
+      //j 'ai ajouté ca pour voir disponibilté du voiture aussi
+      { carName: carName },
+      ]
     });
 
     if (existingEvent) {
-      return res.status(400).json({ error: 'Le technicien est déjà assigné à un événement pendant cette période' });
+      return res.status(400).json({ error: 'Le technicien ou la voiture est déjà assigné à un événement pendant cette période' });
     }
 
     const techniciens = await User.find({ role: 'technicien' });
@@ -32,15 +36,16 @@ const createEvent = async (req, res) => {
       description,
       start,
       end,
+      hoursTravel,
       statut:0,
       statuttechnicien: 0,
       userId,
       userName,
       technicienName,
-      carName
+      carName,
+      ticketId,
     });
 
-    // Enregistrer l'événement dans la base de données
     const eventData = await newEvent.save();
 
     console.log('Saved Event Data:', eventData);
@@ -56,7 +61,6 @@ const createEvent = async (req, res) => {
   
   const getEvents = async (req, res) => {
     try {
-      // Fetch all events from the database
       const events = await Event.find().sort({ createdAt: -1 });
   
       res.status(200).send({ success: true, msg: 'Events Data retrieved', data: events });
@@ -86,13 +90,11 @@ const createEvent = async (req, res) => {
     try {
       const id = req.params.id;
   
-      // Check if the fiche exists before deleting
       const existingEvent = await Event.findById(id);
       if (!existingEvent) {
         return res.status(400).send({ success: false, msg: 'Event already deleted' });
       }
   
-      // Use Fiche model to delete the document by _id
       await Event.findByIdAndDelete(id);
   
       res.status(200).send({ success: true, msg: 'Event deleted successfully' });
@@ -104,18 +106,21 @@ const createEvent = async (req, res) => {
   const updateEvent = async (req, res) => {
     try {
       const eventId = req.params.id;
-      const { title, description, start, end, statut,statuttechnicien, userId, userName, technicienName, carName } = req.body;
+      const { title, description, start, end, hoursTravel, statut,statuttechnicien, userId, userName, technicienName, carName, ticketId } = req.body;
   
-      // Vérifiez si le technicien est déjà assigné à un événement pendant cette période
       const existingEvent = await Event.findOne({
         $and: [
-          { _id: { $ne: eventId } }, // Ne pas inclure l'événement en cours de mise à jour
+          { _id: { $ne: eventId } },
           { $or: [
               { start: { $lte: end }, end: { $gte: start } },
               { start: { $gte: start, $lte: end } },
             ]
           },
-          { technicienName: technicienName }
+          { $or: [
+            { technicienName: technicienName },
+            { carName: carName },
+          ]
+        }
         ]
       });
   
@@ -123,7 +128,7 @@ const createEvent = async (req, res) => {
         return res.status(400).json({ error: 'Le technicien est déjà assigné à un événement pendant cette période' });
       }
   
-      let updateFields = { title, description, start, end, statut, statuttechnicien, userId, userName, technicienName, carName };
+      let updateFields = { title, description, start, end, hoursTravel, statut, statuttechnicien, userId, userName, technicienName, carName };
   
       console.log("Updating event with ID:", eventId);
       console.log("Update Events:", updateFields);
@@ -149,7 +154,6 @@ const createEvent = async (req, res) => {
     try {
       const { start, end } = req.query;
   
-      // Convertir les dates de chaînes en objets Date
       const startDate = new Date(start);
       const endDate = new Date(end);
   
@@ -168,6 +172,22 @@ const createEvent = async (req, res) => {
       res.status(400).json({ success: false, msg: error.message });
     }
   };
+
+  const getEventById = async (req, res) => {
+    try {
+      const eventId = req.params.id;
+      const event = await Event.findById(eventId);
+  
+      if (!event) {
+        return res.status(404).json({ success: false, msg: 'Event not found' });
+      }
+  
+      res.status(200).json({ success: true, data: event });
+    } catch (error) {
+      console.error('Error fetching event:', error);
+      res.status(400).json({ success: false, msg: error.message });
+    }
+  }
   
   module.exports = {
     createEvent,
@@ -176,4 +196,5 @@ const createEvent = async (req, res) => {
     updateEvent,
     getOverlappingEvents,
     getPlanningOneTechnicien,
+    getEventById
   };

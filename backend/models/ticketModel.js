@@ -19,6 +19,10 @@ const ticketSchema = new mongoose.Schema({
     enum: ['Technique', 'Facturation', 'Autre'],
     required: true
   },
+  statutticket: {
+    type: Number,
+    required: false
+  },
   user_id: {
     type: String,
     required: true

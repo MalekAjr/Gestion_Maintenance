@@ -160,7 +160,6 @@ function Signup() {
       }
     }
 
-    // Affiche l'alerte pendant 3 secondes
     setShowAlert(true);
     setTimeout(() => setShowAlert(false), 3000);
   };
@@ -169,7 +168,7 @@ function Signup() {
   const handleSubmitLogin = async (e) => {  
     e.preventDefault();
 
-    axios.post("http://localhost:8000/api/login/", { email, password })
+    await axios.post("http://localhost:8000/api/login/", { email, password })
       .then((res) => {
         const { token, role } = res.data;
         const decodedToken = jwtDecode(token);
@@ -178,19 +177,20 @@ function Signup() {
         localStorage.setItem('token', token);
         localStorage.setItem('role', role);
         localStorage.setItem('userId', userId);
+    
 
-        // Détermine le rôle de l'utilisateur et redirige en conséquence
         if (role === 'admin') {
           setLoggedIn(true);
           setUserRole(role);
 
         //  triggerReloadNavbar();
-
-          navigate("/admin/dashboard/");
+                 window.location.href=window.location.origin+'/app/admin/dashboard/';
+          //navigate("/admin/dashboard/");
         } else {
           setLoggedIn(true);
           setUserRole(role);
-          navigate("/dashboard/"); // Redirection vers la page showficheintervention après la connexion réussie
+          window.location.href=window.location.origin+'/app/dashboard/';
+          //navigate("/dashboard/"); // Redirection vers la page showficheintervention après la connexion réussie
         }
       })
       .catch((err) => {
@@ -210,6 +210,9 @@ function Signup() {
 
       <div className='signup-form-container'>
         <div className="container">
+        <div className='imagepetit'>
+        <img src="/imgs/hpclogo2.JPG" alt="HPC Logo" />
+        </div>
           <div className="card">
             {/* Toggle Buttons */}
             <div className="toggle-btns">

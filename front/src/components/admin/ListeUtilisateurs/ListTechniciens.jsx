@@ -1,17 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../css/ListUsers.css';
+import { useTheme } from '../../ThemeContext';
 import adminService from '../../../services/adminService';
-import DeleteConfirmationModal from '../DeleteConfirmationModal';
-import UpdateUserModal from '../UpdateUserModal';
-import withAuthorization from '../../authorization/withAuthorization';
 import LoadingSpinner from '../../LoadingSpinner';
 import Navbar from '../../NavBar/Navbar';
-import { useTheme } from '../../ThemeContext';
+import UpdateUserModal from '../UpdateUserModal';
+import DeleteConfirmationModal from '../DeleteConfirmationModal';
+import withAuthorization from '../../authorization/withAuthorization';
+import { BsPencilSquare, BsTrash } from 'react-icons/bs';
 
-function ListTechniciens() {
-  const [users, setUsers] = useState([]);
+function ListUsers() {
+  const [techniciens, setTechniciens] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [users, setUsers] = useState([]);
   const [filteredUsers, setFilteredUsers] = useState([]);
   const [selectedUser, setSelectedUser] = useState(null);
   const [showUpdateModal, setShowUpdateModal] = useState(false);
@@ -19,22 +21,21 @@ function ListTechniciens() {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedUserForUpdate, setSelectedUserForUpdate] = useState(null);
   const { darkMode } = useTheme();
+  const iconSize = 28;
 
   useEffect(() => {
     console.log('Dark Mode:', darkMode);
   }, [darkMode]);
 
-  // Fetch users from the database
+
   const fetchTechniciens = async () => {
     try {
       setLoading(true);
-      const response = await adminService.getUsers();
-      const allUsers = response.data.users;
-      const filteredUsers = allUsers.filter(user => user.role === "technicien");
-      setUsers(filteredUsers);
+      const response = await adminService.getListeTechniciens();
+      setTechniciens(response.data.techniciens);
       setLoading(false);
     } catch (error) {
-      console.error("Error fetching users:", error);
+      console.error("Error fetching techniciens:", error);
       setLoading(false);
     }
   };
@@ -89,18 +90,17 @@ function ListTechniciens() {
     setShowDeleteModal(false);
   };
 
-  // Filter users based on searchQuery
   const handleSearch = async (e) => {
     const query = e.target.value.toLowerCase(); //.trim();
     setSearchQuery(query);
 
     try {
       if (query === "") {
-        const response = await adminService.getUsers();
-        setUsers(response.data.users);
+        const response = await adminService.getListeTechniciens();
+        setUsers(response.data.techniciens);
       } else {
         const response = await adminService.searchUsers(query);
-        setUsers(response.data.users);
+        setUsers(response.data.techniciens);
       }
     } catch (error) {
       console.error("Error searching users:", error);
@@ -108,13 +108,13 @@ function ListTechniciens() {
   };
 
   useEffect(() => {
-    const filteredResults = users.filter(user =>
-      Object.keys(user).some(key =>
-        typeof user[key] === 'string' && user[key].toLowerCase().includes(searchQuery)
+    const filteredResults = techniciens.filter(technicien =>
+      Object.keys(technicien).some(key =>
+        typeof technicien[key] === 'string' && technicien[key].toLowerCase().includes(searchQuery)
       )
     );
     setFilteredUsers(filteredResults);
-  }, [searchQuery, users]);
+  }, [searchQuery, techniciens]);
 
   if (loading) {
     return <LoadingSpinner />;
@@ -123,7 +123,7 @@ function ListTechniciens() {
   return (
     <div className={`container mt-5 ${darkMode ? 'dark' : 'light'}`}>
     <div className="container mt-5">
-      <h1 className="text-center mb-5">Liste des Users</h1>
+      <h1 className="text-center mb-5">Liste des Techniciens</h1>
       <Navbar searchQuery={searchQuery} handleSearch={handleSearch} />
 
       <div className="table-responsive">
@@ -136,11 +136,11 @@ function ListTechniciens() {
        {/*  <th scope="col">Date</th> */}
         <th scope="col">Role</th>
         <th scope="col">Email</th>
-        <th scope="col">Phone</th>
-        <th scope="col">Date Created</th>
-        <th scope="col">Time Created</th>
-        <th scope="col">Update</th>
-        <th scope="col">Delete</th>
+        <th scope="col">Num Téléphone</th>
+        <th scope="col">Date Création</th>
+        <th scope="col">Temps Création</th>
+        <th scope="col">Modifier</th>
+        <th scope="col">Supprimer</th>
       </tr>
     </thead>
     <tbody>
@@ -160,7 +160,7 @@ function ListTechniciens() {
                           style={{ maxWidth: '100px', maxHeight: '100px' }}
                         />
                       ) : (
-                        <span>No Image Available</span>
+                        <span>Pas D'Image Trouvée</span>
                       )}
                     </div>
                   </td>
@@ -173,13 +173,13 @@ function ListTechniciens() {
                   <td>{formatTime(user.createdAt)}</td>
                   <td>
                     <button
-                      className="btn btn-primary"
+                      className="btn btn-success"
                       onClick={() => {
                         setSelectedUserForUpdate(user);
                         setShowUpdateModal(true);
                       }}
                     >
-                      Update
+                      <BsPencilSquare className="me-1" size={iconSize} /> 
                     </button>
                   </td>
                   <td>
@@ -187,7 +187,8 @@ function ListTechniciens() {
                       className="btn btn-danger"
                       onClick={() => handleDelete(user)}
                     >
-                      Delete
+                    <BsTrash className="me-1" size={iconSize} />
+
                     </button>
                   </td>
                 </tr>
@@ -233,4 +234,4 @@ function ListTechniciens() {
 
 const allowedRoles = ['admin'];
 
-export default withAuthorization(allowedRoles)(ListTechniciens);
+export default withAuthorization(allowedRoles)(ListUsers);

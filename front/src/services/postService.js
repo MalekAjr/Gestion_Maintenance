@@ -28,7 +28,7 @@ class FicheIntervention {
 
     deleteFiche(id) {
         const url = "http://localhost:8000/api/delete-fiche/" + id;
-        return axios.get(url,config);
+        return axios.delete(url,config);
     }
 
     searchFiches(query) {
@@ -145,8 +145,16 @@ class FicheIntervention {
     }
 
      getClientDetails = (clientName) => {
-      return axios.get(`/api/client/details/${clientName}`);
+      const url= `http://localhost:8000/api/details/${clientName}`;
+      return axios.get(url, config);
     };
+
+    sendEmail(userEmail) {
+      const url = "http://localhost:8000/api/sendemail";
+      const data = { userEmail };
+      return axios.post(url, data, config);
+  }
+  
 }
 
 export default new FicheIntervention();

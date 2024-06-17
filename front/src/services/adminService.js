@@ -21,6 +21,11 @@ class AdminForm {
     return axios.get(url, this.config);
   }
 
+  getEventById(id) {
+    const url = `http://localhost:8000/api/get-event/${id}`;
+    return axios.get(url, this.config);
+  }
+
   searchEventOneUser(query) {
     const url = `http://localhost:8000/api/get-events/?query=${query}`;
     return axios.get(url, this.config);
@@ -42,6 +47,15 @@ class AdminForm {
     return axios.get(url, this.config);
   }
   
+  getClients() {
+    const url = "http://localhost:8000/api/get-clients/";
+    return axios.get(url, this.config);
+  }
+
+  getListeTechniciens() {
+    const url = "http://localhost:8000/api/getliste-techniciens/";
+    return axios.get(url, this.config);
+  }
 
   updateUser(updatedUser) {
     const url = `http://localhost:8000/api/update-user/${updatedUser._id}`;
@@ -99,6 +113,11 @@ class AdminForm {
     return axios.get(url, this.config);
   }
 
+  getCarById(carId) {
+    const url = `http://localhost:8000/api/get-car/${carId}`;
+    return axios.get(url, this.config);
+  }
+  
 
   getTechniciens(startDate, endDate) {
     const url = "http://localhost:8000/api/get-techniciens-sans-evenements";
@@ -123,6 +142,40 @@ getFichesDemandes() {
   const url = "http://localhost:8000/api/get-fiches-demandes";
   return axios.get(url, this.config);
 }
+
+addNotification(notificationData) {
+  const url = "http://localhost:8000/api/add-notification";
+  return axios.post(url, notificationData, this.config);
+}
+
+getLastNotification() {
+  const url = "http://localhost:8000/api/last-notification-message";
+  return axios.get(url, this.config);
+}
+
+getAllNotifications() {
+  const url = "http://localhost:8000/api/get-all-notifications";
+  return axios.get(url, this.config);
+}
+
+getUnreadNotifications() {
+  const url = "http://localhost:8000/api/unread-notifications";
+  return axios.get(url, this.config);
+}
+
+markNotificationsAsRead() {
+  const url = "http://localhost:8000/api/mark-notifications-as-read";
+  return axios.post(url, {}, this.config);
+}
+
+createUser(formDataToSend) {
+  const url = "http://localhost:8000/api/signup/";
+
+  return axios.post(url, formDataToSend, this.config);
+}
+
+
+
 
 }
 

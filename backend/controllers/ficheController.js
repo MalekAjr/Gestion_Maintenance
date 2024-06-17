@@ -16,7 +16,6 @@ const createFiche = async (req, res) => {
         client: req.body.client,
         address: req.body.address,
         contact: req.body.contact,
-        nom: req.body.nom,
         date: date,
         categories: JSON.parse(req.body.categories),
         equipment: req.body.equipment,
@@ -29,16 +28,20 @@ const createFiche = async (req, res) => {
         NBheures_Mission: req.body.NBheures_Mission,
         NBheures_Trajet: req.body.NBheures_Trajet,
         fraisMission: req.body.fraisMission,
-        malek:req.body.malek,
         heurestart:req.body.heurestart,
         heureend:req.body.heureend,
         statuttechnique: 1,
         statutclient: 1,
         statuttechnicien: 1,
+        statutservice:1,
         comment:req.body.comment,
         user_id: req.user._id,
-        user_email: '', // Placeholder for user email
-        user_nom: '', // Placeholder for user nom
+        user_email: '',
+        user_nom: '',
+        hourlyRate: req.body.hourlyRate,
+        piecePrice: req.body.piecePrice,
+        heuresPrice: req.body.heuresPrice,
+        totalPrice: req.body.totalPrice,
       });
   
       User.findById(req.user._id)
@@ -166,9 +169,38 @@ const deleteFiche = async (req, res) => {
 const updateFiche = async (req, res) => {
     try {
         const ficheId = req.params.id;
-        const { client, address, contact, nom, date, categories, equipment,interventionType ,descriptif, reference, quantite, prixUnitaire, NBheures_Mission, NBheures_Trajet, fraisMission, statut, statuttechnique, statutclient, statuttechnicien, comment } = req.body;
+        const {
+            client, address, contact, date, categories, equipment, interventionType,
+            descriptif, reference, quantite, prixUnitaire, NBheures_Mission,
+            NBheures_Trajet, fraisMission, statut, statuttechnique, statutclient,
+            statuttechnicien, statutservice, comment, hourlyRate, piecePrice,
+            heuresPrice, totalPrice
+        } = req.body;
 
-        let updateFields = { client, address, contact, nom, date, categories, equipment, interventionType, descriptif, reference, quantite, prixUnitaire, NBheures_Mission, NBheures_Trajet, fraisMission, statut, statuttechnique, statutclient, statuttechnicien, comment };
+        // Prepare the updateFields object
+        let updateFields = {
+            client, address, contact, date, equipment, interventionType, descriptif,
+            reference, quantite, prixUnitaire, NBheures_Mission, NBheures_Trajet,
+            fraisMission, statut, statuttechnique, statutclient, statuttechnicien,
+            statutservice, comment, hourlyRate, piecePrice, heuresPrice, totalPrice
+        };
+
+        // Handle the categories field if it is defined
+        if (categories) {
+            if (typeof categories === 'string') {
+                try {
+                    updateFields.categories = JSON.parse(categories);
+                } catch (error) {
+                    updateFields.categories = categories.split(',').map(category => category.trim());
+                }
+            } else if (Array.isArray(categories)) {
+                updateFields.categories = categories;
+            } else {
+                throw new TypeError('Invalid type for categories');
+            }
+        }
+
+        // Include the image file if it is provided
         if (req.file) {
             updateFields.image = req.file.filename;
         }
@@ -176,6 +208,7 @@ const updateFiche = async (req, res) => {
         console.log("Updating fiche with ID:", ficheId);
         console.log("Update Fields:", updateFields);
 
+        // Update the fiche and return the new version
         const updatedFiche = await Fiche.findByIdAndUpdate(ficheId, updateFields, { new: true });
 
         if (!updatedFiche) {
@@ -190,6 +223,8 @@ const updateFiche = async (req, res) => {
         res.status(400).json({ success: false, msg: error.message });
     }
 };
+
+
 
 const getFichesDemandes = async (req, res) => {
     try {

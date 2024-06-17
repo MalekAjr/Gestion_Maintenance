@@ -6,10 +6,11 @@ import { Link } from 'react-router-dom';
 import Navbar from '../../components/NavBar/Navbar';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
-import { BsFillPlusSquareFill } from 'react-icons/bs';
+import { BsFillArrowLeftSquareFill, BsFillPlusSquareFill } from 'react-icons/bs';
 import StatusBadgeAdmin from './StatusBadgeAdmin';
 import StatusBadgeClient from './StatusBadgeClient';
-import StatusBadgeTechnicien from './StatusBadgeFacturation';
+import StatusBadgeTechnicien from './StatusBadgeTechnicien';
+import adminService from '../../services/adminService';
 
 function FicheInterventionTable() {
   const [fiches, setFiches] = useState([]);
@@ -76,6 +77,19 @@ function FicheInterventionTable() {
     }
   };
   
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        // Fetch user data here, including the role
+        const response = await adminService.getUser();
+        setRole(response.data.user.role);
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+      }
+    };
+  
+    fetchUserData();
+  }, []);
   
 
   if (loading || !fiches) {
@@ -83,10 +97,18 @@ function FicheInterventionTable() {
   }
 
   return (
+
+         
+
     <div className="container">
       <div className="row align-items-center">
+          <div className="col-auto">
+              <Link to="/dashboard" className="btn mb-3" style={{ color: 'green' }}>
+                  <BsFillArrowLeftSquareFill size={30} /> Retour Vers Dashboard
+              </Link>
+          </div>
         <div className="col">
-          <h1 className="mb-5">Liste des Fiches d'Intervention</h1>
+          <h1 className="mb-5"  style={{ textAlign: 'center', marginTop: "10px" }}>Liste des Fiches d'Intervention</h1> 
         </div>
         {role !== 'utilisateur' && (
           <div className="col-auto">

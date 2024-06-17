@@ -11,7 +11,8 @@ import adminService from '../../services/adminService';
 
 import { Button, Modal } from 'react-bootstrap';
 import { FaCheckCircle } from 'react-icons/fa';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { BsFillArrowLeftSquareFill } from 'react-icons/bs';
 
 const localizer = momentLocalizer(moment);
 
@@ -44,12 +45,24 @@ const TechnicienSchedulerCalendar = () => {
   }, []);
 
   const handleNavigation = () => {
-    const clientData = {
-      userName: selectedEvent.userName,
-      // Ajoutez d'autres données client si nécessaire
-    };
-    navigate('/createficheIntervention', { state: { clientData } });
+    if (selectedEvent) {
+      const ticketId = selectedEvent.ticketId;
+      console.log("Ticket ID passé:", ticketId);
+      const clientData = {
+        userName: selectedEvent.userName,
+        heurestart: selectedEvent.start,
+        heureend: selectedEvent.end,
+        heureTrajet: selectedEvent.hoursTravel,
+        ticketId: ticketId,
+      };
+      console.log("Heure Trajet:", selectedEvent.hoursTravel); // Ajout du console.log
+
+      navigate('/createficheIntervention', { state: { clientData } });
+    }
   };
+  
+  
+  
   
   
   const handleSelectEvent = (event) => {
@@ -130,10 +143,46 @@ const TechnicienSchedulerCalendar = () => {
     );
   };
   
+  const handleSendEmailToClient = async () => {
+    try {
+      if (selectedEvent && selectedEvent.userName) {
+        // Appeler getClientDetails avec le nom d'utilisateur du client
+        const response = await postService.getClientDetails(selectedEvent.userName);
+  
+        // Vérifier si les détails du client ont été récupérés avec succès
+        if (response.data && response.data.email) {
+          // Récupérer l'adresse e-mail du client à partir de la réponse
+          const clientEmail = response.data.email;
+  
+          // Envoyer l'e-mail au client en utilisant son adresse e-mail récupérée
+          const emailResponse = await postService.sendEmail(clientEmail);
+          console.log(emailResponse.data); // Si nécessaire
+          alert('Email envoyé avec succès!');
+        } else {
+          // Aucune adresse e-mail n'a été trouvée pour le client
+          alert('Aucune adresse e-mail client disponible');
+        }
+      } else {
+        // Aucun nom d'utilisateur n'a été fourni
+        alert('Nom d\'utilisateur client non spécifié');
+      }
+    } catch (error) {
+      console.error('Erreur lors de l\'envoi de l\'e-mail au client:', error);
+      alert('Une erreur s\'est produite lors de l\'envoi de l\'e-mail au client.');
+    }
+  };
+  
+
+  
   
   return (
     <div style={{ display: 'flex' }}>
       <div style={{ flex: 1 }}>
+      <div className="col-auto">
+              <Link to="/dashboard" className="btn mb-3" style={{ color: 'green' }}>
+                  <BsFillArrowLeftSquareFill size={30} /> Retour Vers Dashboard
+              </Link>
+        </div>
         <Calendar
           localizer={localizer}
           events={events}
@@ -174,14 +223,19 @@ const TechnicienSchedulerCalendar = () => {
           )}
         </Modal.Body>
         <Modal.Footer>
-          <div className="w-100 d-flex justify-content-between">
-            <Button variant="warning" onClick={handleNavigation}>Créer cette intervention</Button>
-            <div>
-              <Button variant="primary" onClick={handleUpdateEvent}>Tâche effectuée</Button>
-              <Button variant="secondary" onClick={() => setShowModal(false)}>Fermer</Button>
-            </div>
-          </div>
-        </Modal.Footer>
+  <div className="w-100 d-flex justify-content-between">
+    <Button variant="warning" className="btn-block mr-2" onClick={handleNavigation}>
+      Créer cette intervention
+    </Button>
+    <Button variant="success" className="btn-block mx-2" onClick={handleSendEmailToClient}>
+      Envoi Email Au Client
+    </Button>
+    <Button variant="primary" className="btn-block ml-2" onClick={handleUpdateEvent}>
+      Tâche effectuée
+    </Button>
+  </div>
+</Modal.Footer>
+
 
       </Modal>
     </div>

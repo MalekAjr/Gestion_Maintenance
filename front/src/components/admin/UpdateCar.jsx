@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useParams, useNavigate } from 'react-router-dom';
 import adminService from '../../services/adminService';
 import e from 'cors';
+import { BsFillArrowLeftSquareFill } from 'react-icons/bs';
 
 const UpdateCar = () => {
   const { id } = useParams();
@@ -25,7 +26,7 @@ const UpdateCar = () => {
   const fetchCar = async () => {
     try {
       const response = await adminService.getCarById(id);
-      const carData = response.data;
+      const carData = response.data.data;
       setFormData({
         matricule: carData.matricule,
         brand: carData.brand,
@@ -78,7 +79,12 @@ const UpdateCar = () => {
 
   return (
     <div className="container mt-5">
-      <div className="row justify-content-center">
+      <div className="col-auto">
+        <Link to="/admin/dashboard" className="btn mb-3" style={{ color: 'green' }}>
+          <BsFillArrowLeftSquareFill size={30} /> Retour Vers Dashboard
+        </Link>
+      </div>
+      <div className="row justify-content-center" style={{marginTop: "-60px"}}>
         <div className="col-lg-6">
           <div className="card shadow">
             <div className="card-body">

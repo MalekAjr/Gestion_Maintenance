@@ -2,6 +2,7 @@ const nodemailer = require('nodemailer');
 const Mailgen = require('mailgen');
 const { EMAIL, PASSWORD } = require('../env.js');
 
+/*
 const sendmail = async (req, res) => {
     try {
         let testAccount = await nodemailer.createTestAccount();
@@ -34,8 +35,9 @@ const sendmail = async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 };
-
-const getbill = (req, res) => {
+*/
+/*
+const sendemail = (req, res) => {
     const { userEmail } = req.body;
     let config = {
         service: 'gmail',
@@ -88,7 +90,53 @@ const getbill = (req, res) => {
     });
 };
 
+*/
+
+const sendemail = (req, res) => {
+    const { userEmail } = req.body;
+    let config = {
+        service: 'gmail',
+        auth: {
+            user: EMAIL,
+            pass: PASSWORD
+        }
+    };
+
+    let transporter = nodemailer.createTransport(config);
+
+    let MailGenerator = new Mailgen({
+        theme: "default",
+        product: {
+            name: "Mailgen",
+            link: 'https://mailgen.js/'
+        }
+    });
+
+    let response = {
+        body: {
+            name: "Hpc Group", // Changer le nom ici
+            intro: "Le technicien va venir pour corriger votre problème.", // Modifier le message d'introduction
+            outrou: "Cordialement, Hpc Group" // Modifier le message de fin
+        }
+    };
+
+    let mail = MailGenerator.generate(response);
+
+    let message = {
+        from: EMAIL,
+        to: userEmail,
+        subject: "Intervention Technique", // Changer le sujet ici
+        html: mail
+    };
+
+    transporter.sendMail(message).then(() => {
+        res.status(201).json({ msg: "Vous devriez recevoir un e-mail réel" });
+    }).catch(error => {
+        res.status(500).json({ error });
+    });
+};
+
+
 module.exports = {
-    sendmail,
-    getbill
+    sendemail,
 };

@@ -2,16 +2,18 @@ import React, { useState, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../css/ListUsers.css';
 import { useTheme } from '../../ThemeContext';
-import DeleteConfirmationModal from '../DeleteConfirmationModal';
-import UpdateUserModal from '../UpdateUserModal';
 import adminService from '../../../services/adminService';
 import LoadingSpinner from '../../LoadingSpinner';
 import Navbar from '../../NavBar/Navbar';
+import UpdateUserModal from '../UpdateUserModal';
+import DeleteConfirmationModal from '../DeleteConfirmationModal';
 import withAuthorization from '../../authorization/withAuthorization';
+import { BsPencilSquare, BsTrash } from 'react-icons/bs';
 
-function ListClients() {
-  const [users, setUsers] = useState([]);
+function ListUsers() {
+  const [clients, setClients] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [users, setUsers] = useState([]);
   const [filteredUsers, setFilteredUsers] = useState([]);
   const [selectedUser, setSelectedUser] = useState(null);
   const [showUpdateModal, setShowUpdateModal] = useState(false);
@@ -19,29 +21,27 @@ function ListClients() {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedUserForUpdate, setSelectedUserForUpdate] = useState(null);
   const { darkMode } = useTheme();
+  const iconSize = 28;
 
   useEffect(() => {
     console.log('Dark Mode:', darkMode);
   }, [darkMode]);
 
-  // Fetch users from the database
+
   const fetchClients = async () => {
     try {
       setLoading(true);
-      const response = await adminService.getUsers();
-      const allUsers = response.data.users;
-      const filteredUsers = allUsers.filter(user => user.role === "utilisateur");
-      setUsers(filteredUsers);
+      const response = await adminService.getClients(); // Utiliser la méthode getClients de votre service adminService
+      setClients(response.data.clients); // Mettre à jour le state avec la liste des clients récupérée
       setLoading(false);
     } catch (error) {
-      console.error("Error fetching users:", error);
+      console.error("Error fetching clients:", error);
       setLoading(false);
     }
   };
-
   useEffect(() => {
     fetchClients();
-  }, []); // Fetch users on component mount
+  }, []);
 
   const formatTime = (dateString) => {
     const date = new Date(dateString);
@@ -96,11 +96,11 @@ function ListClients() {
 
     try {
       if (query === "") {
-        const response = await adminService.getUsers();
-        setUsers(response.data.users);
+        const response = await adminService.getClients();
+        setUsers(response.data.clients);
       } else {
         const response = await adminService.searchUsers(query);
-        setUsers(response.data.users);
+        setUsers(response.data.clients);
       }
     } catch (error) {
       console.error("Error searching users:", error);
@@ -108,13 +108,13 @@ function ListClients() {
   };
 
   useEffect(() => {
-    const filteredResults = users.filter(user =>
+    const filteredResults = clients.filter(user =>
       Object.keys(user).some(key =>
         typeof user[key] === 'string' && user[key].toLowerCase().includes(searchQuery)
       )
     );
     setFilteredUsers(filteredResults);
-  }, [searchQuery, users]);
+  }, [searchQuery, clients]);
 
   if (loading) {
     return <LoadingSpinner />;
@@ -123,7 +123,7 @@ function ListClients() {
   return (
     <div className={`container mt-5 ${darkMode ? 'dark' : 'light'}`}>
     <div className="container mt-5">
-      <h1 className="text-center mb-5">Liste des Users</h1>
+      <h1 className="text-center mb-5">Liste des Clients</h1>
       <Navbar searchQuery={searchQuery} handleSearch={handleSearch} />
 
       <div className="table-responsive">
@@ -136,11 +136,11 @@ function ListClients() {
        {/*  <th scope="col">Date</th> */}
         <th scope="col">Role</th>
         <th scope="col">Email</th>
-        <th scope="col">Phone</th>
-        <th scope="col">Date Created</th>
-        <th scope="col">Time Created</th>
-        <th scope="col">Update</th>
-        <th scope="col">Delete</th>
+        <th scope="col">Num Téléphone</th>
+        <th scope="col">Date Création</th>
+        <th scope="col">Temps Création</th>
+        <th scope="col">Modifier</th>
+        <th scope="col">Supprimer</th>
       </tr>
     </thead>
     <tbody>
@@ -160,7 +160,7 @@ function ListClients() {
                           style={{ maxWidth: '100px', maxHeight: '100px' }}
                         />
                       ) : (
-                        <span>No Image Available</span>
+                        <span>Pas D'Image Trouvée</span>
                       )}
                     </div>
                   </td>
@@ -173,13 +173,13 @@ function ListClients() {
                   <td>{formatTime(user.createdAt)}</td>
                   <td>
                     <button
-                      className="btn btn-primary"
+                      className="btn btn-success"
                       onClick={() => {
                         setSelectedUserForUpdate(user);
                         setShowUpdateModal(true);
                       }}
                     >
-                      Update
+                      <BsPencilSquare className="me-1" size={iconSize} /> 
                     </button>
                   </td>
                   <td>
@@ -187,7 +187,8 @@ function ListClients() {
                       className="btn btn-danger"
                       onClick={() => handleDelete(user)}
                     >
-                      Delete
+                    <BsTrash className="me-1" size={iconSize} />
+
                     </button>
                   </td>
                 </tr>
@@ -233,4 +234,4 @@ function ListClients() {
 
 const allowedRoles = ['admin'];
 
-export default withAuthorization(allowedRoles)(ListClients);
+export default withAuthorization(allowedRoles)(ListUsers);

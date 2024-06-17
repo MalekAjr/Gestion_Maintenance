@@ -5,37 +5,44 @@ import hpclogo from '../../imgs/hpclogo.png';
 import plasticlogo from '../../imgs/plasticlogo.png';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-import { useLocation , useNavigate } from 'react-router-dom';
+import { Link, useLocation , useNavigate } from 'react-router-dom';
 import { FaClock, FaChevronUp, FaChevronDown } from 'react-icons/fa';
 import adminService from '../../services/adminService';
+import { BsFillArrowLeftSquareFill, BsListCheck } from 'react-icons/bs';
 
 const CreateFicheIntervention = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const clientData = location.state;
-  const clientName = clientData ? clientData.clientData.userName : '';
-
+const clientName = clientData ? clientData.clientData.userName : '';
+const heureStart = clientData ? clientData.clientData.heurestart : new Date();
+const heureEnd = clientData ? clientData.clientData.heureend : new Date();
+const ticketId = clientData ? clientData.clientData.ticketId : '';
+const heureTrajet = clientData ? new Date(clientData.clientData.heureTrajet) : new Date();
+const heureTrajetFormatted = `${heureTrajet.getHours().toString().padStart(2, '0')}:${heureTrajet.getMinutes().toString().padStart(2, '0')}`;
+console.log("Nombre d'heures Trajet:", heureTrajetFormatted);
+const heuresTrajet = parseInt(heureTrajetFormatted);
 
   const [formData, setFormData] = useState({
     client: '',
     address: '',
     contact: '',
-    nom: '',
+   // nom: '',
     categories: [],
     equipment: '',
     interventionType: 'Préventive',
     descriptif: '',
     image: null,
     date: new Date().toISOString().slice(0, 10),
-    reference: '',
+    reference: ticketId,
     quantite: 0,
     prixUnitaire: 0,
     NBheures_Mission: 0,
-    NBheures_Trajet: 0,
+    NBheures_Trajet: heuresTrajet,
     fraisMission: 0,
     malek: 0,
-    heurestart: new Date(),
-    heureend: new Date()
+    heurestart: heureStart,
+    heureend: heureEnd,
   });
 
   const [message, setMessage] = useState('');
@@ -53,6 +60,8 @@ const CreateFicheIntervention = () => {
   const [newEquipmentClicked, setNewEquipmentClicked] = useState(false);
   
   const [users, setUsers] = useState()
+  const [tickets, setTickets] = useState([]);
+  const [role, setRole] = useState('');
 
   const fetchUsers = async () => {
     try {
@@ -68,6 +77,22 @@ const CreateFicheIntervention = () => {
   useEffect(() => {
     fetchUsers();
   }, []);
+
+  
+
+  const fetchTickets = async () => {
+    try {
+      const response = await postService.getTickets();
+      setTickets(response.data.data);
+    } catch (error) {
+      console.error("Error fetching tickets:", error);
+    }
+  };
+  
+  useEffect(() => {
+    fetchTickets();
+  }, []);
+  
 
   const getUserDetails = (clientName) => {
     if (users) {
@@ -109,9 +134,11 @@ const CreateFicheIntervention = () => {
         contact: userDetails.contact,
       });
     } else {
+      const newValue = name === 'NBheures_Trajet' ? parseInt(value) : value;
+
       setFormData({
         ...formData,
-        [name]: value,
+        [name]: newValue,
       });
     }
   };
@@ -121,6 +148,14 @@ const CreateFicheIntervention = () => {
       ...formData,
       customEquipmentEnabled: !formData.customEquipmentEnabled,
       equipment: ''
+    });
+  };
+
+  const handleChangeReference = (e) => {
+    const { value } = e.target;
+    setFormData({
+      ...formData,
+      reference: value,
     });
   };
   
@@ -213,11 +248,13 @@ const CreateFicheIntervention = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
+    const totalHours = formData.NBheures_Trajet + (formData.NBheures_Trajet_minutes / 60);
+
     const formDataToSend = new FormData();
     formDataToSend.append('client', formData.client);
     formDataToSend.append('address', formData.address);
     formDataToSend.append('contact', formData.contact);
-    formDataToSend.append('nom', formData.nom);
+    //formDataToSend.append('nom', formData.nom);
     formDataToSend.append('date', formData.date);
     formDataToSend.append('categories', JSON.stringify(formData.categories));
     formDataToSend.append('equipment', formData.equipment);
@@ -259,7 +296,7 @@ const CreateFicheIntervention = () => {
       client: '',
       address: '',
       contact: '',
-      nom: '',
+      //nom: '',
       categories: [],
       equipment: '',
       descriptif: '',
@@ -295,10 +332,48 @@ const CreateFicheIntervention = () => {
     });
   };
 
+  const formatTime = (time) => {
+    const date = new Date(time);
+    const hours = date.getHours().toString().padStart(2, '0');
+    const minutes = date.getMinutes().toString().padStart(2, '0');
+    return `${hours}:${minutes}`;
+  };
+  
+  const handleTimeTrajetChange = (date) => {
+    const differenceInHours = Math.abs(date.getHours() - formData.heurestart.getHours());
+    const differenceInMinutes = Math.abs(date.getMinutes() - formData.heurestart.getMinutes()) / 60;
+    const totalHours = differenceInHours + differenceInMinutes;
+    
+    setFormData({
+      ...formData,
+      heurestart: date,
+      NBheures_Trajet: totalHours,
+    });
+  };
+  
   if (!users) return null 
   
   return (
     <div className="container">
+      <div className="row align-items-center justify-content-between">
+      {role === 'admin' && (
+        <div className="col-auto">
+          <Link to="/admin/demandesfiches" className="btn mb-3" style={{ color: 'green' }}>
+            <BsFillArrowLeftSquareFill size={30} /> Retour Vers Dashboard
+          </Link>
+        </div>
+      )} : {(
+        <div className="col-auto">
+        <Link to="/showficheIntervention" className="btn mb-3" style={{ color: 'green' }}>
+          <BsFillArrowLeftSquareFill size={30} /> Retour Vers Dashboard
+        </Link>
+      </div>
+      )}
+        <div className="col text-center mx-auto">
+          <h1 className="mb-5 txt-center" style={{ marginRight: "6em"}}>Créer Rapport Intervention</h1>
+        </div>
+      </div>
+
       <div className="d-flex justify-content-between">
         <div className="col-md-4">
           <div className="mb-3">
@@ -307,12 +382,11 @@ const CreateFicheIntervention = () => {
         </div>
         <div className="col-md-4">
           <div className="mb-3">
-            <img src={plasticlogo} alt="Logo" className="logo" style={{ width: '120px', height: 'auto' }} />
+            <img src={plasticlogo} alt="Logo" className="logo" style={{ width: '120px', height: 'auto',marginLeft: "2.5em" }} />
           </div>
         </div>
       </div>
 
-      <h1 className="text-center">Créer Rapport Intervention</h1>
       <form onSubmit={handleSubmit}>
         <div className="row">
           <div className="col-md-4">
@@ -403,7 +477,7 @@ const CreateFicheIntervention = () => {
                 disabled
               />
             </div>
-            <div className="mb-3">
+          { /* <div className="mb-3">
               <label className="form-label">Nom:</label>
               <input
                 type="text"
@@ -413,7 +487,7 @@ const CreateFicheIntervention = () => {
                 required
                 className="form-control"
               />
-            </div>
+            </div> */}
             <div className="mb-3">
               <div className="col-md-4">
                 <div className="mb-3">
@@ -554,45 +628,48 @@ const CreateFicheIntervention = () => {
           </div>
           <div className="col-md-4">
           <div className="mb-3">
-    <label className="form-label">Reference:</label>
-    <div className="input-group">
-    {formData.customReferenceEnabled ? (
-  <input
-    type="text"
-    name="reference"
-    value={formData.reference}
-    onChange={handleChange}
-    required
-    className="form-control"
-    placeholder="Entrez une nouvelle référence"
-  />
-) : (
-  <select
-  name="reference"
-  value={formData.reference}
-  onChange={handleChange}
-  required
-  className="form-select"
->
-  <option value="">Sélectionner une référence</option>
-  {references.map((ref, index) => (
-    <option key={index} value={ref}>
-      {ref}
-    </option>
-  ))}
-</select>
+              <label className="form-label">Reference:</label>
+              <div className="input-group">
+              {formData.customReferenceEnabled ? (
+            <input
+              type="text"
+              name="reference"
+              value={formData.reference}
+              onChange={handleChange}
+              required
+              className="form-control"
+              placeholder="Entrez une nouvelle référence"
+            />
+          ) : (
+            <select
+            name="reference"
+            value={formData.reference}
+            onChange={handleChange}
+            required
+            className="form-select"
+          >
+            <option value="">Sélectionner une référence</option>
+            {tickets
+              .filter(ticket => ticket.user_nom === formData.client) // Filtrer les tickets pour le client sélectionné
+              .map((ticket, index) => (
+                <option key={ticket._id} value={ticket._id}>
+                  {ticket._id}
+                </option>
+              ))}
+          </select>
 
-)}
+          )}
 
-      <button
-        type="button"
-        className="btn btn-outline-secondary"
-        onClick={handleCustomReferenceToggle} // Appeler handleCustomReferenceToggle lors du clic sur le bouton "Nouvelle Référence"
-      >
-        {formData.customReferenceEnabled ? "Annuler" : "Nouvelle Référence"}
-      </button>
-    </div>
-  </div>
+
+                <button
+                  type="button"
+                  className="btn btn-outline-secondary"
+                  onClick={handleCustomReferenceToggle} // Appeler handleCustomReferenceToggle lors du clic sur le bouton "Nouvelle Référence"
+                >
+                  {formData.customReferenceEnabled ? "Annuler" : "Nouvelle Référence"}
+                </button>
+              </div>
+            </div>
 
 
             <div className="mb-3">
@@ -668,16 +745,17 @@ const CreateFicheIntervention = () => {
               />
             </div>
             <div className="mb-3">
-              <label className="form-label">Nombre d'heures Trajet:</label>
-              <input
-                type="number"
-                name="NBheures_Trajet"
-                value={formData.NBheures_Trajet}
-                onChange={handleChange}
-                required
-                className="form-control"
-              />
-            </div>
+            <label className="form-label">Nombre d'heures Trajet:</label>
+            <input
+              type="text"
+              name="NBheures_Trajet"
+              value={heuresTrajet}
+              onChange={handleChange}
+              required
+              className="form-control"
+            />
+          </div>
+
             <div className="mb-3">
               <label className="form-label">Frais Mission:</label>
               <input

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { BsFillPlusSquareFill } from 'react-icons/bs';
+import { BsFillArrowLeftSquareFill, BsFillPlusSquareFill } from 'react-icons/bs';
 import { Table, Button, Modal } from 'react-bootstrap';
 import LoadingSpinner from '../LoadingSpinner';
 import Navbar from '../NavBar/Navbar';
@@ -72,16 +72,22 @@ function ShowTicketsClient() {
 
   return (
     <div className="container">
-      <div className="row align-items-center">
-        <div className="col">
-          <h1 className="mb-5">Liste des Tickets</h1>
-        </div>
-        <div className="col-auto">
-          <Link to="/createticketclient" className="btn btn-success mb-3">
-            <BsFillPlusSquareFill /> Créer un ticket
-          </Link>
-        </div>
+     <div className="row align-items-center">
+      <div className="col-auto">
+        <Link to="/dashboard" className="btn mb-3" style={{ color: 'green' }}>
+          <BsFillArrowLeftSquareFill size={30} /> Retour Vers Dashboard
+        </Link>
       </div>
+      <div className="col mx-auto text-center">
+        <h1 className="mb-5">Liste des Tickets</h1>
+      </div>
+      <div className="col-auto">
+        <Link to="/createticketclient" className="btn btn-success mb-3">
+          <BsFillPlusSquareFill /> Créer un ticket
+        </Link>
+      </div>
+    </div>
+
 
       <Navbar searchQuery={searchQuery} handleSearch={handleSearch} />
       

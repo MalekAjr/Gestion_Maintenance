@@ -47,6 +47,8 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import StatistiquesTotal from './components/admin/charts/StatistiquesTotal';
 import ListeClients from './components/admin/ListeUtilisateurs/ListeClients';
 import ListTechniciens from './components/admin/ListeUtilisateurs/ListTechniciens';
+import FicheUpdate from './components/admin/FicheUpdate';
+import UpdateEvent from './components/admin/Events/UpdateEvent';
 
 
 function App() {
@@ -83,6 +85,7 @@ function App() {
                 <Route path="/admin/listclients" element={<ListeClients />} />
                 <Route path="/admin/listtechniciens" element={<ListTechniciens />} />
                 <Route path='/admin/demandesfiches' element={<FicheDemandes />} />
+                <Route path='/admin/updatefiche/:id' element={<FicheUpdate />} />
                 <Route path='/admin/listcars' element={<ListCars />} />
                 <Route path='/admin/modifier-voiture/:id' element={<UpdateCar />} />
                 <Route path='/admin/créer-car' element={<CreateCar />} />
@@ -90,7 +93,8 @@ function App() {
                 <Route path='/admin/schedulerPage' element={<SchedulePage />} />
                 <Route path='/admin/showeventsplan' element={<ShowEvents />} />
                 <Route path='/admin/create-event' element={<CreateEvent />} />
-
+                <Route path='/admin/updateevent/:id' element={<UpdateEvent />} />
+                
                 <Route path='/admin/dashboard' element={<Dashboard />} />
                 <Route path='/admin/achat' element={<ServiceAchat />} />
                 <Route path='/admin/consulter-ordre' element={<ShowOrdreMission />} />
@@ -99,7 +103,7 @@ function App() {
                 <Route path='/admin/createticket' element={<CreateTicketAdmin />} />
                 <Route path='/admin/details/:id' element={<TicketDetailsAdmin />} />
                 <Route path="/admin/statistiques" element={<StatistiquesTotal />} />
-
+                
                 <Route path='/planningtechnicien' element={<TechnicienShedulerCalendar />} />
                 
                 {/* Redirection par défaut */}

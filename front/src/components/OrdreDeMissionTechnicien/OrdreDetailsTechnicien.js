@@ -286,11 +286,11 @@ function OrdreDetailsTechnicien() {
       </div>
       <div className="row">
         <div className="col-md-6">
-          <label className="form-label">Statut technique :</label>
+          <label className="form-label">Statut technicien :</label>
           <StatusOrdreMissionTechnicien statuttechnicien={ordre.statuttechnicien} />
         </div>
         <div className="col-md-6">
-          <label className="form-label">Statut de facturation :</label>
+          <label className="form-label">Statut de Technique(Admin) :</label>
           <StatusOrdreMissionAdmin statutadmin={ordre.statutadmin} />
         </div>
       </div>

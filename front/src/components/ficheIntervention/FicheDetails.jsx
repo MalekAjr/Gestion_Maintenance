@@ -6,7 +6,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 import StatusBadgeAdmin from '../ficheIntervention/StatusBadgeAdmin';
 import StatusBadgeClient from '../ficheIntervention/StatusBadgeClient';
-import StatusBadgeTechnicien from '../ficheIntervention/StatusBadgeFacturation';
+import StatusBadgeTechnicien from '../ficheIntervention/StatusBadgeTechnicien';
+import { BsFillArrowLeftSquareFill, BsFillPlusSquareFill, BsListCheck, BsListUl } from 'react-icons/bs';
 
 
 const FicheDetails = () => {
@@ -182,7 +183,7 @@ const FicheDetails = () => {
             </div>
             <div>
               <h3>Demandé Par:</h3>
-              <p><strong>Client:</strong> ${fiche.user_nom}</p>
+              <p><strong>Technicien:</strong> ${fiche.user_nom}</p>
               <p><strong>Email:</strong> ${fiche.user_email}</p>
               <p><strong>Nom:</strong> ${fiche.user_nom}</p>
             </div>
@@ -228,7 +229,6 @@ const FicheDetails = () => {
       fenetreImpression.print();
     };
   
-    // Charger l'image en tant que base64
     const imageSrc = 'http://localhost:8000/fichesImages/' + fiche.image;
     fetch(imageSrc)
       .then((res) => res.blob())
@@ -239,8 +239,13 @@ const FicheDetails = () => {
           chargerImageEtImprimer(imageData);
         };
         reader.readAsDataURL(blob);
+      })
+      .catch((error) => {
+        console.error("Erreur lors du chargement de l'image:", error);
       });
   };
+  
+  
   
   
 
@@ -259,31 +264,53 @@ const FicheDetails = () => {
       </div>
     );
   }
-
   return (
     <>
-  <div className="container">
-      <div className="row align-items-center">
-      <div className="col-auto">
-                    {userRole === 'admin' ? (
-                      <>
-                      <Link to="/admin/demandesfiches" className="btn btn-primary">
-                        <FontAwesomeIcon icon={faArrowLeft} /> View Tous les Listes
-                      </Link>
-                      <Link to="/showficheIntervention" className="btn btn-primary">
-                      <FontAwesomeIcon icon={faArrowLeft} /> View Votre Liste
-                    </Link></>
-                    ) : (
-                      <Link to="/showficheIntervention" className="btn btn-primary">
-                        <FontAwesomeIcon icon={faArrowLeft} /> View Votre Liste
-                      </Link>
-                    )}
+      <div className="container">
+        <div className="row align-items-center">
+        <div className="col-auto">
+              <Link to="/showficheIntervention" className="btn mb-3" style={{ color: 'green' }}>
+                  <BsFillArrowLeftSquareFill size={30} /> Retour Vers Dashboard
+              </Link>
+          </div>
+          {userRole === 'admin' ? (
+            <>
+              <div className="col">
+                <div className="row align-items-center justify-content-between">
+                  <div className="col-auto">
+                    <Link to="/admin/demandesfiches" className="btn mb-3" style={{ color: 'green' }}>
+                      <BsFillArrowLeftSquareFill size={30} /> Retour Vers Dashboard
+                    </Link>
                   </div>
-        <div className="col">
-          <h1 className="text-center mb-5">Détails de la Fiche D'intervention</h1>
+                  <div className="col text-center">
+                    <h1 className="mb-5">Détails de la Fiche D'intervention</h1>
+                  </div>
+                  <div className="col-auto text-end">
+                    <Link to="/createficheintervention" className="btn btn-success mb-3">
+                      <BsListCheck size={30} /> Créer Fiche Intervention
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            </>
+          ) : null}
         </div>
-      </div>
-      </div>
+        {userRole === 'admin' && (
+          <div className="row align-items-center justify-content-center">
+            <div className="col-auto">
+              <Link to="/admin/demandesfiches" className="btn btn-success mb-3">
+                <BsListUl size={30} /> Voir Tous les Listes
+              </Link>
+            </div>
+            <div className="col-auto">
+              <Link to="/showficheIntervention" className="btn btn-success mb-3">
+                <BsListUl size={30} /> Voir Ma Liste
+              </Link>
+            </div>
+          </div>
+        )}
+      </div>  
+
 
     <div className="container mt-5 d-flex justify-content-center">
       <div className="row justify-content-around">
@@ -302,10 +329,10 @@ const FicheDetails = () => {
                 <h5 className="card-title">Contact :</h5>
                 <p className="card-text">{fiche.contact}</p>
               </div>
-              <div className="d-flex justify-content-between">
+             {/* <div className="d-flex justify-content-between">
                 <h5 className="card-title">Nom :</h5>
                 <p className="card-text">{fiche.nom}</p>
-              </div>
+              </div> */} 
               <div className="d-flex justify-content-between">
                 {fiche.categories && (
                   <>
@@ -359,7 +386,7 @@ const FicheDetails = () => {
               </div>
               <div className="d-flex justify-content-between">
                 <h5 className="card-title">Statut :</h5>
-                <p className="card-text">{fiche.statut}</p>
+                <p className="card-text">{fiche.statutclient}</p>
               </div>
               <div className="d-flex justify-content-between">
                 <h5 className="card-title">Date de Création :</h5>
@@ -382,7 +409,7 @@ const FicheDetails = () => {
             />
              <div className="card-body">
               <h5 className="card-title">Demandé Par :</h5>
-              <p className="card-text">Client : {fiche.user_nom}</p>
+              <p className="card-text">Technicien : {fiche.user_nom}</p>
               <p className="card-text">Email : {fiche.user_email}</p>
               <p className="card-text">Nom : {fiche.user_nom}</p>
             </div>
@@ -394,32 +421,35 @@ const FicheDetails = () => {
     <div style={{ width: "50%", margin: "auto", marginTop: "50px", textAlign: "center" }}>
       <div style={{ display: "flex", justifyContent: "center" }}>
         <div style={{ width: "40%", margin: "15px auto", textAlign: "center" }}>
-          Validation Technique
+          <span>Validation Responsable/Admin</span>
           <StatusBadgeAdmin statuttechnique={fiche.statuttechnique} />
         </div>          
         <div style={{ width: "40%", margin: "15px auto", textAlign: "center",marginLeft:"5px" ,marginRight:"5px"  }}>
-          Validation de Client
+        <span>Validation de Client</span>
           <StatusBadgeClient statutclient={fiche.statutclient} />
         </div>
         <div style={{ width: "40%", margin: "15px auto", textAlign: "center" }}>
-          Validation Technicien
+        <span>Validation Technicien</span>
           <StatusBadgeTechnicien statuttechnicien={fiche.statuttechnicien} />
         </div>
       </div>
     </div>
 
     <div style={{ width: "50%", margin: "auto", marginTop: "50px", textAlign: "center" }}>
-      {fiche.statutclient === 0 ?
-      <div>
-      <p>Commentaire de client :</p> 
-      <h3>{fiche.comment}</h3>
-      </div> : null}
-      
+  {fiche.statutservice === 1 ? (
+    <>
+      {fiche.statutclient === 0 ? (
+        <div>
+          <p>Commentaire de client :</p> 
+          <h3>{fiche.comment}</h3>
+        </div>
+      ) : null}
+
       {userRole === 'admin' ? (
-        <div style={{ display: "flex", justifyContent: "center" }}>
-          <button onClick={handleValiderparAdmin} style={{ width: "45%", marginRight: "10px" }} className="btn btn-success btn-rounded">Valider</button>
-          <button onClick={handleRefuserparAdmin} style={{ width: "45%" }} className="btn btn-danger btn-rounded">Refuser</button>
-          <button onClick={handleImprimer} style={{ width: "45%" }} className="btn btn-primary btn-rounded">Imprimer</button>
+        <div style={{ display: "flex", justifyContent:"space-between" }}>
+          <button onClick={handleValiderparAdmin} style={{ width: "33%" }} className="btn btn-success btn-rounded">Valider</button>
+          <button onClick={handleRefuserparAdmin} style={{ width: "33%", marginLeft: "5px" }} className="btn btn-danger btn-rounded">Refuser</button>
+          <button onClick={handleImprimer} style={{ width: "33%", marginLeft: "5px" }} className="btn btn-primary btn-rounded">Imprimer</button>
         </div>
       ) : userRole === 'utilisateur' ? (
         <div style={{ display: "flex", justifyContent: "center" }}>
@@ -429,13 +459,14 @@ const FicheDetails = () => {
       ) : userRole === 'technicien' ? (
         <div style={{ display: "flex", justifyContent: "center" }}>
           <button onClick={handleValiderparTechnicien} style={{ width: "45%", marginRight: "10px" }} className="btn btn-success btn-rounded">Valider</button>
-          <button onClick={handleRefuserparTechnicien} style={{ width: "45%" }} className="btn btn-danger btn-rounded">Refuser</button>
-          <button onClick={handleImprimer} style={{ width: "45%" }} className="btn btn-primary btn-rounded">Imprimer</button>
+          <button onClick={handleRefuserparTechnicien} style={{ width: "45%", marginLeft: "5px" }} className="btn btn-danger btn-rounded">Refuser</button>
+          <button onClick={handleImprimer} style={{ width: "45%", marginLeft: "5px" }} className="btn btn-primary btn-rounded">Imprimer</button>
         </div>
-      ) : (
-        ""
-      )}
-    </div>
+      ) : null}
+    </>
+  ) : null}
+</div>
+
 
         {showComment && (
           <div style={{ width: "50%", margin: "auto", marginTop: "50px" }}>

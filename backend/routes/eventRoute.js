@@ -9,5 +9,6 @@ eventrouter.get('/get-events', authenticateToken, eventcontroller.getEvents);
 eventrouter.get('/delete-event/:id', authenticateToken, eventcontroller.deleteEvent);
 eventrouter.put('/update-event/:id', authenticateToken,  eventcontroller.updateEvent);
 eventrouter.get('/getPlanningOneTechnicien', authenticateToken,  eventcontroller.getPlanningOneTechnicien);
+eventrouter.get('/get-event/:id', authenticateToken,  eventcontroller.getEventById);
 
 module.exports = eventrouter;

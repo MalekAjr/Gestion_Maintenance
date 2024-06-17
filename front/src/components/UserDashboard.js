@@ -16,6 +16,7 @@ function UserDashboard() {
     const fetchUser = async () => {
       try {
         const response = await adminService.getUser();
+        console.log(response);
         setUser(response.data.user);
         setLoading(false);
         setUserId(localStorage.getItem('userId'));
@@ -30,6 +31,7 @@ function UserDashboard() {
   }, []);
 
   return (
+    loading?<div>loading</div>:
     <div style={{ display: 'flex', maxWidth: '100%', overflowX: 'hidden' }}>
       <div style={{ marginRight: '20px', flex: '0 0 auto' }}>
         {user.image && (
@@ -48,20 +50,32 @@ function UserDashboard() {
         <p><strong><center>{user.nom}</center></strong> </p>
         <div className="list-group">
           <Link to={`/gerer-profile/${userId}`} className="list-group-item list-group-item-action">
-            Edit Profile
+            Modifier Profile
           </Link>
+          {user.role !== 'achat' && (
           <Link to={`/showficheIntervention/`} className="list-group-item list-group-item-action">
             Consulter mes demandes Faites
           </Link>
-         
-      
+          )}
+           {user.role === 'achat' && (
+          <Link to={`/admin/achat`} className="list-group-item list-group-item-action">
+            Consulter Facturations
+          </Link>
+          )}
+          {user.role === 'admin' && (
+            <>
+            <Link to={`/showticketclient/`} className="list-group-item list-group-item-action">
+            Consulter mes Tickets Faites
+          </Link>
+          <Link to={`/admin/scheduler/`} className="list-group-item list-group-item-action">
+            Consulter Planning
+          </Link>
+          </>
+          )}
           {user.role === 'technicien' && (
             <>
-            <Link to={`/consulter-planningtechnicien/`} className="list-group-item list-group-item-action">
-              Consulter Mon Planning
-            </Link>
             <Link to={`/consulter-ordretechnicien/`} className="list-group-item list-group-item-action">
-            Consulter mes Demandes Faites
+            Consulter mes Ordres Faites
           </Link>
           <Link to={`/planningtechnicien/`} className="list-group-item list-group-item-action">
             Mon Planning
@@ -72,9 +86,6 @@ function UserDashboard() {
           {user.role === 'utilisateur' && (
             <>
           <Link to={`/showticketclient/`} className="list-group-item list-group-item-action">
-            Consulter mes Demandes Interventions
-          </Link>
-          <Link to={`/showticketclient/`} className="list-group-item list-group-item-action">
           Consulter mes Tickets
         </Link>
           </>
@@ -82,15 +93,15 @@ function UserDashboard() {
         </div>
       </div>
       <div style={{ flex: '1 1 auto', marginRight: '20px' }}>
-        <h1 className="text-center mb-4">Welcome to Your Dashboard</h1>
+        <h1 className="text-center mb-4">Bienvenue Sur votre Tableau De Bord</h1>
         <div className="row justify-content-center">
           <div className="col-md-6">
             <div className="card mb-4">
               <div className="card-body">
-                <h5 className="card-title">Profile Management</h5>
-                <p className="card-text">Update your profile information.</p>
+                <h5 className="card-title">Gestion de Profile</h5>
+                <p className="card-text">Modifier les information de ton profile.</p>
                 <Link to={`/gerer-profile/${userId}`} className="btn btn-primary">
-                  Edit Profile
+                  Modifier Profile
                 </Link>
               </div>
             </div>
@@ -101,22 +112,50 @@ function UserDashboard() {
                 <h5 className="card-title">Mes Demandes Faites</h5>
                 <p className="card-text">Voir Mes Demandes Faites</p>
                 <Link to={`/showficheIntervention/`} className="btn btn-primary">
-                  View Requests
+                Demandes Faites
                 </Link>
               </div>
             </div>
           </div>
+          {user.role === 'technicien' && (
           <div className="col-md-6">
             <div className="card mb-4">
               <div className="card-body">
-                <h5 className="card-title">Mes Demandes D'interventions</h5>
-                <p className="card-text">View and manage your service requests.</p>
-                <Link to={`/createdemandeinterventionclient/`} className="btn btn-primary">
+                <h5 className="card-title">Mes Ordres Faites</h5>
+                <p className="card-text">Voir toutes Mes Plans</p>
+                <Link to={`/consulter-ordretechnicien`} className="btn btn-primary">
                   Créer Une Demande D'intervention
                 </Link>
               </div>
             </div>
           </div>
+          )}
+          {user.role !== 'achat' && (
+          <div className="col-md-6">
+            <div className="card mb-4">
+              <div className="card-body">
+                <h5 className="card-title">Consulter Mes Tickets Faites</h5>
+                <p className="card-text">Voir toutes Mes Tickets</p>
+                <Link to={`/showticketclient/`} className="btn btn-primary">
+                  Créer Une Nouvelle Ticket
+                </Link>
+              </div>
+            </div>
+          </div>
+          )}
+          {user.role === 'admin' && (
+          <div className="col-md-6">
+            <div className="card mb-4">
+              <div className="card-body">
+                <h5 className="card-title">Consulter Planning</h5>
+                <p className="card-text">Voir toutes Mes Planning Faites</p>
+                <Link to={`/admin/scheduler/`} className="btn btn-primary">
+                  Créer Une Nouvelle Planning
+                </Link>
+              </div>
+            </div>
+          </div>
+           )}
         </div>
       </div>
     </div>

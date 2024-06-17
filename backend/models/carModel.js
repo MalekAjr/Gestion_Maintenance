@@ -22,7 +22,7 @@ const carSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-});
+}, { timestamps: true });
 
 const Car = mongoose.model('Car', carSchema);
 

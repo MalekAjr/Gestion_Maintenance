@@ -3,7 +3,7 @@ import adminService from '../../services/adminService';
 import withAuthorization from '../authorization/withAuthorization';
 import { Modal, Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-import { BsFillPlusSquareFill } from 'react-icons/bs';
+import { BsFillArrowLeftSquareFill, BsFillPlusSquareFill, BsPencilSquare, BsTrash } from 'react-icons/bs';
 import Navbar from '../../components/NavBar/Navbar';
 
 const ListCars = () => {
@@ -76,11 +76,14 @@ const ListCars = () => {
   };
 
   return (
-    <div className="container mt-5">
-      <h2 className="text-center mb-4">Liste des voitures</h2>
-
+    <div className="container mt-5">  
       <div className="row align-items-center">
-        <div className="col">
+        <div className="col-auto">
+          <Link to="/admin/dashboard" className="btn mb-3" style={{ color: 'green' }}>
+            <BsFillArrowLeftSquareFill size={30} /> Retour Vers Dashboard
+          </Link>
+        </div>
+        <div className="col text-center">
           <h1 className="mb-5">Liste des Voitures</h1>
         </div>
         <div className="col-auto">
@@ -89,42 +92,44 @@ const ListCars = () => {
           </Link>
         </div>
       </div>
-
+  
       <Navbar searchQuery={searchQuery} handleSearch={handleSearch} />
-
+  
       {filteredCars.length > 0 && (
-        <table className="table table-striped">
-          <thead>
-            <tr>
-              <th scope="col">Matricule</th>
-              <th scope="col">Marque</th>
-              <th scope="col">Modèle</th>
-              <th scope="col">Année</th>
-              <th scope="col">Couleur</th>
-              <th scope="col" colSpan="2">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filteredCars.map((car) => (
-              <tr key={car._id}>
-                <td>{car.matricule}</td>
-                <td>{car.brand}</td>
-                <td>{car.model}</td>
-                <td>{car.year}</td>
-                <td>{car.color}</td>
-                <td>
-                  <Link to={`/admin/modifier-voiture/${car._id}`} className="btn btn-primary mr-2">
-                    Modifier
-                  </Link>
-                  &emsp;
-                  <button onClick={() => handleDeleteCar(car._id, car.matricule)} className="btn btn-danger">
-                    Supprimer
-                  </button>
-                </td>
+        <div className="table-responsive">
+          <table className="table table-striped">
+            <thead>
+              <tr>
+                <th scope="col">Matricule</th>
+                <th scope="col">Marque</th>
+                <th scope="col">Modèle</th>
+                <th scope="col">Année</th>
+                <th scope="col">Couleur</th>
+                <th scope="col" colSpan="2">Actions</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {filteredCars.map((car) => (
+                <tr key={car._id}>
+                  <td>{car.matricule}</td>
+                  <td>{car.brand}</td>
+                  <td>{car.model}</td>
+                  <td>{car.year}</td>
+                  <td>{car.color}</td>
+                  <td>
+                    <Link to={`/admin/modifier-voiture/${car._id}`} className="btn btn-success mr-2">
+                      <BsPencilSquare className="me-1" />
+                    </Link>
+                    &emsp;
+                    <Button onClick={() => handleDeleteCar(car._id, car.matricule)} className="btn btn-danger">
+                      <BsTrash className="me-1" />
+                    </Button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       )}
       <Modal show={showConfirmationModal} onHide={() => setShowConfirmationModal(false)}>
         <Modal.Header closeButton>
@@ -144,6 +149,7 @@ const ListCars = () => {
       </Modal>
     </div>
   );
+  
 
 };
 

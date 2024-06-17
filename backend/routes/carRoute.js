@@ -8,5 +8,6 @@ carrouter.get('/get-cars', authenticateToken, carController.getCars);
 carrouter.post('/get-carssansevenements', authenticateToken, carController.getCarsWithoutEvents);
 carrouter.delete('/delete-car/:id', authenticateToken, carController.deleteCar);
 carrouter.put('/update-car/:id', authenticateToken, carController.updateCar);
+carrouter.get('/get-car/:id', authenticateToken, carController.getCarById);
 
 module.exports = carrouter;

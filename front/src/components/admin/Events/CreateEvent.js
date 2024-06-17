@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Form, Button } from 'react-bootstrap';
 import adminService from '../../../services/adminService';
 import Navbar from '../../NavBar/Navbar';
+import { BsFillArrowLeftSquareFill } from 'react-icons/bs';
 
 const CreateEvent = () => {
   const [formData, setFormData] = useState({
@@ -53,14 +54,22 @@ const CreateEvent = () => {
 
   return (
     <div className="container mt-5">
-      <h2 className="text-center mb-4">Create New Event</h2>
-      <Navbar />
+      <div className="row align-items-center">
+          <div className="col-auto">
+              <Link to="/admin/showeventsplan" className="btn mb-3" style={{ color: 'green' }}>
+                  <BsFillArrowLeftSquareFill size={30} /> Retour Vers Dashboard
+              </Link>
+          </div>
+          <div className="col text-center">
+              <h1 className="mb-5">Créer un Nouveau Evénement</h1>
+          </div>
+      </div>
       <Form onSubmit={handleSubmit}>
         <Form.Group className="mb-3" controlId="formTitle">
           <Form.Label>Title</Form.Label>
           <Form.Control
             type="text"
-            placeholder="Enter title"
+            placeholder="Entrer titre"
             name="title"
             value={formData.title}
             onChange={handleChange}
@@ -73,7 +82,7 @@ const CreateEvent = () => {
           <Form.Control
             as="textarea"
             rows={3}
-            placeholder="Enter description"
+            placeholder="Entrer description"
             name="description"
             value={formData.description}
             onChange={handleChange}
@@ -107,7 +116,7 @@ const CreateEvent = () => {
           <Form.Label>Technicien Concerné</Form.Label>
           <Form.Control
             type="text"
-            placeholder="Enter technicien name"
+            placeholder="Entrer nom technicien"
             name="technicienName"
             value={formData.technicienName}
             onChange={handleChange}
@@ -119,7 +128,7 @@ const CreateEvent = () => {
           <Form.Label>Voiture Utilisée</Form.Label>
           <Form.Control
             type="text"
-            placeholder="Enter car name"
+            placeholder="Entrer nom voiture"
             name="carName"
             value={formData.carName}
             onChange={handleChange}
@@ -129,10 +138,10 @@ const CreateEvent = () => {
 
         <div className="d-grid">
           <Button variant="primary" type="submit" disabled={loading}>
-            {loading ? 'Creating...' : 'Create Event'}
+            {loading ? 'Création...' : 'Créer Evenement'}
           </Button>
-          <Link to="/admin/events" className="btn btn-secondary mt-2">
-            Cancel
+          <Link to="/admin/showeventsplan" className="btn btn-secondary mt-2">
+            Annuler
           </Link>
         </div>
       </Form>

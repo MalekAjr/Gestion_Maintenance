@@ -5,6 +5,12 @@ const createCar = async (req, res) => {
     try {
         const { matricule, brand, model, year, color } = req.body;
             
+        const existingCar = await Car.findOne({ matricule });
+
+        if (existingCar) {
+            return res.status(400).send({ success: false, msg: 'Cette voiture avec le matricule ${matricule} existe déjà' });
+        }
+
         const newCar = new Car({
             matricule,
             brand,
@@ -17,7 +23,7 @@ const createCar = async (req, res) => {
 
         console.log('Saved Car Data:', carData);
 
-        res.status(200).send({ success: true, msg: 'Car Data saved successfully', data: carData });
+        res.status(200).send({ success: true, msg: 'Voiture enregistrée correctement', data: carData });
 
     } catch (error) {
         console.error('Error saving Car Data:', error);
@@ -64,7 +70,6 @@ const getCarsWithoutEvents = async (req, res) => {
         }
       }
   
-      // Envoyer la liste des voitures sans événements pendant l'intervalle spécifié en réponse
       res.status(200).json({ success: true, msg: 'Voitures sans événements pendant l\'intervalle spécifié récupérées', data: carsWithoutEvents });
     } catch (error) {
       console.error('Erreur lors de la récupération des voitures sans événements pendant l\'intervalle spécifié :', error);
@@ -77,13 +82,11 @@ const deleteCar = async (req, res) => {
     try {
         const id = req.params.id;
 
-        // Check if the car exists before deleting
         const existingCar = await Car.findById(id);
         if (!existingCar) {
             return res.status(400).send({ success: false, msg: 'Car already deleted' });
         }
 
-        // Use Car model to delete the document by _id
         await Car.findByIdAndDelete(id);
 
         res.status(200).send({ success: true, msg: 'Car deleted successfully' });
@@ -118,10 +121,29 @@ const updateCar = async (req, res) => {
     }
 };
 
+const getCarById = async (req, res) => {
+    try {
+        const id = req.params.id;
+
+        const car = await Car.findById(id);
+
+        if (!car) {
+            return res.status(404).json({ success: false, msg: 'Car not found' });
+        }
+
+        res.status(200).json({ success: true, msg: 'Car data retrieved', data: car });
+    } catch (error) {
+        console.error('Error fetching car by ID:', error);
+        res.status(500).json({ success: false, msg: 'Error fetching car by ID' });
+    }
+};
+
+
 module.exports = {
     createCar,
     getCars,
     getCarsWithoutEvents,
     deleteCar,
-    updateCar
+    updateCar,
+    getCarById
 };

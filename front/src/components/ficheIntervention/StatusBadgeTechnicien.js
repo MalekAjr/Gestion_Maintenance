@@ -1,34 +1,35 @@
 import React from 'react';
 import { BsArrowRepeat, BsX, BsCheck } from 'react-icons/bs';
+import { FaCheckCircle, FaTimesCircle } from 'react-icons/fa';
 
 function StatusBadgeTechnicien({ statuttechnicien }) {
-  let text, bgColor, icon, textSize, iconSize;
+  let text, textColor, icon, textSize, iconSize;
 
   switch (statuttechnicien) {
     case 0:
       text = 'Demande refusée';
-      bgColor = 'bg-danger';
-      icon = <BsX />;
+      textColor = 'text-danger';
+      icon = <FaTimesCircle color="red" size={24} className="me-2" /> //<BsX />;
       textSize = 'h6';
       iconSize = 'fs-3';
       break;
     case 1:
       text = 'En Cours';
-      bgColor = 'bg-primary';
+      textColor = 'text-primary';
       icon = <BsArrowRepeat />;
       textSize = 'h6';
       iconSize = 'fs-3';
       break;
     case 2:
       text = 'Demande acceptée';
-      bgColor = 'bg-success';
-      icon = <BsCheck />;
+      textColor = 'text-success';
+      icon = <FaCheckCircle color="#32CD32" size={24} className="me-2" /> //<BsCheck />;
       textSize = 'h6';
       iconSize = 'fs-3';
       break;
     default:
       text = '';
-      bgColor = '';
+      textColor = '';
       icon = null;
       textSize = '';
       iconSize = '';
@@ -36,8 +37,7 @@ function StatusBadgeTechnicien({ statuttechnicien }) {
   }
 
   return (
-    
-    <div className={`d-flex align-items-center justify-content-center text-white p-2 rounded ${bgColor}`}>
+    <div className={`d-flex align-items-center justify-content-center p-2 ${textColor}`}>
       {icon && <span className={`me-2 ${iconSize}`}>{icon}</span>}
       <h4 className={`m-0 text-center ${textSize}`}>{text}</h4>
     </div>

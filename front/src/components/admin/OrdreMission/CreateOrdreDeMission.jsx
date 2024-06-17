@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-import { BsClock } from 'react-icons/bs';
+import { BsClock, BsFillArrowLeftSquareFill } from 'react-icons/bs';
 
 import "./OrdreMission.css";
 import postService from '../../services/postService';
+import { Link } from 'react-router-dom';
 
 const CreateOrdreDeMission = () => {
   const [formData, setFormData] = useState({
@@ -87,6 +88,11 @@ const CreateOrdreDeMission = () => {
   
   return (
     <div className="container">
+       <div className="col">
+          <Link to="/admin/dashboard" className="btn mb-3" style={{ color: 'green' }}>
+            <BsFillArrowLeftSquareFill size={30} /> Retour Vers Dashboard
+          </Link>
+        </div>
       <h1 className="text-center">ORDRE DE MISSION</h1>
       {error && <h5 style={{textAlign: "center"}} className={`text-danger ${error && 'error'}`}>{error}</h5>}
       {success && <p className={`text-success ${success && 'success'}`}>{success}</p>}

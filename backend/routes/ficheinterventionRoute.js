@@ -33,7 +33,7 @@ fiche_route.post('/create-fiche', authenticateToken, uploadfiche.single('image')
  // fiche_route.get('/get-fiches-demandes-clients', authenticateToken, fichecontroller.getFichesDemandesParClient);
 
  
-fiche_route.get('/delete-fiche/:id', authenticateToken, fichecontroller.deleteFiche);
+fiche_route.delete('/delete-fiche/:id', authenticateToken, fichecontroller.deleteFiche);
 fiche_route.put('/update-fiche/:id', authenticateToken, uploadfiche.single('image'), fichecontroller.updateFiche);
 
 module.exports = fiche_route;

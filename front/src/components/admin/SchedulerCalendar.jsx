@@ -17,7 +17,8 @@ import withAuthorization from '../authorization/withAuthorization';
 import imguser from '../../../src/imgs/img_client.png';
 import imgtech from '../../../src/imgs/img_technicien.png';
 import imgvoiture from '../../../src/imgs/img_voiture.jpg';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
+import Swal from 'sweetalert2';
 
 
 const localizer = momentLocalizer(moment);
@@ -28,23 +29,30 @@ export const ItemTypes = {
   CAR: 'CAR',
 };
 
-const SchedulerCalendar = () => {
+const SchedulerCalendar = (props) => {
+  const location = useLocation();
+
+  const { category, user_nom, priority,ticketId, showModel } = location.state || {};
+  const [showModal, setShowModal] = useState(showModel);
+  const [userName, setUserName] = useState(user_nom || '');
+  
   const [selectedStart, setSelectedStart] = useState(null);
   const [selectedEnd, setSelectedEnd] = useState(null);
+  const [selectedhoursTravel, setSelectedHoursTravel] = useState(0);
+  const [showHoursTimePicker, setShowHoursTimePicker] = useState(false);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [message, setMessage] = useState('');
-  const [showModal, setShowModal] = useState(false);
   const [events, setEvents] = useState([]);
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [showStartDatePicker, setShowStartDatePicker] = useState(false);
   const [showEndDatePicker, setShowEndDatePicker] = useState(false);
   const [showStartTimePicker, setShowStartTimePicker] = useState(false);
   const [showEndTimePicker, setShowEndTimePicker] = useState(false);
+
   const [selectedUserNames, setSelectedUserNames] = useState([]);
   const [selectedTechnicienNames, setSelectedTechnicienNames] = useState([]);
 
-  const [userName, setUserName] = useState('');
   const [technicienName, setTechnicienName] = useState('');
   const [updateClicked, setUpdateClicked] = useState(false);
   const [date, setDate] = useState();
@@ -57,6 +65,18 @@ const SchedulerCalendar = () => {
   const [selectedTime, setSelectedTime] = useState(initialTime);
   const navigate = useNavigate();
 
+
+ 
+  
+  useEffect(() => {
+    setShowModal(showModel || false);
+  }, [showModel]);
+
+  useEffect(() => {
+    setTitle(category || '');
+
+    setUserName(user_nom || '');
+  }, [category, user_nom]);
 
   const updateEventsWithColor = (events, updatedEvent) => {
   const updatedEvents = events.map((event) => {
@@ -105,6 +125,7 @@ const SchedulerCalendar = () => {
     setUserName(event.userName || '');
     setTechnicienName(event.technicienName || '');
     setCarName(event.carName || '');
+    setSelectedHoursTravel(event.hoursTravel || 0);
     setShowModal(true);
   };
 
@@ -169,6 +190,25 @@ const SchedulerCalendar = () => {
     setSelectedEnd(moment(selectedEnd).subtract(1, 'hour').toDate());
   };
 
+  const handleHoursTimeIncrease = () => {
+    setSelectedHoursTravel(moment(selectedhoursTravel).add(1, 'hour').toDate());
+  };
+
+  const handleHoursTimeDecrease = () => {
+    setSelectedHoursTravel(moment(selectedhoursTravel).subtract(1, 'hour').toDate());
+  };
+
+  const isValidTime = (value) => {
+    return moment(value, 'HH:mm', true).isValid();
+  };
+  
+  const handleHoursTravelChange = (e) => {
+    const value = e.target.value;
+    if (isValidTime(value)) {
+      setSelectedHoursTravel(moment(`2022-01-01 ${value}`).toDate());
+    }
+  };
+
   const fetchUsers = async () => {
     try {
       const response = await adminService.getUsers();
@@ -228,23 +268,52 @@ const SchedulerCalendar = () => {
 const handleNavigation = () => {
   const clientData = {
     userName: selectedEvent.userName,
+    heurestart: selectedEvent.start,
+    heureend: selectedEvent.end,
+    heureTrajet: selectedEvent.hoursTravel,
+    ticketId: selectedEvent.ticketId
   };
+  console.log("Heure Trajet:", selectedEvent.hoursTravel); // Ajout du console.log
+
   navigate('/createficheIntervention', { state: { clientData } });
 };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     if (!selectedStart || !selectedEnd || !title || !description) {
-      alert('Veuillez remplir tous les champs.');
+      Swal.fire({
+        icon: 'error',
+        iconColor: '#d9534f',
+        text: 'Veuillez remplir tous les champs.'
+    });
       return;
     }
   
+    if (selectedStart >= selectedEnd) {
+      Swal.fire({
+          icon: 'error',
+          iconColor: '#d9534f',
+          text: 'La date de début doit être antérieure à la date de fin.'
+      });
+      return;
+    }
+    if (selectedStart.toDateString() === selectedEnd.toDateString() && selectedStart >= selectedEnd) {
+      Swal.fire({
+        icon: 'error',
+        iconColor: '#d9534f',
+        text: "L'heure de fin doit être postérieure à l'heure de début."
+    });
+      return;
+    }
+
     try {
       let formData = {
         title,
         description,
         start: selectedStart,
         end: selectedEnd,
+        hoursTravel: selectedhoursTravel,
+        ticketId: ticketId,
        // userId: selectedUserNames.map((user) => user.value)[0], // Prend le premier ID utilisateur sélectionné
         userName,
         technicienName,
@@ -284,8 +353,8 @@ const handleNavigation = () => {
       const updatedEventsWithColor = updateEventsWithColor(events, updatedEvent);
       setEvents(updatedEventsWithColor);
     } catch (error) {
-      console.error('Error creating/updating Event:', error);
-      setMessage('An error occurred. Please try again.');
+      console.error('Une erreur création/Modification Evenement:', error);
+      Swal.fire('Une erreur s\'est produite. Veuillez réessayer.');
     }
   };
   
@@ -371,17 +440,26 @@ const handleNavigation = () => {
     setShowEndTimePicker(!showEndTimePicker);
   };
 
+  const handleHoursTimePicker  = () => {
+    setShowHoursTimePicker (!showHoursTimePicker);
+  };
+
   const handleStartDateChange = (date) => {
-    setSelectedStart(date);
-    setShowStartDatePicker(false);
-    // filterTechniciens(date, selectedEnd);
+    if (date instanceof Date && !isNaN(date)) {
+      setSelectedStart(date);
+      setShowStartDatePicker(false);
+    } else {
+      console.error("Invalid date:", date);
+    }
   };
 
   const handleEndDateChange = (date) => {
-    setSelectedEnd(date);
-    setShowEndDatePicker(false);
-   // filterTechniciens(selectedStart, date);
-
+    if (date instanceof Date && !isNaN(date)) {
+      setSelectedEnd(date);
+      setShowEndDatePicker(false);
+    } else {
+      console.error("Invalid date:", date);
+    }
   };
 
   /*
@@ -426,6 +504,11 @@ const handleNavigation = () => {
     setShowEndTimePicker(false);
   };
 
+  const handleHoursTimeChange = (time) => {
+    setSelectedHoursTravel(moment(time).toDate());
+    setShowHoursTimePicker(false);
+  };
+
   const saveEvent = async (event) => {
     try {
       if (event._id) {
@@ -455,7 +538,8 @@ const handleNavigation = () => {
       setSelectedStart(selectedEvent.start || null);
       setSelectedEnd(selectedEvent.end || null);
       setUserName(selectedEvent.userName || '');
-      setTechnicienName(selectedEvent.technicienName || ''); // Corrected line
+      setTechnicienName(selectedEvent.technicienName || '');
+      setSelectedHoursTravel(selectedEvent.hoursTravel);
       setUpdateClicked(false);
     }
   }, [selectedEvent]);
@@ -699,7 +783,8 @@ const handleNavigation = () => {
             </Form.Group>
 
                     <Row>
-        <Col xs={12} md={6} className="mb-3">
+{/* Colonne pour la Date de Début */}
+      <Col xs={12} md={6} className="mb-3">
         <Form.Group controlId="startDate">
           <Form.Label className="start-date-label">Date de début</Form.Label>
           <InputGroup className="align-items-center">
@@ -707,8 +792,8 @@ const handleNavigation = () => {
               <FaCalendarAlt className="date-picker-icon" />
             </InputGroup.Text>
             <input
-              type='date'
-              onChange={handleStartDateChange}
+              type="date"
+              onChange={(e) => handleStartDateChange(e.target.valueAsDate)}
               value={selectedStart ? formatDate(selectedStart) : ''}
               className="form-control custom-date-input"
             />
@@ -735,6 +820,7 @@ const handleNavigation = () => {
           />
         )}
       </Col>
+
 
 
             {/* Colonne pour l'Heure de Début */}
@@ -861,24 +947,38 @@ const handleNavigation = () => {
 
                 {/* Colonne pour les Heures de Trajet */}
                 <Col xs={12} md={6} className="mb-3">
-                <Form.Group controlId="travelHours">
-                  <Form.Label className="start-date-label">Heures de Trajet</Form.Label>
-                  <InputGroup>
-                    <FormControl
-                      type="text"
-                      value={selectedTime}
-                      onChange={(e) => setSelectedTime(e.target.value)}
-                      placeholder="Entrez les heures de trajet"
-                      className="form-control"
+                  <Form.Group controlId="hoursTravel">
+                    <Form.Label className="start-date-label">Heures de Trajet</Form.Label>
+                    <InputGroup>
+                      <FormControl
+                        type="text"
+                        value={selectedhoursTravel ? moment(selectedhoursTravel).format("HH:mm") : ''}
+                        onChange={(e) => setSelectedHoursTravel(moment(`2022-01-01 ${e.target.value}`).toDate())}
+                        onClick={handleHoursTimePicker}
+                        placeholder="Choisir les heures de trajets"
+                        className="form-control"
+                      />
+                      <InputGroup.Text><FaClock /></InputGroup.Text>
+                      <Button variant="outline-secondary" onClick={handleHoursTimeDecrease}><FaCaretDown /></Button>
+                      <Button variant="outline-secondary" onClick={handleHoursTimeIncrease}><FaCaretUp /></Button>
+                    </InputGroup>
+                  </Form.Group>
+                  {showHoursTimePicker && (
+                    <DatePicker
+                      selected={selectedhoursTravel}
+                      onChange={handleHoursTimeChange}
+                      showTimeSelect
+                      showTimeSelectOnly
+                      timeIntervals={15}
+                      dateFormat="h:mm aa"
+                      timeCaption="Time"
+                      inline
                     />
-                    <InputGroup.Text><FaClock /></InputGroup.Text>
-                    <Button variant="outline-secondary" onClick={handleTimeDecrease}><FaCaretDown /></Button>
-                    <Button variant="outline-secondary" onClick={handleTimeIncrease}><FaCaretUp /></Button>
-                  </InputGroup>
-                </Form.Group>
-              </Col>
-              </Row>
+                  )}
+                </Col>
 
+              </Row>
+              
               <Form.Group controlId="description">
                 <Form.Label>Description de l'intervention</Form.Label>
                 <Form.Control
@@ -890,16 +990,20 @@ const handleNavigation = () => {
                 />
               </Form.Group>
               <Form.Group controlId="formUserName">
-              <Form.Label>Nom de Client</Form.Label>
-              <Form.Control as="select" value={userName} onChange={handleUserNameChange}>
-                <option value="">Sélectionner un client</option>
-                {userOptions.map((client, index) => (
-                  <option key={index} value={client.nom}>
-                    {client.nom}
-                  </option>
-                ))}
-              </Form.Control>
-            </Form.Group>
+                <Form.Label>Nom de Client</Form.Label>
+                <Form.Control as="select" value={userName} onChange={handleUserNameChange}>
+                  {user_nom ? (
+                    <option value={user_nom}>{user_nom}</option>
+                  ) : (
+                    <option value="">Sélectionner un client</option>
+                  )}
+                  {userOptions.map((client, index) => (
+                    <option key={index} value={client.nom}>
+                      {client.nom}
+                    </option>
+                  ))}
+                </Form.Control>
+              </Form.Group>
 
             <Form.Group controlId="formTechnicienName">
               <Form.Label>Nom de Technicien</Form.Label>

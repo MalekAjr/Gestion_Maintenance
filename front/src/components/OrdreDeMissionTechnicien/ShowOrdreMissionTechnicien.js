@@ -5,7 +5,7 @@ import Navbar from '../NavBar/Navbar';
 import StatusOrdreMissionAdmin from './StatusOrdreMissionAdmin';
 import StatusOrdreMissionTechnicien from './StatusOrdreMissionTechnicien';
 import { Link } from 'react-router-dom';
-import { BsFillPlusSquareFill } from 'react-icons/bs';
+import { BsFillArrowLeftSquareFill, BsFillPlusSquareFill } from 'react-icons/bs';
 import { Modal, Button } from 'react-bootstrap'; // Importation des composants de la boîte de dialogue
 
 function ShowOrdreMissionTechnicien() {
@@ -97,6 +97,11 @@ function ShowOrdreMissionTechnicien() {
   return (
     <div className="container">
       <div className="row align-items-center">
+      <div className="col-auto">
+              <Link to="/dashboard" className="btn mb-3" style={{ color: 'green' }}>
+                  <BsFillArrowLeftSquareFill size={30} /> Retour Vers Dashboard
+              </Link>
+        </div>
         <div className="col">
           <h1 className="mb-5">Liste des Ordres de Mission</h1>
         </div>
@@ -124,8 +129,8 @@ function ShowOrdreMissionTechnicien() {
                 <th>Kilométrage effectué(KM)</th>
                 <th>Statut Technicien</th>
                 <th>Statut d'Admin</th>
-                <th>Email du Client</th>
-                <th>Nom du Client</th>
+                <th>Email du Technicien</th>
+                <th>Nom du Technicien</th>
                 <th>Date de création</th>
                 <th>Date de mise à jour</th>
                 <th>Heure de mise à jour</th>

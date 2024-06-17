@@ -1,43 +1,54 @@
 const Ticket = require('../models/ticketModel');
 const User = require('../models/userModel');
+const Notification = require('../models/NotificationModel');
 
 const createTicket = async (req, res) => {
+    const { title, description, priority, category } = req.body;
+    
     try {
-        const { title, description, priority, category } = req.body;
-            
+        const user = await User.findById(req.user._id);
+        
+        if (!user) {
+            throw new Error('User not found');
+        }
+
         const newTicket = new Ticket({
             title,
             description,
             priority,
             category,
+            statutticket: 0,
             user_id: req.user._id,
-            user_email: '',
-            user_nom: '',
+            user_email: user.email,
+            user_nom: user.nom,
         });
 
-        User.findById(req.user._id)
-        .then(user => {
-          if (!user) {
-            return Promise.reject(new Error('User not found'));
-          }
-          newTicket.user_email = user.email;
-          newTicket.user_nom = user.nom;
-          return newTicket.save();
-        })
-        .then(savedTicket => {
-          console.log('Ticket saved successfully:', savedTicket);
-          res.status(200).send({ success: true, msg: 'Fiche Data', data: savedTicket });
-        })
-        .catch(error => {
-          console.error('Error saving fiche:', error);
-          res.status(400).send({ success: false, msg: error.message });
+        const savedTicket = await newTicket.save();
+        console.log('Ticket saved successfully:', savedTicket);
+
+        const notificationMessage = `${user.nom} a créé un nouveau ticket de titre "${title}"`;
+        console.log(notificationMessage);
+        // Créer une nouvelle instance de Notification avec le message de notification
+        const newNotification = new Notification({
+            message: notificationMessage
         });
 
+        // Enregistrer la notification dans la base de données
+        await newNotification.save();
+
+        // Récupérer le dernier message de notification
+       //  const lastNotificationMessage = await getLastNotificationMessage();
+
+        // Émettre un événement de notification avec Socket.IO
+        req.app.get('io').emit('notification', newNotification);
+
+        res.status(200).send({ success: true, msg: 'Fiche Data', data: savedTicket });
     } catch (error) {
         console.error('Error saving Ticket Data:', error);
         res.status(400).send({ success: false, msg: error.message });
     }
 };
+
 
 const getTickets = async (req, res) => {
     try {
@@ -104,9 +115,9 @@ const deleteTicket = async (req, res) => {
 const updateTicket = async (req, res) => {
     try {
         const ticketId = req.params.id;
-        const { title, description, priority, category } = req.body;
+        const { title, description, priority, category, statutticket } = req.body;
 
-        let updateFields = { title, description, priority, category };
+        let updateFields = { title, description, priority, category, statutticket };
 
         console.log("Updating ticket with ID:", ticketId);
         console.log("Update Fields:", updateFields);

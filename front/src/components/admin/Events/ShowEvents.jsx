@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { Modal, Button } from 'react-bootstrap';
 import adminService from '../../../services/adminService';
 import Navbar from '../../NavBar/Navbar';
+import { BsFillArrowLeftSquareFill, BsFillPlusSquareFill, BsPencilSquare, BsTrash } from 'react-icons/bs';
 
 const ShowEvents = () => {
   const [events, setEvents] = useState([]);
@@ -149,19 +150,23 @@ const ShowEvents = () => {
 
   return (
     <div className="container mt-5">
-      <h2 className="text-center mb-4">List of Events</h2>
-      <div className="row align-items-center mb-4">
-        <div className="col">
-          <h1>Event List</h1>
-        </div>
-        <div className="col-auto">
-          <Link to="/admin/create-event" className="btn btn-success mb-3">
-            Create New Event
-          </Link>
-        </div>
+      <div className="row align-items-center">
+          <div className="col-auto">
+              <Link to="/admin/dashboard" className="btn mb-3" style={{ color: 'green' }}>
+                  <BsFillArrowLeftSquareFill size={30} /> Retour Vers Dashboard
+              </Link>
+          </div>
+          <div className="col text-center">
+              <h1 className="mb-5">Liste Des Evenements</h1>
+          </div>
+          <div className="col-auto text-end">
+              <Link to="/admin/create-event" className="btn btn-success mb-3">
+                  <BsFillPlusSquareFill size={30} /> Créer un Evenement
+              </Link>
+          </div>
       </div>
       <Navbar searchQuery={searchQuery} handleSearch={handleSearch} />
-      {loading ? ( // Render loading indicator if loading is true
+      {loading ? (
         <div className="text-center">
           <div className="spinner-border" role="status">
             <span className="visually-hidden">Loading...</span>
@@ -171,12 +176,12 @@ const ShowEvents = () => {
         <table className="table table-striped">
           <thead>
             <tr>
-              <th scope="col">Title</th>
+              <th scope="col">Titre</th>
               <th scope="col">Description</th>
-              <th scope="col">Date Fin</th>
-              <th scope="col">Time Début</th>
               <th scope="col">Date Début</th>
-              <th scope="col">Time Fin</th>
+              <th scope="col">Temps Début</th>
+              <th scope="col">Date Fin</th>
+              <th scope="col">Temps Fin</th>
               <th scope="col">Technicien Concerné</th>
               <th scope="col">Voiture Utilisé</th>
               <th scope="col">Actions</th>
@@ -196,11 +201,13 @@ const ShowEvents = () => {
                   <td>{event.carName}</td>
                   <td>
                     <div className="d-flex justify-content-between">
-                      <Link to={`/events/${event._id}`} className="btn btn-primary me-2 btn-block">
-                        View Details
+                      <Link to={`/admin/updateevent/${event._id}`} className="btn btn-success me-2 btn-block">
+                      <BsPencilSquare className="me-1" />
+                        Modifier
                       </Link>
                       <button onClick={() => handleDeleteEvent(event._id, event.title)} className="btn btn-danger btn-block">
-                        Delete
+                      <BsTrash className="me-1" />
+                        Supprimer
                       </button>
                     </div>
                   </td>
@@ -209,7 +216,7 @@ const ShowEvents = () => {
               ))
             ) : (
               <tr>
-                <td colSpan="9">No events found.</td>
+                <td colSpan="9">Pas D'événements trouver</td>
               </tr>
             )}
           </tbody>
@@ -228,7 +235,7 @@ const ShowEvents = () => {
           </Button>
           <Button variant="danger" onClick={confirmDelete}>
             Confirm
-          </Button>
+          </Button> 
         </Modal.Footer>
       </Modal>
     </div>

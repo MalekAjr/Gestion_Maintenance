@@ -1,34 +1,35 @@
 import React from 'react';
 import { BsArrowRepeat, BsX, BsCheck } from 'react-icons/bs';
+import { FaCheckCircle, FaSpinner, FaTimesCircle } from 'react-icons/fa';
 
 function StatusOrdreMissionAdmin({ statutadmin }) {
-  let text, bgColor, icon, textSize, iconSize;
+  let text, textColor, icon, textSize, iconSize;
 
   switch (statutadmin) {
     case 0:
-      text = 'Demande refusée';
-      bgColor = 'bg-danger';
-      icon = <BsX />;
+      text = 'Ordre refusée';
+      textColor = 'text-danger';
+      icon = <FaTimesCircle color="red" size={24} className="me-2" />//<BsX />;
       textSize = 'h6';
       iconSize = 'fs-3';
       break;
     case 1:
-      text = 'En Cours';
-      bgColor = 'bg-primary';
-      icon = <BsArrowRepeat />;
+      text = 'En Cours'; 
+      textColor = 'text-primary';
+      icon = <BsArrowRepeat />//<BsArrowRepeat />;
       textSize = 'h6';
       iconSize = 'fs-3';
       break;
     case 2:
-      text = 'Demande acceptée';
-      bgColor = 'bg-success';
-      icon = <BsCheck />;
+      text = 'Ordre acceptée';
+      textColor = 'text-success';
+      icon = <FaCheckCircle color="#32CD32" size={24} className="me-2" />//<BsCheck />;
       textSize = 'h6';
       iconSize = 'fs-3';
       break;
     default:
       text = '';
-      bgColor = '';
+      textColor = '';
       icon = null;
       textSize = '';
       iconSize = '';
@@ -36,9 +37,9 @@ function StatusOrdreMissionAdmin({ statutadmin }) {
   }
 
   return (
-    <div className={`d-flex align-items-center justify-content-center text-white p-2 rounded ${bgColor}`}>
-      {icon && <span className={`me-2 ${iconSize}`}>{icon}</span>}
-      <h4 className={`m-0 text-center ${textSize}`}>{text}</h4>
+    <div className="d-flex align-items-center">
+      {icon && <span className={`me-2 ${iconSize} ${textColor}`}>{icon}</span>}
+      <h4 className={`m-0 ${textSize} ${textColor}`}>{text}</h4>
     </div>
   );
 }
