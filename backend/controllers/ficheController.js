@@ -1,6 +1,9 @@
 const Fiche = require('../models/ficheModel');
 const User = require('../models/userModel');
 const mongoose = require('mongoose');
+const { EMAIL, PASSWORD } = require('../env.js');
+const nodemailer = require('nodemailer');
+const Mailgen = require('mailgen');
 
 const createFiche = async (req, res) => {
     try {
@@ -9,7 +12,7 @@ const createFiche = async (req, res) => {
       if (req.file) {
         image = req.file.filename;
       }
-  
+   
       const date = new Date(req.body.date);
 
       const fiche = new Fiche({
@@ -42,6 +45,7 @@ const createFiche = async (req, res) => {
         piecePrice: req.body.piecePrice,
         heuresPrice: req.body.heuresPrice,
         totalPrice: req.body.totalPrice,
+        prixTVA: 0,
       });
   
       User.findById(req.user._id)
@@ -166,6 +170,99 @@ const deleteFiche = async (req, res) => {
     }
 };
 
+/* Fait ca et changer pour qu'il soit
+const sendEmailAutomatique = async (userEmail) => {
+    let config = {
+        service: 'gmail',
+        auth: {
+            user: EMAIL,
+            pass: PASSWORD
+        }
+    };
+
+    let transporter = nodemailer.createTransport(config);
+
+    let MailGenerator = new Mailgen({
+        theme: "default",
+        product: {
+            name: "Hpc Group",
+            link: 'https://mailgen.js/'
+        }
+    });
+
+    let response = {
+        body: {
+            name: "Hpc Group",
+            intro: "Le technicien va venir pour corriger votre problème.",
+            outro: "Cordialement, Hpc Group"
+        }
+    };
+
+    let mail = MailGenerator.generate(response);
+
+    let message = {
+        from: EMAIL,
+        to: userEmail,
+        subject: "Intervention Technique",
+        html: mail
+    };
+
+    try {
+        await transporter.sendMail(message);
+        console.log("Email sent successfully");
+    } catch (error) {
+        console.error("Error sending email:", error);
+    }
+};
+*/
+
+const sendEmailAutomatique = async () => {
+    // Adresse e-mail du service de facturation ou destinataire approprié
+    let serviceBillingEmail = 'd.benali@hpc-group.com.tn';
+
+    let config = {
+        service: 'gmail',
+        auth: {
+            user: EMAIL,
+            pass: PASSWORD
+        }
+    };
+
+    let transporter = nodemailer.createTransport(config);
+
+    let MailGenerator = new Mailgen({
+        theme: "default",
+        product: {
+            name: "Hpc Group",
+            link: 'https://mailgen.js/'
+        }
+    });
+
+    let response = {
+        body: {
+            name: "Hpc Group App",
+            intro: "La demande a été accépté, va le cloturer.",
+            outro: "Cordialement, Hpc Group"
+        }
+    };
+
+    let mail = MailGenerator.generate(response);
+
+    let message = {
+        from: EMAIL,
+        to: serviceBillingEmail, // Adresse e-mail du service de facturation
+        subject: "Nouvelle Facturation(Mail Automatique)",
+        html: mail
+    };
+
+    try {
+        await transporter.sendMail(message);
+        console.log("Email sent to service de facturation successfully");
+    } catch (error) {
+        console.error("Error sending email to service de facturation:", error);
+    }
+};
+
 const updateFiche = async (req, res) => {
     try {
         const ficheId = req.params.id;
@@ -174,7 +271,7 @@ const updateFiche = async (req, res) => {
             descriptif, reference, quantite, prixUnitaire, NBheures_Mission,
             NBheures_Trajet, fraisMission, statut, statuttechnique, statutclient,
             statuttechnicien, statutservice, comment, hourlyRate, piecePrice,
-            heuresPrice, totalPrice
+            heuresPrice, prixTVA, totalPrice,
         } = req.body;
 
         // Prepare the updateFields object
@@ -182,7 +279,7 @@ const updateFiche = async (req, res) => {
             client, address, contact, date, equipment, interventionType, descriptif,
             reference, quantite, prixUnitaire, NBheures_Mission, NBheures_Trajet,
             fraisMission, statut, statuttechnique, statutclient, statuttechnicien,
-            statutservice, comment, hourlyRate, piecePrice, heuresPrice, totalPrice
+            statutservice, comment, hourlyRate, piecePrice, heuresPrice, prixTVA ,totalPrice
         };
 
         // Handle the categories field if it is defined
@@ -217,6 +314,13 @@ const updateFiche = async (req, res) => {
         }
 
         console.log("Fiche updated successfully:", updatedFiche);
+
+        // Vérifier si tous les statuts sont 2, puis envoyer un email
+        if (updatedFiche.statuttechnique === 2 && updatedFiche.statutclient === 2 && updatedFiche.statuttechnicien === 2) {
+            console.log("Sending email to Servie Facturation ");
+            await sendEmailAutomatique(updatedFiche.contact);
+        }
+
         res.status(200).json({ success: true, msg: 'Fiche updated successfully', data: updatedFiche });
     } catch (error) {
         console.error('Error updating fiche:', error);

@@ -79,42 +79,37 @@ const SchedulerCalendar = (props) => {
   }, [category, user_nom]);
 
   const updateEventsWithColor = (events, updatedEvent) => {
-  const updatedEvents = events.map((event) => {
-    if (updatedEvent && event._id === updatedEvent._id) {
-      // Updated event
-      if (updatedEvent.statut === 2) {
-        // Set background color to green if statut is 2
-        return { ...updatedEvent, backgroundColor: 'yellow' };
-      } else if (updatedEvent.start < new Date() && updatedEvent.end > new Date()) {
-        // Ongoing event
-        return { ...updatedEvent, backgroundColor: 'yellow' };
-      } else if (updatedEvent.start > new Date()) {
-        // Future event
-        return { ...updatedEvent, backgroundColor: '#32CD32' };
+    const updatedEvents = events.map((event) => {
+      const now = new Date();
+  
+      if (updatedEvent && event._id === updatedEvent._id) {
+        // Updated event
+        if (updatedEvent.statut === 2) {
+          return { ...updatedEvent, backgroundColor: 'yellow' }; // Modification
+        } else if (new Date(updatedEvent.start) < now && new Date(updatedEvent.end) > now) {
+          return { ...updatedEvent, backgroundColor: 'yellow' }; // En cours et modification
+        } else if (new Date(updatedEvent.start) > now) {
+          return { ...updatedEvent, backgroundColor: '#32CD32' }; // Futur
+        } else {
+          return { ...updatedEvent, backgroundColor: 'gray' }; // Passé
+        }
       } else {
-        // Past event
-        return { ...updatedEvent, backgroundColor: 'gray' };
+        // Other events
+        if (event.statut === 2) {
+          return { ...event, backgroundColor: 'yellow' }; // Modification
+        } else if (new Date(event.start) < now && new Date(event.end) > now) {
+          return { ...event, backgroundColor: 'Blue' }; // En cours et modification
+        } else if (new Date(event.start) > now) {
+          return { ...event, backgroundColor: '#32CD32' }; // Futur
+        } else {
+          return { ...event, backgroundColor: 'gray' }; // Passé
+        }
       }
-    } else {
-      // Other events
-      if (event.statut === 2) {
-        // Set background color to green if statut is 2
-        return { ...event, backgroundColor: 'yellow' };
-      } else if (event.start < new Date() && event.end > new Date()) {
-        // Ongoing event
-        return { ...event, backgroundColor: 'yellow' };
-      } else if (event.start > new Date()) {
-        // Future event
-        return { ...event, backgroundColor: '#32CD32' };
-      } else {
-        // Past event
-        return { ...event, backgroundColor: 'gray' };
-      }
-    }
-  });
-
-  return updatedEvents;
-};
+    });
+  
+    return updatedEvents;
+  };
+  
 
 
 

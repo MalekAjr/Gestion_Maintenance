@@ -23,7 +23,8 @@ function ServiceAchat() {
       const updatedFiches = response.data.data.map(fiche => {
         return {
           ...fiche,
-          hourlyRate: fiche.hourlyRate || 0, // Initialize to 0 if hourlyRate is not provided
+          hourlyRate: fiche.hourlyRate || 0,
+          tva: fiche.tva || 0,
         };
       });
       setFiches(updatedFiches);
@@ -38,7 +39,6 @@ function ServiceAchat() {
     fetchFichesbyID();
   }, []);
 
-  
   const filteredFiches = fiches.filter(fiche => {
     const lowerCaseQuery = searchQuery.toLowerCase();
   
@@ -53,24 +53,29 @@ function ServiceAchat() {
       if (typeof value === 'number') {
         return value.toString().includes(searchQuery);
       }
-      if (key === 'hourlyRate' || key === 'prixUnitaire' || key === 'prixPiece' || key === 'prixHeures' || key === 'prixTotal') {
+      if (key === 'hourlyRate' || key === 'prixUnitaire' || key === 'prixPiece' || key === 'prixHeures' || key === 'prixTotal' || key === 'tva') {
         return value.toString().includes(searchQuery);
       }
       return false;
     });
   });
-  
-  
-  
+
   const handleSearch = async (e) => {
     const query = e.target.value;
     setSearchQuery(query);
   
     try {
-      const response = query === ""
-        ? await postService.getFiches()
+      const response = query === "" 
+        ? await postService.getFiches() 
         : await postService.searchFiches(query);
-      setFiches(response.data.data)
+      const updatedFiches = response.data.data.map(fiche => {
+        return {
+          ...fiche,
+          hourlyRate: fiche.hourlyRate || 0,
+          tva: fiche.tva || 0,
+        };
+      });
+      setFiches(updatedFiches);
     } catch (error) {
       console.error("Error searching fiches:", error);
     }
@@ -91,7 +96,7 @@ function ServiceAchat() {
   
     return date.toLocaleString('fr-FR', options);
   };
-  
+
   const formatTime = (dateTimeString) => {
     const date = new Date(dateTimeString);
     if (isNaN(date.getTime())) {
@@ -146,8 +151,9 @@ function ServiceAchat() {
     return isNaN(totalHourlyPrice) ? 0 : totalHourlyPrice.toFixed(2);
   };
 
-  const calculateTotalPrice = (heuresPrice, piecePrice) => {
-    return (parseFloat(heuresPrice) + parseFloat(piecePrice)).toFixed(2);
+  const calculateTotalPrice = (heuresPrice, piecePrice, tva) => {
+    const total = parseFloat(heuresPrice) + parseFloat(piecePrice);
+    return (total + parseFloat(tva)).toFixed(2);
   };
 
   const generateInvoice = (fiche) => {
@@ -156,7 +162,7 @@ function ServiceAchat() {
   
     doc.autoTable({
       startY: 30,
-      head: [['Client', 'Heure Debut', 'Heure Fin', 'Heures Travaillées', 'Prix de l\'heure (Dinar(s))', 'Quantité', 'Prix Unitaire (Dinar(s))', 'Prix de la Pièce (Dinar(s))', 'Prix Des Heures (Dinar(s))', 'Prix Totales (Dinar(s))']],
+      head: [['Client', 'Heure Debut', 'Heure Fin', 'Heures Travaillées', 'Prix de l\'heure (Dinar(s))', 'Quantité', 'Prix Unitaire (Dinar(s))', 'Prix de la Pièce (Dinar(s))', 'Prix Des Heures (Dinar(s))', 'TVA (Dinar(s))', 'Prix Totales (Dinar(s))']],
       body: [[
         fiche.client,
         formatTime(fiche.heurestart),
@@ -167,9 +173,11 @@ function ServiceAchat() {
         fiche.prixUnitaire,
         calculatePiecePrice(fiche.quantite, fiche.prixUnitaire),
         calculateTotalHeuresPrice(calculateHoursWorked(fiche.heurestart, fiche.heureend), fiche.hourlyRate),
+        fiche.prixTVA,
         calculateTotalPrice(
           calculateTotalHeuresPrice(calculateHoursWorked(fiche.heurestart, fiche.heureend), fiche.hourlyRate),
-          calculatePiecePrice(fiche.quantite, fiche.prixUnitaire)
+          calculatePiecePrice(fiche.quantite, fiche.prixUnitaire),
+          fiche.prixTVA
         ),
       ]],
     });
@@ -181,46 +189,47 @@ function ServiceAchat() {
   
     doc.save(`facture_${fiche.client}.pdf`);
   };
-  
-  const handleVerifyInvoice = async (ficheId) => {
-    try {
-      const ficheToUpdate = fiches.find(fiche => fiche._id === ficheId);
-      
-      if (!ficheToUpdate) {
-        console.error("Fiche not found:", ficheId);
-        return;
-      }
-  
-      const updatedData = {
-        statutservice: 2,
-        hourlyRate: ficheToUpdate.hourlyRate,
-        quantite: ficheToUpdate.quantite,
-        prixUnitaire: ficheToUpdate.prixUnitaire,
-        prixPiece: calculatePiecePrice(ficheToUpdate.quantite, ficheToUpdate.prixUnitaire),
-        prixHeures: calculateTotalHeuresPrice(calculateHoursWorked(ficheToUpdate.heurestart, ficheToUpdate.heureend), ficheToUpdate.hourlyRate),
-        prixTotal: calculateTotalPrice(
-          calculateTotalHeuresPrice(calculateHoursWorked(ficheToUpdate.heurestart, ficheToUpdate.heureend), ficheToUpdate.hourlyRate),
-          calculatePiecePrice(ficheToUpdate.quantite, ficheToUpdate.prixUnitaire)
-        ),
-      };
-  
-      await postService.updateFiche(ficheId, updatedData);
-  
-      const updatedFiches = fiches.map(fiche => {
-        if (fiche._id === ficheId) {
-          return { ...fiche, ...updatedData };
-        } else {
-          return fiche;
-        }
-      });
-  
-      setFiches(updatedFiches);
-    } catch (error) {
-      console.error("Error verifying invoice:", error);
-    }
-  };
-  
 
+
+  const handleVerifyInvoice = async (ficheId) => {
+  try {
+    const ficheToUpdate = fiches.find(fiche => fiche._id === ficheId);
+
+    if (!ficheToUpdate) {
+      console.error("Fiche not found:", ficheId);
+      return;
+    }
+
+    const heuresPrice = calculateTotalHeuresPrice(
+      calculateHoursWorked(ficheToUpdate.heurestart, ficheToUpdate.heureend),
+      ficheToUpdate.hourlyRate
+    );
+    const piecePrice = calculatePiecePrice(ficheToUpdate.quantite, ficheToUpdate.prixUnitaire);
+    const tva = parseFloat(ficheToUpdate.prixTVA) || 0;
+    const totalPrice = calculateTotalPrice(heuresPrice, piecePrice, tva);
+
+    const updatedData = {
+      statutservice: 2,
+      hourlyRate: ficheToUpdate.hourlyRate,
+      quantite: ficheToUpdate.quantite,
+      prixUnitaire: ficheToUpdate.prixUnitaire,
+      piecePrice: piecePrice,
+      heuresPrice: heuresPrice,
+      prixTVA: tva,
+      totalPrice: totalPrice,
+    };
+
+    await postService.updateFiche(ficheId, updatedData);
+
+    // Update the local state of fiches
+    setFiches(fiches.map(fiche => fiche._id === ficheId ? { ...fiche, ...updatedData } : fiche));
+  } catch (error) {
+    console.error("Error verifying invoice:", error);
+  }
+};
+
+  
+  
 
   if (loading) {
     return <LoadingSpinner />; 
@@ -243,7 +252,7 @@ function ServiceAchat() {
         </div>
       )}
           <div className="col text-center">
-              <h1 className="mb-5">Liste des Achats</h1>
+              <h1 className="mb-5">Liste des Facturations</h1>
           </div>
       </div>
       
@@ -266,6 +275,7 @@ function ServiceAchat() {
                 <th scope="col">Prix Unitaire (Dinar(s))</th>
                 <th scope="col">Prix de la Pièce (Dinar(s))</th>
                 <th scope="col">Prix Des Heures (Dinar(s))</th>
+                <th scope="col">TVA (Dinar(s))</th>
                 <th scope="col">Prix Totales (Dinar(s))</th>
                 <th scope="col">View Details</th>
                 <th scope="col">Générer la Facture</th>
@@ -320,7 +330,29 @@ function ServiceAchat() {
                       </td>           
                       <td>{calculatePiecePrice(fiche.quantite, fiche.prixUnitaire)} Dinar(s)</td>
                       <td>{calculateTotalHeuresPrice(calculateHoursWorked(fiche.heurestart, fiche.heureend), fiche.hourlyRate)} Dinar(s)</td>
-                      <td>{calculateTotalPrice(calculateTotalHeuresPrice(calculateHoursWorked(fiche.heurestart, fiche.heureend), fiche.hourlyRate), calculatePiecePrice(fiche.quantite, fiche.prixUnitaire))} Dinar(s)</td>
+                      <td>
+                        {fiche.statutservice === 1 ? (
+                          <input
+                            type="number"
+                            value={fiche.prixTVA}
+                            onChange={(e) => {
+                              const updatedFiches = [...fiches];
+                              const index = updatedFiches.findIndex(item => item._id === fiche._id);
+                              updatedFiches[index].prixTVA = e.target.value;
+                              setFiches(updatedFiches);
+                            }}
+                            placeholder="TVA"
+                          />
+                        ) : (
+                          `${fiche.prixTVA} Dinar(s)`
+                        )}
+                      </td>
+                      <td>{calculateTotalPrice(
+                        calculateTotalHeuresPrice(calculateHoursWorked(fiche.heurestart, fiche.heureend), fiche.hourlyRate),
+                        calculatePiecePrice(fiche.quantite, fiche.prixUnitaire),
+                        fiche.prixTVA
+                      )} Dinar(s)</td>
+                      
                       <td>
                         {fiche.statutservice === 2 ? (
                           <div className="d-flex align-items-center">
@@ -349,11 +381,10 @@ function ServiceAchat() {
                 ))
               ) : (
                 <tr>
-                  <td colSpan="15">Pas De Demande Terminée Pour le moment</td>
+                  <td colSpan="16">Pas De Demande Terminée Pour le moment</td>
                 </tr>
               )}
             </tbody>
-
           </table>
         </div>
       )}

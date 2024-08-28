@@ -117,7 +117,8 @@ const ficheSchema = mongoose.Schema({
     totalPrice: {
         type: Number,
         required: false
-    }
+    },
+    prixTVA: { type: Number, required: false }
 
 }, { timestamps: true });
 

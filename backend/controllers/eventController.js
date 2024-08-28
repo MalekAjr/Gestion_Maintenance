@@ -1,20 +1,26 @@
 const Event = require('../models/eventModel');
 const User = require('../models/userModel');
 
-
 const createEvent = async (req, res) => {
   try {
     const { title, description, start, end, hoursTravel, statut, userId, userName, technicienName = '', carName, ticketId } = req.body;
     
+    // Vérifiez si l'événement existe déjà en vérifiant le chevauchement des dates et l'assignation du technicien
     const existingEvent = await Event.findOne({
-      $or: [
-        { start: { $lte: end }, end: { $gte: start } },
-        { start: { $gte: start, $lte: end } },
-      ],
-      $or: [
-      {technicienName: technicienName },
-      //j 'ai ajouté ca pour voir disponibilté du voiture aussi
-      { carName: carName },
+      $and: [
+        {
+          $or: [
+            { start: { $lte: end }, end: { $gte: start } },
+            { start: { $gte: start, $lte: end } },
+          ]
+        },
+        {
+          $or: [
+            { technicienName: technicienName },
+            // Ne vérifiez carName que s'il est fourni
+            ...(carName ? [{ carName: carName }] : []),
+          ]
+        }
       ]
     });
 
@@ -22,22 +28,13 @@ const createEvent = async (req, res) => {
       return res.status(400).json({ error: 'Le technicien ou la voiture est déjà assigné à un événement pendant cette période' });
     }
 
-    const techniciens = await User.find({ role: 'technicien' });
-
-    const overlappingEvents = await Event.find({
-      $or: [
-        { start: { $lte: end }, end: { $gte: start } },
-        { start: { $gte: start, $lte: end } },
-      ],
-    });
-
     const newEvent = new Event({
       title,
       description,
       start,
       end,
       hoursTravel,
-      statut:0,
+      statut: 0,
       statuttechnicien: 0,
       userId,
       userName,
@@ -57,6 +54,8 @@ const createEvent = async (req, res) => {
     res.status(400).send({ success: false, msg: error.message });
   }
 };
+
+
 
   
   const getEvents = async (req, res) => {
@@ -118,7 +117,7 @@ const createEvent = async (req, res) => {
           },
           { $or: [
             { technicienName: technicienName },
-            { carName: carName },
+            ...(carName ? [{ carName: carName }] : []),
           ]
         }
         ]
