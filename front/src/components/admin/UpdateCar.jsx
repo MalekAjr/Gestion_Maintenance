@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useParams, useNavigate } from 'react-router-dom';
 import adminService from '../../services/adminService';
-import e from 'cors';
+import cors from 'cors';
 import { BsFillArrowLeftSquareFill } from 'react-icons/bs';
 
 const UpdateCar = () => {
