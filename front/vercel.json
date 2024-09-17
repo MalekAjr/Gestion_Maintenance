@@ -2,10 +2,7 @@
   "builds": [
     {
       "src": "front/package.json",
-      "use": "@vercel/static-build",
-      "config": {
-        "distDir": "build"  // Specify your build directory if different
-      }
+      "use": "@vercel/static-build"
     }
   ],
   "routes": [
