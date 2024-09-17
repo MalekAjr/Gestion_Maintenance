@@ -1,14 +1,17 @@
 {
   "builds": [
     {
-      "src": "front/package.json",
-      "use": "@vercel/static-build"
+      "src": "package.json",  // This points to the package.json in the `front` directory
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": "build"  // Directory where the build output will be placed
+      }
     }
   ],
   "routes": [
     {
-      "src": "/(.*)",
-      "dest": "/App.js"
+      "src": "/(.*)",  // Match all routes
+      "dest": "/$1"    // Serve files from the build directory
     }
   ]
 }
