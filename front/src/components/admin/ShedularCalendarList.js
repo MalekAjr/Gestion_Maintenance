@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useCallback, useState, useEffect } from 'react';
 import { Calendar, momentLocalizer } from 'react-big-calendar';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import moment from 'moment';
@@ -93,6 +93,38 @@ const ShedularCalendarList = () => {
 };
 
 
+const fetchEvents = useCallback(async () => {
+  try {
+    const response = await adminService.getEvents();
+    if (response.data.success) {
+      const formattedEvents = response.data.data.map((event) => ({
+        ...event,
+        start: new Date(event.start),
+        end: new Date(event.end),
+      }));
+      const updatedEvents = updateEventsWithColor(formattedEvents);
+      setEvents(updatedEvents);
+    }
+  } catch (error) {
+    console.error('Error fetching events:', error);
+  }
+}, []); // Le tableau des dépendances est vide car fetchEvents ne change pas
+
+useEffect(() => {
+  const fetchData = async () => {
+    try {
+      const storedUpdateClicked = localStorage.getItem('updateClicked');
+      if (storedUpdateClicked) {
+        setUpdateClicked(JSON.parse(storedUpdateClicked));
+      }
+      await fetchEvents(); // Utilisation de fetchEvents
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  };
+
+  fetchData();
+}, [fetchEvents]);
 
   const handleSelectEvent = (event) => {
     setSelectedStart(event.start);
@@ -281,21 +313,7 @@ const ShedularCalendarList = () => {
   
   
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const storedUpdateClicked = localStorage.getItem('updateClicked');
-        if (storedUpdateClicked) {
-          setUpdateClicked(JSON.parse(storedUpdateClicked));
-        }
-        await fetchEvents();
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-    };
-
-    fetchData();
-  }, []);
+ 
 
   useEffect(() => {
     const saveUpdateClickedToLocalStorage = () => {
@@ -327,31 +345,8 @@ const ShedularCalendarList = () => {
     }
   };
 
-  const fetchEvents = async () => {
-    try {
-      const response = await adminService.getEvents();
-      if (response.data.success === true) {
-        const formattedEvents = response.data.data.map((event) => ({
-          ...event,
-          start: new Date(event.start),
-          end: new Date(event.end),
-        }));
-        const updatedEvents = updateEventsWithColor(formattedEvents);
-        setEvents(updatedEvents);
-      }
-    } catch (error) {
-      console.error('Error fetching events:', error);
-    }
-  };
-/*
-  const handleStartDatePicker = () => {
-    setShowStartDatePicker(!showStartDatePicker);
-  };
+  
 
-  const handleEndDatePicker = () => {
-    setShowEndDatePicker(!showEndDatePicker);
-  };
-*/
   const handleStartTimePicker = () => {
     setShowStartTimePicker(!showStartTimePicker);
   };
@@ -623,6 +618,8 @@ const ShedularCalendarList = () => {
   };
 
   return (
+    <div>
+      {message && <div className="alert alert-danger">{message}</div>}
     <div style={{ display: 'flex' }}>
       <div style={{ flex: '1' }}>
         <Calendar
@@ -905,6 +902,7 @@ const ShedularCalendarList = () => {
           </Modal.Body>
         </Modal>
       </div>
+    </div>
     </div>
   );
 };

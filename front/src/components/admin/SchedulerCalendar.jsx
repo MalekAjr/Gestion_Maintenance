@@ -415,15 +415,6 @@ const handleNavigation = () => {
     }
   };
 
-  
-
-  const handleStartDatePicker = () => {
-    setShowStartDatePicker(!showStartDatePicker);
-  };
-
-  const handleEndDatePicker = () => {
-    setShowEndDatePicker(!showEndDatePicker);
-  };
 
   const handleStartTimePicker = () => {
     setShowStartTimePicker(!showStartTimePicker);

@@ -20,25 +20,27 @@ const UpdateCar = () => {
 
 
 
-  const fetchCar = async () => {
-    try {
-      const response = await adminService.getCarById(id);
-      const carData = response.data.data;
-      setFormData({
-        matricule: carData.matricule,
-        brand: carData.brand,
-        model: carData.model,
-        year: carData.year,
-        color: carData.color
-      });
-    } catch (error) {
-      console.error('Error fetching car:', error);
-    }
-  };
+  
 
   useEffect(() => {
+    const fetchCar = async () => {
+      try {
+        const response = await adminService.getCarById(id);
+        const carData = response.data.data;
+        setFormData({
+          matricule: carData.matricule,
+          brand: carData.brand,
+          model: carData.model,
+          year: carData.year,
+          color: carData.color
+        });
+      } catch (error) {
+        console.error('Error fetching car:', error);
+      }
+    };
+  
     fetchCar();
-  }, [id]);
+  }, [id]);  
 
   const handleCarUpdate = async (e) => {
     e.preventDefault();

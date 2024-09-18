@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import postService from '../../services/postService';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import hpclogo from '../../imgs/hpclogo.png';
@@ -87,12 +87,10 @@ const heuresTrajet = parseInt(heureTrajetFormatted);
     fetchTickets();
   }, []);
   
-
-  const getUserDetails = (clientName) => {
+  const getUserDetails = useCallback((clientName) => {
     const user = users.find(user => user.nom === clientName);
     return user ? { address: user.address, contact: user.contact } : { address: '', contact: '' };
-  };
-  
+  }, [users]); // Dépendance sur users
 
   useEffect(() => {
     if (clientData) {
@@ -105,8 +103,7 @@ const heuresTrajet = parseInt(heureTrajetFormatted);
         contact: userDetails.contact,
       }));
     }
-  }, [clientData]);
-  
+  }, [clientData, getUserDetails]);
   
   
  const handleChange = (e) => {
