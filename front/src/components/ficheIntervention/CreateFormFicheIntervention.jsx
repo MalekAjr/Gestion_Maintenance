@@ -48,16 +48,16 @@ const heuresTrajet = parseInt(heureTrajetFormatted);
   const [message, setMessage] = useState('');
   const [imagePreview, setImagePreview] = useState(null);
   const [customClientEnabled, setCustomClientEnabled] = useState(false);
-  const clients = ["MEGAPLAST", "exemple1", "exemple2"];
-  const [customAddressEnabled, setCustomAddressEnabled] = useState(false);
+ // const clients = ["MEGAPLAST", "exemple1", "exemple2"];
+ // const [customAddressEnabled, setCustomAddressEnabled] = useState(false);
   const [newClientClicked, setNewClientClicked] = useState(false);
   const [newReferenceClicked, setNewReferenceClicked] = useState(false);
   const references = ["Ref1", "Ref2", "Ref3", "Ref4", "Ref5"];
-  const [newAddressClicked, setNewAddressClicked] = useState(false);
+ // const [newAddressClicked, setNewAddressClicked] = useState(false);
   const [customReferenceEnabled, setCustomReferenceEnabled] = useState(false);
-  const [customEquipmentEnabled, setCustomEquipmentEnabled] = useState(false);
+ // const [customEquipmentEnabled, setCustomEquipmentEnabled] = useState(false);
   const equipments = ["Option 1", "Option 2", "Option 3"];
-  const [newEquipmentClicked, setNewEquipmentClicked] = useState(false);
+ // const [newEquipmentClicked, setNewEquipmentClicked] = useState(false);
   
   const [users, setUsers] = useState()
   const [tickets, setTickets] = useState([]);
@@ -150,14 +150,14 @@ const heuresTrajet = parseInt(heureTrajetFormatted);
       equipment: ''
     });
   };
-
+/*
   const handleChangeReference = (e) => {
     const { value } = e.target;
     setFormData({
       ...formData,
       reference: value,
     });
-  };
+  };*/
   
   const handleInterventionTypeChange = (e) => {
     const { value } = e.target;
@@ -248,7 +248,7 @@ const heuresTrajet = parseInt(heureTrajetFormatted);
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    const totalHours = formData.NBheures_Trajet + (formData.NBheures_Trajet_minutes / 60);
+    //const totalHours = formData.NBheures_Trajet + (formData.NBheures_Trajet_minutes / 60);
 
     const formDataToSend = new FormData();
     formDataToSend.append('client', formData.client);
@@ -315,13 +315,14 @@ const heuresTrajet = parseInt(heureTrajetFormatted);
     });
   };
 
+  /*
   const handleCustomAddressToggle = () => {
     setFormData({
       ...formData,
       customAddressEnabled: !formData.customAddressEnabled
     });
   };
-
+*/
 
   const handleTimeChange = (field, hours) => {
     const date = new Date(formData[field]);
@@ -332,13 +333,16 @@ const heuresTrajet = parseInt(heureTrajetFormatted);
     });
   };
 
+  /*
   const formatTime = (time) => {
     const date = new Date(time);
     const hours = date.getHours().toString().padStart(2, '0');
     const minutes = date.getMinutes().toString().padStart(2, '0');
     return `${hours}:${minutes}`;
   };
-  
+  */
+
+/*
   const handleTimeTrajetChange = (date) => {
     const differenceInHours = Math.abs(date.getHours() - formData.heurestart.getHours());
     const differenceInMinutes = Math.abs(date.getMinutes() - formData.heurestart.getMinutes()) / 60;
@@ -351,6 +355,8 @@ const heuresTrajet = parseInt(heureTrajetFormatted);
     });
   };
   
+  */
+ 
   if (!users) return null 
   
   return (
