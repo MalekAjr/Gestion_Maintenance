@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Link } from 'react-router-dom';
-import { BsFillArrowLeftSquareFill, BsFillPlusSquareFill } from 'react-icons/bs';
+import { BsFillArrowLeftSquareFill, /* BsFillPlusSquareFill */ } from 'react-icons/bs';
 import postService from '../../services/postService';
 import LoadingSpinner from '../LoadingSpinner';
 import Navbar from '../NavBar/Navbar';
@@ -81,7 +81,7 @@ function ServiceAchat() {
     }
   };
   
-
+/*
   const formatDate = (dateTimeString) => {
     const date = new Date(dateTimeString);
     if (isNaN(date.getTime())) {
@@ -96,6 +96,7 @@ function ServiceAchat() {
   
     return date.toLocaleString('fr-FR', options);
   };
+*/
 
   const formatTime = (dateTimeString) => {
     const date = new Date(dateTimeString);

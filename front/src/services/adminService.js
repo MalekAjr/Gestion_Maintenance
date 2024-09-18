@@ -57,10 +57,12 @@ class AdminForm {
     return axios.get(url, this.config);
   }
 
+  /*
   updateUser(updatedUser) {
     const url = `http://localhost:8000/api/update-user/${updatedUser._id}`;
     return axios.put(url, updatedUser, this.config);
   }
+    */
   
   updateUser(userId, formData) {
     const url = `http://localhost:8000/api/update-user/${userId}`;

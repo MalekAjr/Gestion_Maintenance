@@ -31,7 +31,7 @@ class FicheIntervention {
         return axios.delete(url,config);
     }
 
-    searchFiches(query) {
+    searchFiches(/*query*/) {
         let url = "http://localhost:8000/api/get-fiches/";
 
         return axios.get(url,config);
@@ -60,7 +60,7 @@ class FicheIntervention {
         return axios.get(url, config);
       }
 
-      searchFicheOneUser(query) {
+      searchFicheOneUser(/*query*/) {
         let url = "http://localhost:8000/api/get-ficheuser/";
 
         return axios.get(url,config);

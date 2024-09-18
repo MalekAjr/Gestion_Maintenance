@@ -63,6 +63,7 @@ function Signup() {
     setShowPassword(!showPassword);
   };
 
+  /*
   const handleErrors = (err) => {
     let errorMessage = "Une erreur s'est produite";
     if (err.response && err.response.data && err.response.data.error) {
@@ -70,7 +71,8 @@ function Signup() {
     }
     return errorMessage;
   };
-  
+  */
+ 
   const handleRegister = async (e) => {
     e.preventDefault();
   
