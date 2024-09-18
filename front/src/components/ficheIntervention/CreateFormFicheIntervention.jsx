@@ -8,13 +8,14 @@ import 'react-datepicker/dist/react-datepicker.css';
 import { Link, useLocation , useNavigate } from 'react-router-dom';
 import { FaClock, FaChevronUp, FaChevronDown } from 'react-icons/fa';
 import adminService from '../../services/adminService';
-import { BsFillArrowLeftSquareFill, BsListCheck } from 'react-icons/bs';
+import { BsFillArrowLeftSquareFill } from 'react-icons/bs';
+import { useAuth } from '../authorization/AuthContext';
 
 const CreateFicheIntervention = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const clientData = location.state;
-const clientName = clientData ? clientData.clientData.userName : '';
+// const clientName = clientData ? clientData.clientData.userName : '';
 const heureStart = clientData ? clientData.clientData.heurestart : new Date();
 const heureEnd = clientData ? clientData.clientData.heureend : new Date();
 const ticketId = clientData ? clientData.clientData.ticketId : '';
@@ -52,7 +53,7 @@ const heuresTrajet = parseInt(heureTrajetFormatted);
  // const [customAddressEnabled, setCustomAddressEnabled] = useState(false);
   const [newClientClicked, setNewClientClicked] = useState(false);
   const [newReferenceClicked, setNewReferenceClicked] = useState(false);
-  const references = ["Ref1", "Ref2", "Ref3", "Ref4", "Ref5"];
+ // const references = ["Ref1", "Ref2", "Ref3", "Ref4", "Ref5"];
  // const [newAddressClicked, setNewAddressClicked] = useState(false);
   const [customReferenceEnabled, setCustomReferenceEnabled] = useState(false);
  // const [customEquipmentEnabled, setCustomEquipmentEnabled] = useState(false);
@@ -61,24 +62,17 @@ const heuresTrajet = parseInt(heureTrajetFormatted);
   
   const [users, setUsers] = useState()
   const [tickets, setTickets] = useState([]);
-  const [role, setRole] = useState('');
+  const { role } = useAuth();
 
   const fetchUsers = async () => {
     try {
       const response = await adminService.getUsers();
-
       const filteredUsers = response.data.users.filter(user => user.role === 'utilisateur');
       setUsers(filteredUsers);
     } catch (error) {
       console.error("Error fetching users:", error);
     }
   };
-
-  useEffect(() => {
-    fetchUsers();
-  }, []);
-
-  
 
   const fetchTickets = async () => {
     try {
@@ -90,6 +84,7 @@ const heuresTrajet = parseInt(heureTrajetFormatted);
   };
   
   useEffect(() => {
+    fetchUsers();
     fetchTickets();
   }, []);
   
@@ -105,21 +100,25 @@ const heuresTrajet = parseInt(heureTrajetFormatted);
   };
 
   useEffect(() => {
-    if (clientData) {
-      const selectedClient = clientData.clientData.userName;
-      try {
-        const userDetails = getUserDetails(selectedClient);
-        setFormData({
-          ...formData,
-          client: selectedClient,
-          address: userDetails.address,
-          contact: userDetails.contact,
-        });
-      } catch (error) {
-        console.error("Error getting user details:", error);
+    const fetchClientDetails = async () => {
+      if (clientData) {
+        const selectedClient = clientData.clientData.userName;
+        try {
+          const userDetails = await getUserDetails(selectedClient);
+          setFormData(prevFormData => ({
+            ...prevFormData,
+            client: selectedClient,
+            address: userDetails.address,
+            contact: userDetails.contact,
+          }));
+        } catch (error) {
+          console.error("Error getting user details:", error);
+        }
       }
-    }
-  }, [users]);
+    };
+
+    fetchClientDetails();
+  }, [clientData]);
   
   
  const handleChange = (e) => {
@@ -356,7 +355,7 @@ const heuresTrajet = parseInt(heureTrajetFormatted);
   };
   
   */
- 
+
   if (!users) return null 
   
   return (

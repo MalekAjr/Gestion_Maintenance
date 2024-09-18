@@ -1,25 +1,23 @@
-// In AuthContext.js
-
 import React, { createContext, useState, useContext } from 'react';
 
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const [role, setRole] = useState(localStorage.getItem('role') || '');
   const [userId, setUserId] = useState(localStorage.getItem('userId') || '');
 
   const login = (newRole, newUserId) => {
-    setRole(newRole);
-    setUserId(newUserId);
     localStorage.setItem('role', newRole);
+    setUserId(newUserId);
     localStorage.setItem('userId', newUserId);
   };
 
   const logout = () => {
-    setRole('');
-    setUserId(''); // Reset userId when logging out
     localStorage.clear();
+    setUserId('');
   };
+
+  // Accédez directement à `role` depuis localStorage
+  const role = localStorage.getItem('role');
 
   return (
     <AuthContext.Provider value={{ role, userId, login, logout }}>
