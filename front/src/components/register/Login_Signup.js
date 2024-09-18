@@ -16,8 +16,8 @@ function Signup() {
   const [imagePreview, setImagePreview] = useState(null);
   const [activeForm, setActiveForm] = useState('login');
   const [showPassword, setShowPassword] = useState(false);
-  const [loggedIn, setLoggedIn] = useState(false);
-  const [userRole, setUserRole] = useState('');
+  // const [loggedIn, setLoggedIn] = useState(false);
+  // const [userRole, setUserRole] = useState('');
   const [errorMessages, setErrorMessages] = useState({
     nom: '',
     phone: '',
@@ -180,15 +180,15 @@ function Signup() {
     
 
         if (role === 'admin') {
-          setLoggedIn(true);
-          setUserRole(role);
+         // setLoggedIn(true);
+         // setUserRole(role);
 
         //  triggerReloadNavbar();
                  window.location.href=window.location.origin+'/app/admin/dashboard/';
           //navigate("/admin/dashboard/");
         } else {
-          setLoggedIn(true);
-          setUserRole(role);
+          // setLoggedIn(true);
+          // setUserRole(role);
           window.location.href=window.location.origin+'/app/dashboard/';
           //navigate("/dashboard/"); // Redirection vers la page showficheintervention après la connexion réussie
         }
