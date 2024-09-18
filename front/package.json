@@ -37,7 +37,6 @@
     "react-router-dom": "^6.23.0",
     "react-scripts": "^5.0.1",
     "react-select": "^5.8.0",
-    "router-dom": "^2.2.11",
     "socket.io-client": "^4.7.5",
     "sockjs": "^0.3.24",
     "sweetalert2": "^11.11.0",
@@ -46,8 +45,11 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "analyze": "source-map-explorer 'build/static/js/*.js'"
   },
   "eslintConfig": {
     "extends": [
@@ -67,5 +69,5 @@
       "last 1 safari version"
     ]
   },
-  "homepage": "/app"
+  "homepage": "http://MalekAjr.github.io/Gestion_Maintenance"
 }
