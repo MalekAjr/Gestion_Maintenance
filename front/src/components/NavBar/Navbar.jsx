@@ -18,7 +18,7 @@ function Navbar({ searchQuery, handleSearch }) {
   return (
     <nav className="navbar navbar-expand-lg navbar-light" style={{ backgroundColor: '#e3f2fd' }}>
       <div className="container-fluid">
-        <a className="navbar-brand" href="#">Navbar</a>
+        <button className="navbar-brand" href="#">Navbar</button>
         <button
           className="navbar-toggler"
           type="button"
@@ -32,17 +32,17 @@ function Navbar({ searchQuery, handleSearch }) {
         <div className={`collapse navbar-collapse ${isDropdownOpen ? 'show' : ''}`} id="navbarSupportedContent">
           <ul className="navbar-nav me-auto mb-2 mb-lg-0">
             <li className="nav-item">
-              <a className="nav-link active" aria-current="page" href="#" onClick={closeDropdown}>
+              <button className="nav-link active" aria-current="page" href="#" onClick={closeDropdown}>
                 Home
-              </a>
+              </button>
             </li>
             <li className="nav-item">
-              <a className="nav-link" href="#" onClick={closeDropdown}>
+              <button className="nav-link" href="#" onClick={closeDropdown}>
                 Link
-              </a>
+              </button>
             </li>
             <li className="nav-item dropdown">
-              <a
+              <button
                 className="nav-link dropdown-toggle"
                 href="#"
                 role="button"
@@ -51,25 +51,25 @@ function Navbar({ searchQuery, handleSearch }) {
                 onClick={toggleDropdown}
               >
                 Dropdown
-              </a>
+              </button>
               <ul className={`dropdown-menu ${isDropdownOpen ? 'show' : ''}`}>
                 <li>
-                  <a className="dropdown-item" href="#" onClick={handleDropdownItemClick}>
+                  <button className="dropdown-item" href="#" onClick={handleDropdownItemClick}>
                     Action
-                  </a>
+                  </button>
                 </li>
                 <li>
-                  <a className="dropdown-item" href="#" onClick={handleDropdownItemClick}>
+                  <button className="dropdown-item" href="#" onClick={handleDropdownItemClick}>
                     Another action
-                  </a>
+                  </button>
                 </li>
                 <li>
                   <hr className="dropdown-divider"/>
                 </li>
                 <li>
-                  <a className="dropdown-item" href="#" onClick={handleDropdownItemClick}>
+                  <button className="dropdown-item" href="#" onClick={handleDropdownItemClick}>
                     Something else here
-                  </a>
+                  </button>
                 </li>
               </ul>
             </li>

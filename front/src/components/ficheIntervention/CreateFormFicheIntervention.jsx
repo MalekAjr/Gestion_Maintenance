@@ -15,7 +15,6 @@ const CreateFicheIntervention = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const clientData = location.state;
-// const clientName = clientData ? clientData.clientData.userName : '';
 const heureStart = clientData ? clientData.clientData.heurestart : new Date();
 const heureEnd = clientData ? clientData.clientData.heureend : new Date();
 const ticketId = clientData ? clientData.clientData.ticketId : '';

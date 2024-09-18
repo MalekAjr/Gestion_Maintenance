@@ -16,21 +16,21 @@ function FicheInterventionTable() {
   const [searchQuery, setSearchQuery] = useState('');
   const [role, setRole] = useState('');
 
-  const fetchFichesbyID = async () => {
-    try {
-      setLoading(true);
-      const response = await postService.getFicheOneUser();
-      setFiches(response.data.data);
-      setLoading(false);
-    } catch (error) {
-      console.error("Error fetching fiches:", error);
-      setLoading(false);
-    }
-  };
-  
   useEffect(() => {
+    const fetchFichesbyID = async () => {
+      try {
+        setLoading(true);
+        const response = await postService.getFicheOneUser();
+        setFiches(response.data.data);
+      } catch (error) {
+        console.error("Error fetching fiches:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
     fetchFichesbyID();
-  }, [fetchFichesbyID]);  
+  }, []);  
 
   const formatTime = (dateString) => {
     const date = new Date(dateString);

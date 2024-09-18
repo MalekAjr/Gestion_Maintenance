@@ -8,7 +8,7 @@ import { BsFillArrowLeftSquareFill, BsFillPlusSquareFill } from 'react-icons/bs'
 
 
 function OrdreDetails() {
-  const { id, startDate, endDate } = useParams();
+  const { id } = useParams();
   const [ordre, setOrdre] = useState(null);
   const [loading, setLoading] = useState(true);
   const userRole = localStorage.getItem('role');

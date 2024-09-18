@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-import { BsClock, BsFillArrowLeftSquareFill } from 'react-icons/bs';
+import {  BsFillArrowLeftSquareFill } from 'react-icons/bs';
 
 import "./OrdreMission.css";
 import postService from '../../services/postService';
@@ -41,7 +41,7 @@ const CreateOrdreDeMissionTechnicien = () => {
     try {
       const { startDate, endDate, startHour, endHour, destination, transportType, heuresRealisees, kilometrageEffectue } = formData;
       let errorMessage = '';
-      let successMessage = '';
+    //  let successMessage = '';
 
       if (!startDate || !endDate || !startHour || !endHour || !transportType || !heuresRealisees || !kilometrageEffectue || !destination) {
         setError('Veuillez remplir tous les champs obligatoires.');

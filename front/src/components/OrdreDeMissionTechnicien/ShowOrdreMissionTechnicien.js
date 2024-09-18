@@ -6,7 +6,7 @@ import StatusOrdreMissionAdmin from './StatusOrdreMissionAdmin';
 import StatusOrdreMissionTechnicien from './StatusOrdreMissionTechnicien';
 import { Link } from 'react-router-dom';
 import { BsFillArrowLeftSquareFill, BsFillPlusSquareFill } from 'react-icons/bs';
-import { Modal, Button } from 'react-bootstrap'; // Importation des composants de la boîte de dialogue
+// import { Modal, Button } from 'react-bootstrap'; // Importation des composants de la boîte de dialogue
 
 function ShowOrdreMissionTechnicien() {
   const [ordres, setOrdres] = useState([]);

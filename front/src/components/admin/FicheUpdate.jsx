@@ -13,10 +13,10 @@ import { BsFillArrowLeftSquareFill } from 'react-icons/bs';
 const FicheUpdate = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [fiches, setFiches] = useState([]);
   const [date, setDate] = useState('');
-  const categories = ["Injection", "Périférique", "Robotique","Froid", "Moules" ];
+//   const categories = ["Injection", "Périférique", "Robotique","Froid", "Moules" ];
 
   const [formData, setFormData] = useState({
     client: '',

@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Form, Button } from 'react-bootstrap';
 import postService from '../../services/postService';
-import adminService from '../../services/adminService';
 import { BsFillArrowLeftSquareFill, BsFillPlusSquareFill } from 'react-icons/bs';
 
 const CreateTicket = () => {

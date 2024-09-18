@@ -1,5 +1,5 @@
 import React from 'react';
-import { BsArrowRepeat, BsX, BsCheck } from 'react-icons/bs';
+import { BsArrowRepeat, } from 'react-icons/bs';
 import { FaCheckCircle,FaTimesCircle } from 'react-icons/fa';
 
 function StatusOrdreMissionTechnicien({ statuttechnicien }) {

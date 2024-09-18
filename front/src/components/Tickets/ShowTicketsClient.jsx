@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { BsFillArrowLeftSquareFill, BsFillPlusSquareFill } from 'react-icons/bs';
-import { Table, Button, Modal } from 'react-bootstrap';
+import { Table, } from 'react-bootstrap';
 import LoadingSpinner from '../LoadingSpinner';
 import Navbar from '../NavBar/Navbar';
 import postService from '../../services/postService';
@@ -53,6 +53,7 @@ function ShowTicketsClient() {
       typeof value === 'string' && value.toLowerCase().includes(lowerCaseQuery)
     );
   });
+  /*
   const priorityColorClass = () => {
     switch (ticket.priority.toLowerCase()) {
       case 'basse':
@@ -65,6 +66,7 @@ function ShowTicketsClient() {
         return '';
     }
   };
+*/
 
   if (loading || !tickets) {
     return <LoadingSpinner />;

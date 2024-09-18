@@ -1,6 +1,6 @@
 import React from 'react';
-import { BsArrowRepeat, BsX, BsCheck } from 'react-icons/bs';
-import { FaCheckCircle, FaSpinner, FaTimesCircle } from 'react-icons/fa';
+import { BsArrowRepeat,  } from 'react-icons/bs';
+import { FaCheckCircle, FaTimesCircle } from 'react-icons/fa';
 
 function StatusOrdreMissionAdmin({ statutadmin }) {
   let text, textColor, icon, textSize, iconSize;

@@ -18,7 +18,6 @@ function FicheInterventionTable() {
   const [loading, setLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const { darkMode } = useTheme();
-  const [role, setRole] = useState('');
   
   const iconSize = 20;
   const fontSize = 16;

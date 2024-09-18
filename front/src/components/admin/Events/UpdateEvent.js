@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { Link, useParams, useNavigate } from 'react-router-dom';
 import { Form, Button } from 'react-bootstrap';
 import adminService from '../../../services/adminService';
-import Navbar from '../../NavBar/Navbar';
 import { BsFillArrowLeftSquareFill } from 'react-icons/bs';
 import { format, parseISO } from 'date-fns';
 import Swal from 'sweetalert2';

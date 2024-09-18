@@ -2,8 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Calendar, momentLocalizer } from 'react-big-calendar';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import moment from 'moment';
-import { DndProvider, useDrop } from 'react-dnd';
-import { HTML5Backend } from 'react-dnd-html5-backend';
+import { useDrop } from 'react-dnd';
 import adminService from '../../services/adminService';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
@@ -11,7 +10,6 @@ import { InputGroup } from 'react-bootstrap';
 import { FormControl } from 'react-bootstrap';
 import { FaCalendarAlt, FaClock, FaCaretUp, FaCaretDown } from 'react-icons/fa';
 import { Modal, Form, Button, Row, Col } from 'react-bootstrap';
-import Select from 'react-select';
 import './SchedulerCalendar.css'
 import withAuthorization from '../authorization/withAuthorization';
 import imguser from '../../../src/imgs/img_client.png';
@@ -40,18 +38,18 @@ const ShedularCalendarList = () => {
   const [showEndDatePicker, setShowEndDatePicker] = useState(false);
   const [showStartTimePicker, setShowStartTimePicker] = useState(false);
   const [showEndTimePicker, setShowEndTimePicker] = useState(false);
-  const [selectedUserNames, setSelectedUserNames] = useState([]);
-  const [selectedTechnicienNames, setSelectedTechnicienNames] = useState([]);
+ // const [selectedUserNames, setSelectedUserNames] = useState([]);
+ // const [selectedTechnicienNames, setSelectedTechnicienNames] = useState([]);
 
   const [userName, setUserName] = useState('');
   const [technicienName, setTechnicienName] = useState('');
   const [updateClicked, setUpdateClicked] = useState(false);
-  const [date, setDate] = useState();
+ // const [date, setDate] = useState();
   const [carName, setCarName] = useState('');
   const [userOptions, setUserOptions] = useState([]);
   const [technicienOptions, setTechnicienOptions] = useState([]);
   const [carOptions, setCarOptions] = useState([]);
-  const [travelHours, setTravelHours] = useState(''); 
+  // const [travelHours, setTravelHours] = useState(''); 
   const initialTime = '00:00';
   const [selectedTime, setSelectedTime] = useState(initialTime);
 
@@ -345,7 +343,7 @@ const ShedularCalendarList = () => {
       console.error('Error fetching events:', error);
     }
   };
-
+/*
   const handleStartDatePicker = () => {
     setShowStartDatePicker(!showStartDatePicker);
   };
@@ -353,7 +351,7 @@ const ShedularCalendarList = () => {
   const handleEndDatePicker = () => {
     setShowEndDatePicker(!showEndDatePicker);
   };
-
+*/
   const handleStartTimePicker = () => {
     setShowStartTimePicker(!showStartTimePicker);
   };
