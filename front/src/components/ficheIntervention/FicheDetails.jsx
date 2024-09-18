@@ -7,7 +7,6 @@ import StatusBadgeClient from '../ficheIntervention/StatusBadgeClient';
 import StatusBadgeTechnicien from '../ficheIntervention/StatusBadgeTechnicien';
 import { BsFillArrowLeftSquareFill, BsListCheck, BsListUl } from 'react-icons/bs';
 
-
 const FicheDetails = () => {
   const [fiche, setFiche] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -16,18 +15,22 @@ const FicheDetails = () => {
   const [showComment, setShowComment] = useState(false);
   const [comment, setComment] = useState('');
 
-  const getFicheOneUser = async () => {
-    try {
-      setLoading(true);
-      const response = await postService.getFicheById(id);
-      setFiche(response.data.data);
-      setLoading(false);
-    } catch (error) {
-      console.error("Error fetching fiche:", error);
-      setLoading(false);
-    }
-  };
-
+  useEffect(() => {
+    const fetchFiche = async () => {
+      try {
+        setLoading(true);
+        const response = await postService.getFicheById(id);
+        setFiche(response.data.data);
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching fiche:", error);
+        setLoading(false);
+      }
+    };
+  
+    fetchFiche();
+  }, [id]);
+  
   const handleValiderparAdmin = async () => {
     try {
       const updatedFiche = { ...fiche, statuttechnique: 2 };
@@ -113,9 +116,7 @@ const FicheDetails = () => {
     }
   };
 
-  useEffect(() => {
-    getFicheOneUser();
-  }, [id]);
+  
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
