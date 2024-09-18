@@ -4,8 +4,6 @@ import postService from '../../services/postService';
 import LoadingSpinner from "../LoadingSpinner";
 import { Link } from 'react-router-dom';
 import Navbar from '../../components/NavBar/Navbar';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
 import { BsFillArrowLeftSquareFill, BsFillPlusSquareFill } from 'react-icons/bs';
 import StatusBadgeAdmin from './StatusBadgeAdmin';
 import StatusBadgeClient from './StatusBadgeClient';
@@ -29,10 +27,10 @@ function FicheInterventionTable() {
       setLoading(false);
     }
   };
-
+  
   useEffect(() => {
     fetchFichesbyID();
-  }, []);
+  }, [fetchFichesbyID]);  
 
   const formatTime = (dateString) => {
     const date = new Date(dateString);

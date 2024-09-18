@@ -2,12 +2,10 @@ import React, { useState, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Link, useParams } from 'react-router-dom';
 import postService from '../../services/postService';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 import StatusBadgeAdmin from '../ficheIntervention/StatusBadgeAdmin';
 import StatusBadgeClient from '../ficheIntervention/StatusBadgeClient';
 import StatusBadgeTechnicien from '../ficheIntervention/StatusBadgeTechnicien';
-import { BsFillArrowLeftSquareFill, BsFillPlusSquareFill, BsListCheck, BsListUl } from 'react-icons/bs';
+import { BsFillArrowLeftSquareFill, BsListCheck, BsListUl } from 'react-icons/bs';
 
 
 const FicheDetails = () => {
