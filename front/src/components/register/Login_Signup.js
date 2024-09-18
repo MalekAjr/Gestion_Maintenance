@@ -25,7 +25,7 @@ function Signup() {
     password: '',
   });
 
-    const [showAlert, setShowAlert] = useState(false);
+   // const [showAlert, setShowAlert] = useState(false);
 
   const navigate = useNavigate();
 
@@ -162,8 +162,8 @@ function Signup() {
       }
     }
 
-    setShowAlert(true);
-    setTimeout(() => setShowAlert(false), 3000);
+   // setShowAlert(true);
+    // setTimeout(() => setShowAlert(false), 3000);
   };
   
 

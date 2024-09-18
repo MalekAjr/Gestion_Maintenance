@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Link } from 'react-router-dom';
-import { BsFillArrowLeftSquareFill, /* BsFillPlusSquareFill */ } from 'react-icons/bs';
+import { BsFillArrowLeftSquareFill, } from 'react-icons/bs';
 import postService from '../../services/postService';
 import LoadingSpinner from '../LoadingSpinner';
 import Navbar from '../NavBar/Navbar';
@@ -9,12 +9,14 @@ import withAuthorization from '../authorization/withAuthorization';
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
 import { FaCheckCircle, FaTimesCircle } from 'react-icons/fa';
+import { AuthContext } from '../authorization/AuthContext';
 
 function ServiceAchat() {
   const [fiches, setFiches] = useState([]);
   const [loading, setLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
-  const [role, setRole] = useState('');
+  const { user } = useContext(AuthContext);
+  const role = user?.role;
 
   const fetchFichesbyID = async () => {
     try {
@@ -314,17 +316,17 @@ function ServiceAchat() {
                       <td>{fiche.quantite}</td>
                       <td>
                         {fiche.statutservice === 1 ? (
-                          <input
-                            type="number"
-                            value={fiche.prixUnitaire}
-                            onChange={(e) => {
-                              const updatedFiches = [...fiches];
-                              const index = updatedFiches.findIndex(item => item._id === fiche._id);
-                              updatedFiches[index].prixUnitaire = e.target.value;
-                              setFiches(updatedFiches);
-                            }}
-                            placeholder="Prix Unitaire"
-                          />
+                         <input
+                         type="number"
+                         value={fiche.prixUnitaire}
+                         onChange={(e) => {
+                           const updatedFiches = [...fiches];
+                           const index = updatedFiches.findIndex(item => item._id === fiche._id);
+                           updatedFiches[index].prixUnitaire = e.target.value;
+                           setFiches(updatedFiches);
+                         }}
+                         placeholder="Prix Unitaire"
+                       />                       
                         ) : (
                           `Prix Unitaire (Dinar(s)): ${fiche.prixUnitaire}`
                         )}
