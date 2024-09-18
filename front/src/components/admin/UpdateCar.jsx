@@ -18,9 +18,7 @@ const UpdateCar = () => {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
 
-  useEffect(() => {
-    fetchCar();
-  }, [id]);
+
 
   const fetchCar = async () => {
     try {
@@ -37,6 +35,10 @@ const UpdateCar = () => {
       console.error('Error fetching car:', error);
     }
   };
+
+  useEffect(() => {
+    fetchCar();
+  }, [id]);
 
   const handleCarUpdate = async (e) => {
     e.preventDefault();

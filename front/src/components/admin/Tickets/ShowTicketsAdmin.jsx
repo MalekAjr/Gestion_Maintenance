@@ -120,6 +120,12 @@ function ShowTicketsAdmin() {
           </div>
       </div>
 
+      {message && (
+      <div className={`alert ${message.includes('succès') ? 'alert-success' : 'alert-danger'}`} role="alert">
+        {message}
+      </div>
+    )}
+    
       <Navbar searchQuery={searchQuery} handleSearch={handleSearch} />
 
       {filteredTickets.length > 0 && (

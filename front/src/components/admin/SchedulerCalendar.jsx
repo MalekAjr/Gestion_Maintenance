@@ -352,7 +352,22 @@ const handleNavigation = () => {
   };
   
   
-  
+  const fetchEvents = async () => {
+    try {
+      const response = await adminService.getEvents();
+      if (response.data.success === true) {
+        const formattedEvents = response.data.data.map((event) => ({
+          ...event,
+          start: new Date(event.start),
+          end: new Date(event.end),
+        }));
+        const updatedEvents = updateEventsWithColor(formattedEvents);
+        setEvents(updatedEvents);
+      }
+    } catch (error) {
+      console.error('Error fetching events:', error);
+    }
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -400,22 +415,7 @@ const handleNavigation = () => {
     }
   };
 
-  const fetchEvents = async () => {
-    try {
-      const response = await adminService.getEvents();
-      if (response.data.success === true) {
-        const formattedEvents = response.data.data.map((event) => ({
-          ...event,
-          start: new Date(event.start),
-          end: new Date(event.end),
-        }));
-        const updatedEvents = updateEventsWithColor(formattedEvents);
-        setEvents(updatedEvents);
-      }
-    } catch (error) {
-      console.error('Error fetching events:', error);
-    }
-  };
+  
 
   const handleStartDatePicker = () => {
     setShowStartDatePicker(!showStartDatePicker);

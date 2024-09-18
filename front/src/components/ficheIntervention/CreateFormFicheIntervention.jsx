@@ -89,35 +89,24 @@ const heuresTrajet = parseInt(heureTrajetFormatted);
   
 
   const getUserDetails = (clientName) => {
-    if (users) {
     const user = users.find(user => user.nom === clientName);
-    if (user) {
-      return { address: user.address, contact: user.contact };
-    }
-  }
-    return { address: '', contact: '' };
+    return user ? { address: user.address, contact: user.contact } : { address: '', contact: '' };
   };
+  
 
   useEffect(() => {
-    const fetchClientDetails = async () => {
-      if (clientData) {
-        const selectedClient = clientData.clientData.userName;
-        try {
-          const userDetails = await getUserDetails(selectedClient);
-          setFormData(prevFormData => ({
-            ...prevFormData,
-            client: selectedClient,
-            address: userDetails.address,
-            contact: userDetails.contact,
-          }));
-        } catch (error) {
-          console.error("Error getting user details:", error);
-        }
-      }
-    };
-
-    fetchClientDetails();
+    if (clientData) {
+      const selectedClient = clientData.clientData.userName;
+      const userDetails = getUserDetails(selectedClient);
+      setFormData(prevFormData => ({
+        ...prevFormData,
+        client: selectedClient,
+        address: userDetails.address,
+        contact: userDetails.contact,
+      }));
+    }
   }, [clientData]);
+  
   
   
  const handleChange = (e) => {
@@ -204,6 +193,7 @@ const heuresTrajet = parseInt(heureTrajetFormatted);
     });
   };
 
+  /*
   const handleImageChange = (e) => {
     const file = e.target.files[0];
 
@@ -228,6 +218,26 @@ const heuresTrajet = parseInt(heureTrajetFormatted);
       setImagePreview(null);
     }
   };
+*/
+const handleImageChange = (e) => {
+  const file = e.target.files[0];
+  if (file && file.size < 5000000 && (file.type === 'image/jpeg' || file.type === 'image/png')) { // Limite de taille et type
+    setFormData({
+      ...formData,
+      image: file,
+    });
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      if (reader.readyState === 2) {
+        setImagePreview(reader.result);
+      }
+    };
+    reader.readAsDataURL(file);
+  } else {
+    console.error("Invalid file type or size too large.");
+  }
+};
 
   const handleStartTimeChange = (date) => {
     setFormData({
@@ -285,11 +295,7 @@ const heuresTrajet = parseInt(heureTrajetFormatted);
       setMessage('An error occurred. Please try again.');
     }
 
-    setTimeout(function () {
-      setMessage('');
-    }, 2000);
-
-    event.target.reset();
+    // event.target.reset();
     setFormData({
       client: '',
       address: '',
@@ -311,6 +317,10 @@ const heuresTrajet = parseInt(heureTrajetFormatted);
       heureend: new Date(),
       interventionType: 'Préventive'
     });
+
+    setTimeout(function () {
+      setMessage('');
+    }, 2000);
   };
 
   /*

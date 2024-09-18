@@ -11,7 +11,7 @@ const withAuthorization = (allowedRoles) => (WrappedComponent) => {
         // Redirect to a different page if not authorized
         navigate('/admin/unauthorized');
       }
-    }, [role, navigate, allowedRoles]);
+    }, [role, navigate]);
 
     return <WrappedComponent {...props} />;
   };

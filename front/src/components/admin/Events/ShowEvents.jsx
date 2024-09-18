@@ -12,10 +12,6 @@ const ShowEvents = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [loading, setLoading] = useState(true); // Add loading state
 
-  useEffect(() => {
-    fetchEvents();
-  }, []);
-
   const fetchEvents = async () => {
     try {
       const response = await adminService.getEvents();
@@ -25,9 +21,14 @@ const ShowEvents = () => {
     } catch (error) {
       console.error('Error fetching events:', error);
     } finally {
-      setLoading(false); // Set loading to false after fetching
+      setLoading(false);
     }
   };
+
+  useEffect(() => {
+    setLoading(true);
+    fetchEvents();
+  }, []);
   
   const formatDateString = (dateString) => {
     const date = new Date(dateString);
