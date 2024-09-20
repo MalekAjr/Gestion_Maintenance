@@ -7,7 +7,7 @@ import { jwtDecode } from 'jwt-decode';
 
 import './Login_Signup.css';
 
-function Signup() {
+function LoginSignup() {
   const [nom, setNom] = useState('');
   const [phone, setPhone] = useState('');
   const [email, setEmail] = useState('');
@@ -374,4 +374,4 @@ function Signup() {
   );  
 }
 
-export default Signup;
+export default LoginSignup;

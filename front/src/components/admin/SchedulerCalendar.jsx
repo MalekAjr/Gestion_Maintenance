@@ -59,7 +59,7 @@ const SchedulerCalendar = (props) => {
   const [technicienOptions, setTechnicienOptions] = useState([]);
   const [carOptions, setCarOptions] = useState([]);
  // const [travelHours, setTravelHours] = useState(''); 
-  const initialTime = '00:00';
+ // const initialTime = '00:00';
 //  const [selectedTime, setSelectedTime] = useState(initialTime);
   const navigate = useNavigate();
 

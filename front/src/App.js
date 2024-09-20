@@ -4,7 +4,6 @@ import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom'; // Aj
 import { ThemeProvider } from './components/ThemeContext';
 import { AuthProvider } from './components/authorization/AuthContext';
 import Login from './components/Login';
-import Login_Signup from './components/register/Login_Signup';
 import CreateFormFicheIntervention from './components/ficheIntervention/CreateFormFicheIntervention';
 import FicheInterventionTable from './components/ficheIntervention/ShowFicheIntervention';
 import FicheDetails from './components/ficheIntervention/FicheDetails';
@@ -49,6 +48,7 @@ import ListeClients from './components/admin/ListeUtilisateurs/ListeClients';
 import ListTechniciens from './components/admin/ListeUtilisateurs/ListTechniciens';
 import FicheUpdate from './components/admin/FicheUpdate';
 import UpdateEvent from './components/admin/Events/UpdateEvent';
+import LoginSignup from './components/register/LoginSignup';
 
 
 function App() {
@@ -63,7 +63,7 @@ function App() {
                 {/* Routes publiques */}
                 <Route path='/logout' element={<LogoutButton />} />
                 <Route path="/admin/unauthorized" element={<Unauthorized />} />
-                <Route path='/signup' element={<Login_Signup />} />
+                <Route path='/signup' element={<LoginSignup />} />
                 <Route path='/login' element={<Login />} />
                 <Route path='/createficheintervention' element={<CreateFormFicheIntervention />} />
                 <Route path='/showficheIntervention' element={<FicheInterventionTable />} />

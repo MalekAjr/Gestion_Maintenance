@@ -55,6 +55,7 @@ const Dashboard = () => {
     image: '',
     role: ''
   });
+  
   const [loading, setLoading] = useState(true);
   const [notifications, setNotifications] = useState([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -239,7 +240,9 @@ const handleBadgeClick = async () => {
 
 
 return (
-    loading?<div>loading</div>:
+    loading?<div>loading <div className="user-info">
+    {user.nom && <span>Welcome, {user.nom}!</span>}
+  </div></div>:
     <div className="dashboard-container">
       <Layout style={{ minHeight: '100vh' }}>
         <Sider collapsible collapsed={collapsed} onCollapse={onCollapse} theme={darkMode ? 'dark' : 'light'}>

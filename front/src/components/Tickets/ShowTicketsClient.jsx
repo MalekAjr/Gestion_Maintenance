@@ -10,7 +10,6 @@ function ShowTicketsClient() {
   const [tickets, setTickets] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
-  const [ticket, setTicket] = useState(null);
 
   useEffect(() => {
     const fetchTickets = async () => {
