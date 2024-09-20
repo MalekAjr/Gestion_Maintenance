@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useCallback, useState, useEffect } from 'react';
 import { Calendar, momentLocalizer } from 'react-big-calendar';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import moment from 'moment';
@@ -128,6 +128,7 @@ const SchedulerCalendar = (props) => {
     setShowModal(true);
   };
 
+  /*
   const handleTimeIncrease = () => {
     const time = moment(selectedTime, 'HH:mm').add(30, 'minutes').format('HH:mm');
     setSelectedTime(time);
@@ -138,6 +139,7 @@ const SchedulerCalendar = (props) => {
     setSelectedTime(time);
   };
 
+*/
 
   const handleTitleChange = (e) => {
     setTitle(e.target.value);
@@ -195,12 +197,14 @@ const SchedulerCalendar = (props) => {
     return moment(value, 'HH:mm', true).isValid();
   };
   
+  /*
   const handleHoursTravelChange = (e) => {
     const value = e.target.value;
     if (isValidTime(value)) {
       setSelectedHoursTravel(moment(`2022-01-01 ${value}`).toDate());
     }
   };
+*/
 
   const fetchUsers = async () => {
     try {
@@ -352,7 +356,7 @@ const handleNavigation = () => {
   };
   
   
-  const fetchEvents = async () => {
+  const fetchEvents = useCallback(async () => {
     try {
       const response = await adminService.getEvents();
       if (response.data.success === true) {
@@ -367,7 +371,7 @@ const handleNavigation = () => {
     } catch (error) {
       console.error('Error fetching events:', error);
     }
-  };
+  }, []);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -383,7 +387,7 @@ const handleNavigation = () => {
     };
 
     fetchData();
-  }, []);
+  }, [fetchEvents]);
 
   useEffect(() => {
     const saveUpdateClickedToLocalStorage = () => {
@@ -726,6 +730,7 @@ const handleNavigation = () => {
 
   return (
     <div style={{ display: 'flex' }}>
+      <h2>{message}</h2>
       <div style={{ flex: '1' }}>
         <Calendar
           localizer={localizer}

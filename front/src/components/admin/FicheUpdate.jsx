@@ -91,11 +91,21 @@ const FicheUpdate = () => {
     }
   };
 
+  const fetchClients = async () => {
+    try {
+      const response = await adminService.getClients();
+      setClients(response.data.clients);
+    } catch (error) {
+      console.error("Error fetching clients:", error);
+    }
+  };
+
   useEffect(() => {
     fetchFiches();
     // fetchEquipments();
     fetchTickets();
     fetchUsers();
+    fetchClients();
   }, []);
 
   useEffect(() => {
@@ -304,7 +314,7 @@ const handleCustomReferenceToggle = () => {
   });
   };
 
-  if (!fiches) return <div>Loading...</div>;
+  if (loading) return <div>Loading...</div>;
 
   return (
     <div className="container">
