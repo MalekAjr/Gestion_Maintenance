@@ -39,6 +39,7 @@ import ShowTicketsAdmin from './Tickets/ShowTicketsAdmin';
 import io from 'socket.io-client';
 import { notification } from 'antd';
 import { Badge } from 'antd';
+import { Button } from 'react-bootstrap';
 
 const { Content, Footer, Sider } = Layout;
 const { SubMenu } = Menu;
@@ -471,11 +472,11 @@ return (
         </Layout>
       </Layout>
 
-    { /* <div className="toggle-button-container">
+   <div className="toggle-button-container">
         <Button type="primary" onClick={toggleTheme}>
           {darkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
         </Button>
-      </div> */}
+      </div>
     </div>
   );
 };

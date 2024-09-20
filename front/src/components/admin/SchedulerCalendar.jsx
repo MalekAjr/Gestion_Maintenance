@@ -60,7 +60,7 @@ const SchedulerCalendar = (props) => {
   const [carOptions, setCarOptions] = useState([]);
  // const [travelHours, setTravelHours] = useState(''); 
   const initialTime = '00:00';
-  const [selectedTime, setSelectedTime] = useState(initialTime);
+//  const [selectedTime, setSelectedTime] = useState(initialTime);
   const navigate = useNavigate();
 
 
@@ -192,11 +192,11 @@ const SchedulerCalendar = (props) => {
   const handleHoursTimeDecrease = () => {
     setSelectedHoursTravel(moment(selectedhoursTravel).subtract(1, 'hour').toDate());
   };
-
+/*
   const isValidTime = (value) => {
     return moment(value, 'HH:mm', true).isValid();
   };
-  
+  */
   /*
   const handleHoursTravelChange = (e) => {
     const value = e.target.value;
