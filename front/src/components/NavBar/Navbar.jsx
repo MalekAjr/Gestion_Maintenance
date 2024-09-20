@@ -31,27 +31,28 @@ function Navbar({ searchQuery, handleSearch }) {
         </button>
         <div className={`collapse navbar-collapse ${isDropdownOpen ? 'show' : ''}`} id="navbarSupportedContent">
           <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-            <li className="nav-item">
-              <button className="nav-link active" aria-current="page" href="#" onClick={closeDropdown}>
-                Home
-              </button>
-            </li>
-            <li className="nav-item">
-              <button className="nav-link" href="#" onClick={closeDropdown}>
-                Link
-              </button>
-            </li>
+          <li className="nav-item">
+            <button className="nav-link active" aria-current="page" onClick={closeDropdown}>
+              Home
+            </button>
+          </li>
+          <li className="nav-item">
+            <button className="nav-link" onClick={closeDropdown}>
+              Link
+            </button>
+          </li>
+
             <li className="nav-item dropdown">
-              <button
-                className="nav-link dropdown-toggle"
-                href="#"
-                role="button"
-                data-bs-toggle="dropdown"
-                aria-expanded={isDropdownOpen ? "true" : "false"}
-                onClick={toggleDropdown}
-              >
-                Dropdown
-              </button>
+            <button
+              className="nav-link dropdown-toggle"
+              href="#"
+              data-bs-toggle="dropdown"
+              aria-expanded={isDropdownOpen ? "true" : "false"}
+              onClick={toggleDropdown}
+            >
+              Dropdown
+            </button>
+
               <ul className={`dropdown-menu ${isDropdownOpen ? 'show' : ''}`}>
                 <li>
                   <button className="dropdown-item" href="#" onClick={handleDropdownItemClick}>
@@ -86,7 +87,6 @@ function Navbar({ searchQuery, handleSearch }) {
               placeholder="Search by all fields"
               aria-label="Search"
             />
-          { /* <button className="btn btn-outline-success" type="submit">Search</button>  */}
           </form>
         </div>
       </div>
