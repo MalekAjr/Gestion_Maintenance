@@ -1,0 +1,14 @@
+{
+  "builds": [
+    {
+      "src": "front/package.json",
+      "use": "@vercel/static-build",
+      "config": { "distDir": "front/build" }
+    }
+  ],
+  "routes": [
+    { "src": "/", "dest": "/signup" },
+    { "src": "/signup", "dest": "/signup" },
+    { "src": "/(.*)", "dest": "/$1" }
+  ]
+}
