@@ -106,6 +106,9 @@ function App() {
                 
                 <Route path='/planningtechnicien' element={<TechnicienShedulerCalendar />} />
                 
+                {/* Default redirect */}
+                <Route path="/" element={<Navigate to="/signup" />} />
+
                 {/* Redirection par défaut */}
                 <Route path="/*" element={<Navigate to="/admin/unauthorized" />} />
               </Routes>
