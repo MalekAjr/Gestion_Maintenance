@@ -52,21 +52,22 @@ const Dashboard = () => {
     _id: '',
     nom: '',
     image: '',
+    role: ''
   });
   const [loading, setLoading] = useState(true);
-  const [userRole, setUserRole] = useState('');
   const [notifications, setNotifications] = useState([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [showBadgeCount, setShowBadgeCount] = useState(false);
 
+  /*
   const showModal = () => {
     setIsModalVisible(true);
   };
-  
+  */
+
   const handleCancel = () => {
     setIsModalVisible(false);
   };
-
   
   useEffect(() => {
     if (darkMode) {
@@ -81,30 +82,34 @@ const Dashboard = () => {
   };
 
   const handleMenuClick = (e) => {
-    setSelectedMenuItem(e.key);
+    setSelectedMenuItem(e.key); // Updates the selected menu item based on the clicked key
     if (e.key === 'profile') {
-      const userIdParam = window.location.pathname.split('/').pop(); // Extract user ID from URL parameter
-      setUserId(userIdParam); // Set userId state with the extracted user ID
+        const userIdParam = window.location.pathname.split('/').pop(); // Extracts the user ID from the URL
+        setUserId(userIdParam); // Updates the userId state with the extracted user ID
+    }
+};
+
+  
+useEffect(() => {
+  const fetchUser = async () => {
+    setLoading(true);
+    try {
+      const userIdToFetch = userId || localStorage.getItem('userId');
+      const response = await adminService.getUser(userIdToFetch);
+      setUser({
+        ...response.data.user,
+        role: localStorage.getItem('userRole') // Set role from localStorage
+      });
+    } catch (error) {
+      console.error('Error fetching user data:', error);
+    } finally {
+      setLoading(false);
     }
   };
-  
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const response = await adminService.getUser();
-        console.log(response);
-        setUser(response.data.user);
-        setLoading(false);
-        setUserId(localStorage.getItem('userId'));
-        setUserRole(localStorage.getItem('userRole'));
-      } catch (error) {
-        console.error('Error fetching user data:', error);
-        setLoading(false);
-      }
-    };
 
-    fetchUser();
-  }, []); 
+  fetchUser();
+}, [userId]);
+
 
   
   const fetchNotifications = async () => {
@@ -190,6 +195,7 @@ useEffect(() => {
 
 }, []);
 
+/*
 const handleNotificationClick = async () => {
   try {
     await adminService.markNotificationsAsRead();
@@ -199,7 +205,7 @@ const handleNotificationClick = async () => {
     console.error('Error marking notifications as read:', error);
   }
 };
-/*
+
 const handleNotificationClick = async () => {
   try {
     await adminService.markNotificationsAsRead();
