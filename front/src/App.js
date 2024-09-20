@@ -1,6 +1,6 @@
 import React from 'react';
 import './App.css';
-import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom'; // Ajout de "Navigate"
+import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom'; 
 import { ThemeProvider } from './components/ThemeContext';
 import { AuthProvider } from './components/authorization/AuthContext';
 import Login from './components/Login';
@@ -42,14 +42,12 @@ import TicketDetailsClient from './components/Tickets/TicketDetailsClient';
 import ShowTicketsClient from './components/Tickets/ShowTicketsClient';
 import ShowTicketsAdmin from './components/admin/Tickets/ShowTicketsAdmin';
 import TechnicienShedulerCalendar from './components/PlanningTechnicien/TechnicienShedulerCalendar';
-import 'bootstrap/dist/css/bootstrap.min.css';
 import StatistiquesTotal from './components/admin/charts/StatistiquesTotal';
 import ListeClients from './components/admin/ListeUtilisateurs/ListeClients';
 import ListTechniciens from './components/admin/ListeUtilisateurs/ListTechniciens';
 import FicheUpdate from './components/admin/FicheUpdate';
 import UpdateEvent from './components/admin/Events/UpdateEvent';
 import LoginSignup from './components/register/LoginSignup';
-
 
 function App() {
   return (
@@ -75,7 +73,7 @@ function App() {
                 <Route path='/dashboard' element={<UserDashboard />} />
                 <Route path='/créer-ordre' element={<CreateOrdreDeMissionTechnicien />} />
                 <Route path='/consulter-ordretechnicien' element={<ShowOrdreMissionTechnicien />} />
-                <Route path='/ordre-detailstechnicien/:id' element={< OrdreDetailsTechnicien />} />
+                <Route path='/ordre-detailstechnicien/:id' element={<OrdreDetailsTechnicien />} />
                 <Route path='/createticketclient' element={<CreateTicket />} />
                 <Route path='/showticketclient' element={<ShowTicketsClient />} />
                 <Route path='/ticketdetails/:id' element={<TicketDetailsClient />} />
@@ -94,7 +92,6 @@ function App() {
                 <Route path='/admin/showeventsplan' element={<ShowEvents />} />
                 <Route path='/admin/create-event' element={<CreateEvent />} />
                 <Route path='/admin/updateevent/:id' element={<UpdateEvent />} />
-                
                 <Route path='/admin/dashboard' element={<Dashboard />} />
                 <Route path='/admin/achat' element={<ServiceAchat />} />
                 <Route path='/admin/consulter-ordre' element={<ShowOrdreMission />} />
@@ -103,13 +100,12 @@ function App() {
                 <Route path='/admin/createticket' element={<CreateTicketAdmin />} />
                 <Route path='/admin/details/:id' element={<TicketDetailsAdmin />} />
                 <Route path="/admin/statistiques" element={<StatistiquesTotal />} />
-                
                 <Route path='/planningtechnicien' element={<TechnicienShedulerCalendar />} />
-                
-                {/* Default redirect */}
-                <Route path="/" element={<Navigate to="/app/signup" />} />
 
-                {/* Redirection par défaut */}
+                {/* Default redirect */}
+                <Route path="/" element={<Navigate to="/signup" />} />
+
+                {/* Catch-all redirection */}
                 <Route path="/*" element={<Navigate to="/admin/unauthorized" />} />
               </Routes>
             </AuthProvider>

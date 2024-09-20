@@ -4,6 +4,6 @@
   ],
   "routes": [
     { "src": "/app/(.*)", "dest": "/app/index.html" },
-    { "src": "/", "dest": "/app/signup" }
+    { "src": "/app/(.*)", "dest": "/app/signup" }
   ]
 }
