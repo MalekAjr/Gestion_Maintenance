@@ -186,12 +186,12 @@ function LoginSignup() {
          // setUserRole(role);
 
         //  triggerReloadNavbar();
-                 window.location.href=window.location.origin+'/app/admin/dashboard/';
+                 window.location.href=window.location.origin+'/admin/dashboard/';
           //navigate("/admin/dashboard/");
         } else {
           // setLoggedIn(true);
           // setUserRole(role);
-          window.location.href=window.location.origin+'/app/dashboard/';
+          window.location.href=window.location.origin+'/dashboard/';
           //navigate("/dashboard/"); // Redirection vers la page showficheintervention après la connexion réussie
         }
       })

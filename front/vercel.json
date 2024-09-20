@@ -3,7 +3,9 @@
     { "src": "package.json", "use": "@vercel/static-build" }
   ],
   "routes": [
-    { "src": "/app/(.*)", "dest": "/app/index.html" },
-    { "src": "/app/(.*)", "dest": "/app/signup" }
+    { "src": "/", "dest": "/app/signup" },
+    { "src": "/app", "dest": "/app/index.html" }, 
+    { "src": "/app/signup", "dest": "/app/signup" },
+    { "src": "/app/(.*)", "dest": "/app/$1" }
   ]
 }

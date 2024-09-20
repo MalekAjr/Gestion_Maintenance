@@ -53,12 +53,12 @@ function App() {
   return (
     <div className="App">
       <DndProvider backend={HTML5Backend}>
-        <BrowserRouter basename='/app'>
+        <BrowserRouter /*basename="/app" */>
           <ThemeProvider>
             <AuthProvider>
               <Navbartotal />
               <Routes>
-                {/* Routes publiques */}
+                {/* Public routes */}
                 <Route path='/logout' element={<LogoutButton />} />
                 <Route path="/admin/unauthorized" element={<Unauthorized />} />
                 <Route path='/signup' element={<LoginSignup />} />
@@ -78,7 +78,7 @@ function App() {
                 <Route path='/showticketclient' element={<ShowTicketsClient />} />
                 <Route path='/ticketdetails/:id' element={<TicketDetailsClient />} />
 
-                {/* Routes protégées */}
+                {/* Protected routes */}
                 <Route path="/admin/listusers" element={<ListUsers />} />
                 <Route path="/admin/listclients" element={<ListeClients />} />
                 <Route path="/admin/listtechniciens" element={<ListTechniciens />} />
@@ -102,7 +102,7 @@ function App() {
                 <Route path="/admin/statistiques" element={<StatistiquesTotal />} />
                 <Route path='/planningtechnicien' element={<TechnicienShedulerCalendar />} />
 
-                {/* Default redirect */}
+                {/* Default redirect to /app/home */}
                 <Route path="/" element={<Navigate to="/signup" />} />
 
                 {/* Catch-all redirection */}
