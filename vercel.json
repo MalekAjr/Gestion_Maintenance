@@ -12,6 +12,8 @@
   ],
   "routes": [
     { "src": "/api/(.*)", "dest": "/backend/server.js" },
-    { "src": "/(.*)", "dest": "/front/build/$1" }
+    { "src": "/", "dest": "/signup" },
+    { "src": "/signup", "dest": "/signup" },
+    { "src": "/(.*)", "dest": "/$1" }
   ]
 }
