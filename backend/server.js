@@ -5,8 +5,10 @@ const mongoose = require('mongoose');
 const path = require('path');
 const socketIo = require('socket.io');
 
-app.use(cors());
-app.use(express.static('public'));
+app.use(cors({
+    origin: '*',
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  }));app.use(express.static('public'));
 app.use('/usersImages', express.static(path.join(__dirname, 'public', 'usersImages')));
 app.use('/piecesImages', express.static(path.join(__dirname, 'public', 'piecesImages')));
 app.use('/fichesImages', express.static(path.join(__dirname, 'public', 'fichesImages')));
