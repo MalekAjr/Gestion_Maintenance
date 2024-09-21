@@ -1,7 +1,7 @@
 const express = require('express');
 const app = express();
 const cors = require('cors');
-app.use(cors());
+app.use(cors({ origin: '*' }));
 const mongoose = require('mongoose');
 const path = require('path');
 const http = require('http');
@@ -22,7 +22,6 @@ app.use('/usersImages', express.static(path.join(__dirname, 'public', 'usersImag
 app.use('/piecesImages', express.static(path.join(__dirname, 'public', 'piecesImages')));
 app.use('/fichesImages', express.static(path.join(__dirname, 'public', 'fichesImages')));
 
-app.use(cors({ origin: '*' }));
 
 
 
