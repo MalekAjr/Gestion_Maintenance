@@ -3,14 +3,15 @@ const app = express();
 const cors = require('cors');
 const mongoose = require('mongoose');
 const path = require('path');
-const socketIo = require('socket.io');
 
+// Middleware
 app.use(cors());
 app.use(express.static('public'));
 app.use('/usersImages', express.static(path.join(__dirname, 'public', 'usersImages')));
 app.use('/piecesImages', express.static(path.join(__dirname, 'public', 'piecesImages')));
 app.use('/fichesImages', express.static(path.join(__dirname, 'public', 'fichesImages')));
 
+// Database connection
 mongoose.connect("mongodb+srv://baabadevs:admin123@mernapp.gendjkv.mongodb.net/Gestion_Maintenance")
     .then(() => {
         console.log("Connected to mongoose");
@@ -37,6 +38,8 @@ mongoose.connect("mongodb+srv://baabadevs:admin123@mernapp.gendjkv.mongodb.net/G
         console.error("Error connecting to mongoose:", error);
     });
 
+// Remove WebSocket code for Vercel as it doesn't support WebSockets
+/*
 const server = app.listen(process.env.PORT || 8000, () => {
     console.log(`Server is running on port ${process.env.PORT || 8000}`);
 });
@@ -54,3 +57,7 @@ io.on('connection', (socket) => {
         console.log('Client disconnected');
     });
 });
+*/
+
+// Export app for Vercel
+module.exports = app;
