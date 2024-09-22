@@ -1,17 +1,12 @@
 {
   "builds": [
     {
-      "src": "front/package.json",
+      "src": "package.json",
       "use": "@vercel/static-build",
-      "config": { "distDir": "front/build" }
-    },
-    {
-      "src": "backend/server.js",
-      "use": "@vercel/node"
+      "config": { "distDir": "build" }
     }
   ],
   "routes": [
-    { "src": "/api/(.*)", "dest": "/backend" },
     { "src": "/", "dest": "/signup" },
     { "src": "/signup", "dest": "/signup" },
     { "src": "/(.*)", "dest": "/$1" }
