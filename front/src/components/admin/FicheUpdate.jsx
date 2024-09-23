@@ -690,7 +690,7 @@ const handleCustomReferenceToggle = () => {
           {fiche._id === id && ( // Vérifiez si l'ID de la fiche correspond à l'ID de la demande en cours
             <div>
               <img
-                src={'https://gestion-maintenance-dfnp.vercel.app/fichesImages/' + fiche.image}
+                src={'https://gestion-maintenance.vercel.app/fichesImages/' + fiche.image}
                 alt={fiche.image}
                 style={{ width: '100px', height: '100px', marginTop: '10px'}}
               />

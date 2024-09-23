@@ -129,7 +129,7 @@ useEffect(() => {
   }, []);
   
   useEffect(() => {
-    const socket = io('https://gestion-maintenance-dfnp.vercel.app/');
+    const socket = io('https://gestion-maintenance.vercel.app/');
   
     socket.on('notification', (notificationData) => {
       setNotifications((prevNotifications) => [...prevNotifications, notificationData]);

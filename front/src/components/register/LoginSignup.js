@@ -122,7 +122,7 @@ function LoginSignup() {
     }
   
     try {
-      const response = await axios.post("https://gestion-maintenance-dfnp.vercel.app/api/signup", formDataToSend, {
+      const response = await axios.post("https://gestion-maintenance.vercel.app/api/signup", formDataToSend, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
@@ -170,7 +170,7 @@ function LoginSignup() {
   const handleSubmitLogin = async (e) => {  
     e.preventDefault();
 
-    await axios.post("https://gestion-maintenance-dfnp.vercel.app/api/login/", { email, password })
+    await axios.post("https://gestion-maintenance.vercel.app/api/login/", { email, password })
       .then((res) => {
         const { token, role } = res.data;
         const decodedToken = jwtDecode(token);
