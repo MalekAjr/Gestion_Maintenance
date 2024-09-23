@@ -39,7 +39,7 @@ function UserDashboard() {
             <br/>
             <div className="text-center">
               <img
-                src={`https://gestion-maintenance-dfnp.vercel.app//usersImages/${user.image}`}
+                src={`https://gestion-maintenance-dfnp.vercel.app/usersImages/${user.image}`}
                 alt="User"
                 className="img-fluid rounded-circle mb-2"
                 style={{ maxWidth: '200px' }}

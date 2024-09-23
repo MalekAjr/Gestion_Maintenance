@@ -16,7 +16,7 @@ const UserItem = ({ user }) => {
         <div className="circular-image-container">
           {user.image ? (
             <img
-              src={`https://gestion-maintenance-dfnp.vercel.app//usersImages/${user.image}`}
+              src={`https://gestion-maintenance-dfnp.vercel.app/usersImages/${user.image}`}
               alt={user.image}
               className="img-fluid"
               style={{ maxWidth: '100px', maxHeight: '100px' }}

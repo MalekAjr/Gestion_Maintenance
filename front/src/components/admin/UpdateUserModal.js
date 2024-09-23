@@ -17,7 +17,7 @@ function UpdateUserModal(props) {
     setEmail(props.email);
     setPhone(props.phone);
     setRole(props.role);
-    setImagePreview(`https://gestion-maintenance-dfnp.vercel.app//usersImages/${props.image}`);
+    setImagePreview(`https://gestion-maintenance-dfnp.vercel.app/usersImages/${props.image}`);
     setImageName(getImageNameFromUrl(props.image));
   }, [props]);
 
@@ -62,7 +62,7 @@ function UpdateUserModal(props) {
       formData.append('image', selectedFile);
     } else {
       // Si aucun fichier sélectionné, utiliser l'image actuelle
-      const currentImageBlob = await fetch(`https://gestion-maintenance-dfnp.vercel.app//usersImages/${props.image}`).then(res => res.blob());
+      const currentImageBlob = await fetch(`https://gestion-maintenance-dfnp.vercel.app/usersImages/${props.image}`).then(res => res.blob());
       formData.append('image', currentImageBlob, props.image);
     }
   
@@ -135,7 +135,7 @@ function UpdateUserModal(props) {
           {!selectedFile && !imagePreview && (
             <div className="mb-3">
               <img
-                src={`https://gestion-maintenance-dfnp.vercel.app//usersImages/${props.image}`}
+                src={`https://gestion-maintenance-dfnp.vercel.app/usersImages/${props.image}`}
                 alt="Current"
                 className="img-fluid rounded"
                 style={{ width: "200px", height: "200px" }} // Dimensions spécifiques

@@ -21,7 +21,7 @@ const TechnicienItem = ({ technicien, handleDropTechnicien }) => {
         <div className="circular-image-container">
           {technicien.image ? (
             <img
-              src={`https://gestion-maintenance-dfnp.vercel.app//usersImages/${technicien.image}`}
+              src={`https://gestion-maintenance-dfnp.vercel.app/usersImages/${technicien.image}`}
               alt={technicien.image}
               className="img-fluid"
               style={{ maxWidth: '100px', maxHeight: '100px' }}

@@ -228,7 +228,7 @@ const FicheDetails = () => {
       fenetreImpression.print();
     };
   
-    const imageSrc = 'https://gestion-maintenance-dfnp.vercel.app//fichesImages/' + fiche.image;
+    const imageSrc = 'https://gestion-maintenance-dfnp.vercel.app/fichesImages/' + fiche.image;
     fetch(imageSrc)
       .then((res) => res.blob())
       .then((blob) => {
@@ -402,7 +402,7 @@ const FicheDetails = () => {
         <div className="col-md-4">
           <div className="card h-100">
             <img
-              src={'https://gestion-maintenance-dfnp.vercel.app//fichesImages/' + fiche.image}
+              src={'https://gestion-maintenance-dfnp.vercel.app/fichesImages/' + fiche.image}
               alt={fiche.image}
               className="card-img-top img-fluid"
             />
