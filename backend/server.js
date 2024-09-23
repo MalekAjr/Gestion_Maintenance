@@ -5,23 +5,30 @@ const mongoose = require('mongoose');
 const path = require('path');
 const socketIo = require('socket.io');
 
+// Middleware pour CORS
 app.use(cors({
     origin: '*',
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  }));app.use(express.static('public'));
+}));
+
+// Middleware pour les fichiers statiques
+app.use(express.static('public'));
 app.use('/usersImages', express.static(path.join(__dirname, 'public', 'usersImages')));
 app.use('/piecesImages', express.static(path.join(__dirname, 'public', 'piecesImages')));
 app.use('/fichesImages', express.static(path.join(__dirname, 'public', 'fichesImages')));
 
+// Route de test
 app.get('/', (req, res) => {
     res.send('Backend for Gestion Maintenance API is running.');
 });
 
+// Tentative de connexion à MongoDB
+console.log("Attempting to connect to MongoDB...");
 mongoose.connect("mongodb+srv://baabadevs:admin123@mernapp.gendjkv.mongodb.net/Gestion_Maintenance")
     .then(() => {
-        console.log("Connected to mongoose");
+        console.log("Connected to MongoDB successfully!");
 
-        // Require routes after successful connection
+        // Importation des routes après une connexion réussie
         const fiche_route = require('./routes/ficheinterventionRoute');
         app.use('/api', fiche_route);
         const userrouter = require('./routes/userRoute');
@@ -40,14 +47,15 @@ mongoose.connect("mongodb+srv://baabadevs:admin123@mernapp.gendjkv.mongodb.net/G
         app.use('/api', notificationrouter);
     })
     .catch(error => {
-        console.error("Error connecting to mongoose:", error);
+        console.error("Error connecting to MongoDB:", error);
     });
 
-    const server = app.listen(process.env.PORT || 8000, () => {
-        console.log(`Server is running on port ${process.env.PORT || 8000}`);
-    });
-    
+// Démarrer le serveur
+const server = app.listen(process.env.PORT || 8000, () => {
+    console.log(`Server is running on port ${process.env.PORT || 8000}`);
+});
 
+// Configuration de Socket.io
 const io = socketIo(server, {
     cors: {
         origin: '*',
@@ -55,6 +63,7 @@ const io = socketIo(server, {
     }
 });
 
+// Gestion des connexions Socket.io
 io.on('connection', (socket) => {
     console.log('New client connected');
     socket.on('disconnect', () => {
@@ -62,4 +71,5 @@ io.on('connection', (socket) => {
     });
 });
 
+// Exporter l'application
 module.exports = app;
