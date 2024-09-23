@@ -179,7 +179,7 @@ const UserProfile = () => {
                             />
                           ) : (
                             <img
-                              src={`http://localhost:8000/usersImages/${user.image}`}
+                              src={`https://gestion-maintenancebackend.vercel.app/usersImages/${user.image}`}
                               alt="User"
                               className="img-fluid rounded-circle"
                               style={{ maxWidth: '200px' }}

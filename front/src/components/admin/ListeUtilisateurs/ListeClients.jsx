@@ -154,7 +154,7 @@ function ListUsers() {
                     <div className="circular-image-container">
                       {user.image ? (
                         <img
-                          src={`http://localhost:8000/usersImages/${user.image}`}
+                          src={`https://gestion-maintenancebackend.vercel.app/usersImages/${user.image}`}
                           alt={user.image}
                           className="img-fluid"
                           style={{ maxWidth: '100px', maxHeight: '100px' }}

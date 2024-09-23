@@ -11,7 +11,7 @@ function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-      axios.post("http://localhost:8000/api/login",{email:email, password:password}).then((res)=>{
+      axios.post("https://gestion-maintenancebackend.vercel.app/api/login",{email:email, password:password}).then((res)=>{
         console.log(res.data.token)
         localStorage.setItem('token', res.data.token)
         navigate("/show")
