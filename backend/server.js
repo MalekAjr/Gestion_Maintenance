@@ -13,6 +13,10 @@ app.use('/usersImages', express.static(path.join(__dirname, 'public', 'usersImag
 app.use('/piecesImages', express.static(path.join(__dirname, 'public', 'piecesImages')));
 app.use('/fichesImages', express.static(path.join(__dirname, 'public', 'fichesImages')));
 
+app.get('/', (req, res) => {
+    res.send('Backend for Gestion Maintenance API is running.');
+});
+
 mongoose.connect("mongodb+srv://baabadevs:admin123@mernapp.gendjkv.mongodb.net/Gestion_Maintenance")
     .then(() => {
         console.log("Connected to mongoose");
