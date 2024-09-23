@@ -149,7 +149,7 @@ function FicheInterventionTable() {
               <div style={{ textAlign: 'center' }}>
                 <div>{fiche.nom}</div>
                 <img
-                  src={'https://gestion-maintenancebackend.vercel.app/fichesImages/' + fiche.image}
+                  src={'https://gestion-maintenance-dfnp.vercel.app//fichesImages/' + fiche.image}
                   alt={fiche.image}
                   style={{ width: '100px', height: '100px', marginTop: '10px' }}
                 />
