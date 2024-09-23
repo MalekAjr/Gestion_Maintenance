@@ -8,12 +8,8 @@
   ],
   "routes": [
     {
-      "rewrites": [
-        {
-          "source": "/api/(.*)",
-          "destination": "/"
-        }
-      ]
+      "src": "/(.*)",
+      "dest": "/server.js"
     }
   ]
 }
