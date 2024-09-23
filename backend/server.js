@@ -13,9 +13,7 @@ app.use('/usersImages', express.static(path.join(__dirname, 'public', 'usersImag
 app.use('/piecesImages', express.static(path.join(__dirname, 'public', 'piecesImages')));
 app.use('/fichesImages', express.static(path.join(__dirname, 'public', 'fichesImages')));
 
-app.get('/', (req, res) => {
-    res.send('Backend for Gestion Maintenance API is running.');
-});
+
 
 mongoose.connect("mongodb+srv://baabadevs:admin123@mernapp.gendjkv.mongodb.net/Gestion_Maintenance")
     .then(() => {
@@ -38,6 +36,10 @@ mongoose.connect("mongodb+srv://baabadevs:admin123@mernapp.gendjkv.mongodb.net/G
         app.use('/api', mailrouter);
         const notificationrouter = require('./routes/notificationRoute');
         app.use('/api', notificationrouter);
+
+        app.get('/', (req, res) => {
+            res.send('Backend for Gestion Maintenance API is running.');
+        });
     })
     .catch(error => {
         console.error("Error connecting to mongoose:", error);
