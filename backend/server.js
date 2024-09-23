@@ -43,7 +43,7 @@ mongoose.connect("mongodb+srv://baabadevs:admin123@mernapp.gendjkv.mongodb.net/G
         console.error("Error connecting to mongoose:", error);
     });
 
-    const server = app.listen("https://gestion-maintenance-backend.vercel.app/", () => {
+    const server = app.listen(process.env.PORT || 8000, () => {
         console.log(`Server is running on port ${process.env.PORT || 8000}`);
     });
     
