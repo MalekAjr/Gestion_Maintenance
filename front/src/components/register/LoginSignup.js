@@ -169,36 +169,34 @@ function LoginSignup() {
 
   const handleSubmitLogin = async (e) => {  
     e.preventDefault();
-
-    await axios.post("https://gestion-maintenance.vercel.app/api/login/", { email, password })
-      .then((res) => {
+    
+    try {
+      const res = await axios.post("https://gestion-maintenance.vercel.app/api/login/", { email, password });
+      
+      if (res.data.token && res.data.role) {
         const { token, role } = res.data;
         const decodedToken = jwtDecode(token);
         const userId = decodedToken._id;
+        
         console.log(token, role, userId);
+        
         localStorage.setItem('token', token);
         localStorage.setItem('role', role);
         localStorage.setItem('userId', userId);
-    
-
+      
         if (role === 'admin') {
-         // setLoggedIn(true);
-         // setUserRole(role);
-
-        //  triggerReloadNavbar();
-                 window.location.href=window.location.origin+'/admin/dashboard/';
-          //navigate("/admin/dashboard/");
+          window.location.href = window.location.origin + '/admin/dashboard/';
         } else {
-          // setLoggedIn(true);
-          // setUserRole(role);
-          window.location.href=window.location.origin+'/dashboard/';
-          //navigate("/dashboard/"); // Redirection vers la page showficheintervention après la connexion réussie
+          window.location.href = window.location.origin + '/dashboard/';
         }
-      })
-      .catch((err) => {
-        alert("Erreur: identifiants incorrects");
-      });
+      } else {
+        alert("Erreur: aucune information de token ou de rôle reçue.");
+      }
+    } catch (err) {
+      alert("Erreur: identifiants incorrects");
+    }
   };
+  
 
   return (
     <>
