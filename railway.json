@@ -1,0 +1,20 @@
+{
+    "services": [
+      {
+        "name": "frontend",
+        "build": {
+          "builder": "nixpacks",
+          "path": "./front"
+        },
+        "start": "npm start --prefix ./front"
+      },
+      {
+        "name": "backend",
+        "build": {
+          "builder": "nixpacks",
+          "path": "./backend"
+        },
+        "start": "node backend/server.js"
+      }
+    ]
+  }  
