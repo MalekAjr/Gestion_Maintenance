@@ -5,33 +5,27 @@ const mongoose = require('mongoose');
 const path = require('path');
 const socketIo = require('socket.io');
 
-// Configurer CORS pour autoriser toutes les requêtes
 app.use(cors({
     origin: '*',
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
-}));
-
-// Définir les dossiers statiques
-app.use(express.static('public'));
+  }));app.use(express.static('public'));
 app.use('/usersImages', express.static(path.join(__dirname, 'public', 'usersImages')));
 app.use('/piecesImages', express.static(path.join(__dirname, 'public', 'piecesImages')));
 app.use('/fichesImages', express.static(path.join(__dirname, 'public', 'fichesImages')));
 
-// Route de test pour vérifier le bon fonctionnement du serveur
 app.get('/', (req, res) => {
     res.send('Backend for Gestion Maintenance API is running.');
 });
 
-// Connexion à la base de données MongoDB
 mongoose.connect("mongodb+srv://baabadevs:admin123@mernapp.gendjkv.mongodb.net/Gestion_Maintenance")
     .then(() => {
         console.log("Connected to mongoose");
 
-        // Importer les routes après la connexion réussie
+        // Require routes after successful connection
         const fiche_route = require('./routes/ficheinterventionRoute');
         app.use('/api', fiche_route);
         const userrouter = require('./routes/userRoute');
-        app.use( userrouter);
+        app.use('/api', userrouter);
         const eventrouter = require('./routes/eventRoute');
         app.use('/api', eventrouter);
         const carrouter = require('./routes/carRoute');
@@ -49,15 +43,12 @@ mongoose.connect("mongodb+srv://baabadevs:admin123@mernapp.gendjkv.mongodb.net/G
         console.error("Error connecting to mongoose:", error);
     });
 
-// Supprimer l'écoute explicite du serveur
-/*
-const server = app.listen(process.env.PORT || 8000, () => {
-    console.log(`Server is running on port ${process.env.PORT || 8000}`);
-});
-*/
+    const server = app.listen(process.env.PORT || 8000, () => {
+        console.log(`Server is running on port ${process.env.PORT || 8000}`);
+    });
+    
 
-// Configuration de Socket.IO
-const io = socketIo({
+const io = socketIo(server, {
     cors: {
         origin: '*',
         methods: ['GET', 'POST']
@@ -71,5 +62,4 @@ io.on('connection', (socket) => {
     });
 });
 
-// Exporter l'application pour Vercel
 module.exports = app;
