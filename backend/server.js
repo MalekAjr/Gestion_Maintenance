@@ -23,21 +23,21 @@ mongoose.connect("mongodb+srv://baabadevs:admin123@mernapp.gendjkv.mongodb.net/G
 
         // Require routes after successful connection
         const fiche_route = require('./routes/ficheinterventionRoute');
-        app.use('api', fiche_route);
+        app.use('/api', fiche_route);
         const userrouter = require('./routes/userRoute');
-        app.use('api', userrouter);
+        app.use('/api', userrouter);
         const eventrouter = require('./routes/eventRoute');
-        app.use('api', eventrouter);
+        app.use('/api', eventrouter);
         const carrouter = require('./routes/carRoute');
-        app.use('api', carrouter);
+        app.use('/api', carrouter);
         const ordremissionrouter = require('./routes/ordremissionRoute');
-        app.use('api', ordremissionrouter);
+        app.use('/api', ordremissionrouter);
         const ticketrouter = require('./routes/ticketRoute');
-        app.use('api', ticketrouter);
+        app.use('/api', ticketrouter);
         const mailrouter = require('./routes/mailRoute');
-        app.use('api', mailrouter);
+        app.use('/api', mailrouter);
         const notificationrouter = require('./routes/notificationRoute');
-        app.use('api', notificationrouter);
+        app.use('/api', notificationrouter);
     })
     .catch(error => {
         console.error("Error connecting to mongoose:", error);
