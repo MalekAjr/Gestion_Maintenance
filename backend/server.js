@@ -31,7 +31,7 @@ mongoose.connect("mongodb+srv://baabadevs:admin123@mernapp.gendjkv.mongodb.net/G
         const fiche_route = require('./routes/ficheinterventionRoute');
         app.use('/api', fiche_route);
         const userrouter = require('./routes/userRoute');
-        app.use('/api', userrouter);
+        app.use( userrouter);
         const eventrouter = require('./routes/eventRoute');
         app.use('/api', eventrouter);
         const carrouter = require('./routes/carRoute');
