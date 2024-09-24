@@ -1,3 +1,5 @@
+require('dotenv').config(); // Assure-toi de charger les variables d'environnement dès le début
+
 const express = require('express');
 const app = express();
 const cors = require('cors');
@@ -5,27 +7,21 @@ const mongoose = require('mongoose');
 const path = require('path');
 const socketIo = require('socket.io');
 
-// Configurer CORS
 app.use(cors({
     origin: '*',
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
 }));
 
-// Configurer les dossiers statiques
 app.use(express.static('public'));
 app.use('/usersImages', express.static(path.join(__dirname, 'public', 'usersImages')));
 app.use('/piecesImages', express.static(path.join(__dirname, 'public', 'piecesImages')));
 app.use('/fichesImages', express.static(path.join(__dirname, 'public', 'fichesImages')));
 
-// Endpoint racine pour tester si l'API fonctionne
 app.get('/', (req, res) => {
     res.send('Backend for Gestion Maintenance API is running.');
 });
 
-// Logger l'URI MongoDB pour vérifier la variable d'environnement
-console.log("Connecting to MongoDB with URI:", process.env.MONGODB_URI);
-
-// Connexion à MongoDB
+// Utilisation de MONGODB_URI depuis les variables d'environnement
 mongoose.connect(process.env.MONGODB_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
@@ -33,11 +29,7 @@ mongoose.connect(process.env.MONGODB_URI, {
     .then(() => {
         console.log("Connected to MongoDB");
 
-        app.post('/login', (req, res) => {
-            res.send('Backend for Gestion Maintenance API is running.');
-        });
-
-        // Charger les routes après la connexion réussie
+        // Require routes after successful connection
         const fiche_route = require('./routes/ficheinterventionRoute');
         app.use('/api', fiche_route);
         const userrouter = require('./routes/userRoute');
@@ -59,16 +51,14 @@ mongoose.connect(process.env.MONGODB_URI, {
         console.error("Error connecting to MongoDB:", error);
     });
 
-// Démarrer le serveur
 const server = app.listen(process.env.PORT || 8000, () => {
     console.log(`Server is running on port ${process.env.PORT || 8000}`);
 });
 
-// Configurer Socket.IO
 const io = socketIo(server, {
     cors: {
         origin: '*',
-        methods: ['GET', 'POST'],
+        methods: ['GET', 'POST']
     }
 });
 
