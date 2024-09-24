@@ -23,6 +23,11 @@ app.get('/login', (req, res) => {
     res.status(200).json({ message: "Login endpoint hit" });
 });
 
+app.get('/cars', (req, res) => {
+    console.log("The get cars good and server is good make sure of mongoDB", req.body);
+    // Logique de connexion ici
+    res.status(200).json({ message: "Login endpoint hit" });
+});
 
 mongoose.connect("mongodb+srv://baabadevs:admin123@mernapp.gendjkv.mongodb.net/Gestion_Maintenance")
     .then(() => {
