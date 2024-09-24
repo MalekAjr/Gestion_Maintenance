@@ -17,7 +17,7 @@ app.get('/', (req, res) => {
     res.send('Backend for Gestion Maintenance API is running.');
 });
 
-app.post('/login', (req, res) => {
+app.get('/login', (req, res) => {
     console.log("Login request received", req.body);
     // Logique de connexion ici
     res.status(200).json({ message: "Login endpoint hit" });
