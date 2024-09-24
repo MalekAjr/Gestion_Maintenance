@@ -33,6 +33,10 @@ mongoose.connect(process.env.MONGODB_URI, {
     .then(() => {
         console.log("Connected to MongoDB");
 
+        app.post('/login', (req, res) => {
+            res.send('Backend for Gestion Maintenance API is running.');
+        });
+
         // Charger les routes après la connexion réussie
         const fiche_route = require('./routes/ficheinterventionRoute');
         app.use('/api', fiche_route);
